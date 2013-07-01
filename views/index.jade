@@ -1,24 +1,97 @@
 extends layout
 
-block content
-	div.container
-		h1= title
+block content	
+	div#myCarousel.carousel.slide
+		div.carousel-inner
+			div.item.active
+				img(src="/images/slide-01.jpg", alt="")				
+				div.container
+					div.carousel-caption
+						h1 Catch phrase
+						p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+						a.btn.btn-large.btn-primary(href="#") Get started today
+			div.item
+				img(src="/images/slide-02.jpg", alt="")
+				div.container
+					div.carousel-caption
+						h1 Catch phrase
+						p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+						a.btn.btn-large.btn-primary(href="#") Get started today
+			div.item
+				img(src="/images/slide-03.jpg", alt="")
+				div.container
+					div.carousel-caption
+						h1 Catch phrase
+						p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+						a.btn.btn-large.btn-primary(href="#") Get started today
+		a.left.carousel-control(href="#myCarousel", data-slide="prev") &lsaquo;
+		a.right.carousel-control(href="#myCarousel", data-slide="next") &rsaquo;
+	
+	div.masthead
+		div.container
+			ul.inline
+				li
+					h3 Welcome
+				li.pull-right
+					h3 Content Management System
+			
+			div.navbar
+				div.navbar-inner
+					div.container
+						ul.nav
+							li.active
+								a(href="#") Home
+							li
+								a(herf="#") ToDo
+							li
+								a(herf="#") Planner
+							li
+								a(herf="#") Projects
+							li
+								a(herf="#") BBS
+							li
+								a(herf="#") Settings		
+	div.container		
+		div.row-fluid
+			div.row
+				div.span4
+					h2 Notice
+					p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					p
+						a.btn(href="#") View details
+				div.span4
+					h2 Risk
+					p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					p
+						a.btn(href="#") View details
+				div.span4
+					h2 Issue
+					p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					p
+						a.btn(href="#") View details
+			div.row
+				div
+					h2 Progress chart
+					p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					p
+						a.btn(href="#") View details
+			div.row
+				div
+					h2 Calendar
+					p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+					p
+						a.btn(href="#") View details
+		hr
+		div.footer
+			p Company 2013
 
-		p Welcome to #{title}
-
-		p I want to put a lot of text here
-
-
-		p
-			| I want
-			| to put
-			| a lot
-			| of text
-			| here ...
-
-		pre
-			| I want
-			| to put
-			| a lot
-			| of text
-			| here ...	
+	script(type='text/javascript')
+		!function ($) {
+			$(function(){
+				// carousel demo
+				$('#myCarousel').carousel();
+			})
+		}(window.jQuery)
+	
+	script(src='libs/jquery/jquery.js')
+	script(src='libs/bootstrap/js/bootstrap.js')
