@@ -40,17 +40,45 @@ block content
 					div.container
 						ul.nav
 							li.active
-								a(href="#") Home
+								a(href="#", tabindex="-1") Home
 							li
-								a(herf="#") ToDo
+								a(herf="#", tabindex="-1") ToDo
 							li
-								a(herf="#") Planner
+								a(herf="#", tabindex="-1") Planner
+							li.dropdown
+								a(herf="#", tabindex="-1", data-toggle="dropdown").dropdown-toggle Projects 
+									b.caret
+								ul.dropdown-menu
+									li.nav-header Setup & Plan
+									li
+										a(href="#", tabindex="-1") Project profile
+									li.divider
+									li.nav-header Exceution & Control
+									li.dropdown-submenu
+										a(href="#", tabindex="-1") Schedule
+										ul.dropdown-menu
+											li 
+												a(href="#", tabindex="-1") MSP Sync/Resource Alloc
+											li 
+												a(href="#", tabindex="-1") Weekly Task Direction
+											li 
+												a(href="#", tabindex="-1") Weekly Task Result
+											li 
+												a(href="#", tabindex="-1") Weekly Task Approval
+											li 
+												a(href="#", tabindex="-1") Completion Rate Management
+											li 
+												a(href="#", tabindex="-1") Milestone Status
+									li.divider
+									li.nav-header Risks & Issues									
+									li
+										a(href="#", tabindex="-1") Risks
+									li
+										a(href="#", tabindex="-1") Issues
 							li
-								a(herf="#") Projects
+								a(herf="#", tabindex="-1") BBS
 							li
-								a(herf="#") BBS
-							li
-								a(herf="#") Settings		
+								a(herf="#", tabindex="-1") Settings		
 	div.container		
 		div.row-fluid
 			div.row

@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"p",
+				"plcaseholder"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"car",
+				"carousel-control"
+			],
+			[
+				"btn",
+				"btn-large"
+			],
+			[
+				"ca",
+				"carousel-caption"
+			],
+			[
+				"drop",
+				"dropdown-menu"
+			],
+			[
+				"nav",
+				"navbar-inner"
+			],
+			[
 				"som",
 				"something"
 			],
@@ -486,34 +514,6 @@
 			[
 				"lang",
 				"languageCd"
-			],
-			[
-				"el",
-				"elementId"
-			],
-			[
-				"labelF",
-				"labelForKoKr"
-			],
-			[
-				"lan",
-				"languageCd"
-			],
-			[
-				"targ",
-				"targetTmplUrl"
-			],
-			[
-				"_res",
-				"_resetDimension"
-			],
-			[
-				"pop",
-				"popupContent"
-			],
-			[
-				"up",
-				"updateMode"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "views/index.jade",
 			"settings":
 			{
-				"buffer_size": 257,
+				"buffer_size": 4710,
 				"line_ending": "Windows"
 			}
 		},
@@ -531,7 +531,15 @@
 			"file": "views/layout.jade",
 			"settings":
 			{
-				"buffer_size": 136,
+				"buffer_size": 274,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/stylesheets/style.less",
+			"settings":
+			{
+				"buffer_size": 3465,
 				"line_ending": "Windows"
 			}
 		},
@@ -539,40 +547,32 @@
 			"file": "app.js",
 			"settings":
 			{
-				"buffer_size": 904,
+				"buffer_size": 2750,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "package.json",
+			"file": "routes/login.js",
 			"settings":
 			{
-				"buffer_size": 481,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/javascripts/application-name.js",
-			"settings":
-			{
-				"buffer_size": 0,
+				"buffer_size": 316,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "public/stylesheets/style.css",
+			"file": "routes/user.js",
+			"settings":
+			{
+				"buffer_size": 107,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "routes/index.js",
 			"settings":
 			{
 				"buffer_size": 110,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/libs/bootstrap/css/bootstrap.css",
-			"settings":
-			{
-				"buffer_size": 127352,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -588,7 +588,19 @@
 			],
 			[
 				"git",
-				"Git: Commit history"
+				"Git: Commit"
+			],
+			[
+				"list p",
+				"Package Control: List Packages"
+			],
+			[
+				"package",
+				"Package Control: Remove Package"
+			],
+			[
+				"list pa",
+				"Package Control: List Packages"
 			],
 			[
 				"install ",
@@ -651,10 +663,6 @@
 				"Tasks: New document"
 			],
 			[
-				"package",
-				"Package Control: Remove Package"
-			],
-			[
 				"each",
 				"Snippet: $.each()"
 			],
@@ -715,7 +723,7 @@
 	},
 	"console":
 	{
-		"height": 349.0
+		"height": 190.0
 	},
 	"distraction_free":
 	{
@@ -728,6 +736,17 @@
 	},
 	"file_history":
 	[
+		"/D/nodeApps/cms/views/login/index.jade",
+		"/D/nodeApps/cms/node_modules/express/lib/application.js",
+		"/D/nodeApps/cms/public/stylesheets/style.css",
+		"/D/nodeApps/cms/public/stylesheets/style.less",
+		"/D/nodeApps/cms/public/libs/bootstrap/js/bootstrap.js",
+		"/D/nodeApps/cms/public/javascripts/application-name.js",
+		"/D/nodeApps/cms/package.json",
+		"/D/nodeApps/cms/views/layout.jade",
+		"/D/nodeApps/cms/app.js",
+		"/D/nodeApps/cms/public/libs/bootstrap/css/bootstrap.css",
+		"/D/30.My Dev Env/parallax scroll/index.html",
 		"/D/30.My Dev Env/Sublime Text 2.0.1/Data/Packages/Default/Default (Windows).sublime-keymap",
 		"/D/30.My Dev Env/Sublime Text 2.0.1/Data/Packages/Git/Git.sublime-settings",
 		"/D/nodeApps/cms/.git/config",
@@ -736,7 +755,6 @@
 		"/D/nodeApps/cms/Gruntfile.js",
 		"/D/nodeApps/cms/build/application-name.min.js",
 		"/C/Users/73007/AppData/Roaming/npm/node_modules/grunt/test/grunt/event_test.js",
-		"/D/nodeApps/cms/views/layout.jade",
 		"/D/nodeApps/cms/public/libs/jquery/jquery.js",
 		"/D/nodeApps/cms/public/libs/backbone/LICENSE",
 		"/D/nodeApps/cms/node_modules/backbone/node_modules/underscore/package.json",
@@ -845,17 +863,7 @@
 		"/D/30.My Dev Env/unsemantic-master/assets/stylesheets/ie.css",
 		"/D/30.My Dev Env/unsemantic-master/README.md",
 		"/D/30.My Dev Env/nathansmith-960-Grid-System-231ee0c/code/demo_24_col.html",
-		"/D/30.My Dev Env/nathansmith-960-Grid-System-231ee0c/code/css/text.css",
-		"/D/30.My Dev Env/nathansmith-960-Grid-System-231ee0c/code/css/960_24_col.css",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/WEB-INF/authorization.excluded",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/20120511_01/dhtmlx35/dhtmlxwindows/dhtmlxwindows.js",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/WEB-INF/authentication.excluded",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/src/lgcns/pms/process/cmd/RetrieveRegResourceListCmd.java",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/20120511_01/apps/templates/main.htm",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/jsp/add/common/loginForm.jsp",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/20120511_01/sys/css/pbf_base.css",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/20120511_01/sys/css/pbf_typo.css",
-		"/C/DevOnStudio/workspace/LGCNS.ADD/war/20120511_01/sys/css/pbf_layout_ext.css"
+		"/D/30.My Dev Env/nathansmith-960-Grid-System-231ee0c/code/css/text.css"
 	],
 	"find":
 	{
@@ -863,7 +871,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"C:\\DevOnStudio\\workspace\\LGCNS.ADD",
@@ -876,6 +884,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"form",
+			"item-height",
+			"drop-curtain",
+			"jumbotron",
 			"quote",
 			"container",
 			"npm",
@@ -999,11 +1011,7 @@
 			"onRow",
 			"',\n",
 			"\n            ",
-			"onGridsRowSelect",
-			"_totalValidError",
-			"makeQuery",
-			"make",
-			"requestChangePassword"
+			"onGridsRowSelect"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1131,15 +1139,15 @@
 					"file": "views/index.jade",
 					"settings":
 					{
-						"buffer_size": 257,
+						"buffer_size": 4710,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								121,
-								121
+								2492,
+								2492
 							]
 						],
 						"settings":
@@ -1281,7 +1289,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 684.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1291,15 +1299,15 @@
 					"file": "views/layout.jade",
 					"settings":
 					{
-						"buffer_size": 136,
+						"buffer_size": 274,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								136,
-								136
+								274,
+								274
 							]
 						],
 						"settings":
@@ -1447,18 +1455,18 @@
 				},
 				{
 					"buffer": 2,
-					"file": "app.js",
+					"file": "public/stylesheets/style.less",
 					"settings":
 					{
-						"buffer_size": 904,
+						"buffer_size": 3465,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								308,
-								308
+								1828,
+								1828
 							]
 						],
 						"settings":
@@ -1596,28 +1604,29 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1216.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "package.json",
+					"file": "app.js",
 					"settings":
 					{
-						"buffer_size": 481,
+						"buffer_size": 2750,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								481,
-								481
+								952,
+								975
 							]
 						],
 						"settings":
@@ -1755,30 +1764,30 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 152.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "public/javascripts/application-name.js",
+					"file": "routes/login.js",
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 316,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								316,
+								316
 							]
 						],
 						"settings":
@@ -1926,10 +1935,10 @@
 				},
 				{
 					"buffer": 5,
-					"file": "public/stylesheets/style.css",
+					"file": "routes/user.js",
 					"settings":
 					{
-						"buffer_size": 110,
+						"buffer_size": 107,
 						"regions":
 						{
 						},
@@ -1937,7 +1946,7 @@
 						[
 							[
 								0,
-								0
+								107
 							]
 						],
 						"settings":
@@ -2075,7 +2084,7 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/CSS/CSS.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2085,18 +2094,18 @@
 				},
 				{
 					"buffer": 6,
-					"file": "public/libs/bootstrap/css/bootstrap.css",
+					"file": "routes/index.js",
 					"settings":
 					{
-						"buffer_size": 127352,
+						"buffer_size": 110,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								87205,
-								87214
+								110,
+								110
 							]
 						],
 						"settings":
@@ -2234,12 +2243,10 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 86360.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2280,7 +2287,11 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 199.0
+		"height": 143.0
+	},
+	"output.git":
+	{
+		"height": 124.0
 	},
 	"replace":
 	{
@@ -2293,12 +2304,32 @@
 		"selected_items":
 		[
 			[
+				"index",
+				"cms/views/index.jade"
+			],
+			[
+				"index.jade",
+				"cms/views/index.jade"
+			],
+			[
+				"applica",
+				"cms/node_modules/express/lib/application.js"
+			],
+			[
+				"sty",
+				"cms/public/stylesheets/style.less"
+			],
+			[
+				"app.js",
+				"cms/app.js"
+			],
+			[
 				"boots",
-				"public/libs/bootstrap/css/bootstrap.css"
+				"cms/public/libs/bootstrap/js/bootstrap.js"
 			],
 			[
 				"layout",
-				"views/layout.jade"
+				"cms/views/layout.jade"
 			],
 			[
 				"p",
@@ -2307,10 +2338,6 @@
 			[
 				"app",
 				"app.js"
-			],
-			[
-				"index",
-				"views/index.jade"
 			],
 			[
 				"initco",
@@ -2787,22 +2814,6 @@
 			[
 				"main.htm",
 				"war/20120511_01/apps/templates/main.htm"
-			],
-			[
-				"leftmenul",
-				"war/20120511_01/apps/views/index/leftMenuListView.js"
-			],
-			[
-				"leftmenuview",
-				"war/20120511_01/apps/views/index/leftMenuView.js"
-			],
-			[
-				"backbone",
-				"war/20120511_01/backbone/backbone-0.9.10.js"
-			],
-			[
-				"glo",
-				"war/20120511_01/apps/views/globalEventAggregatorView.js"
 			]
 		],
 		"width": 0.0
@@ -2814,7 +2825,7 @@
 		[
 			[
 				"",
-				"/D/nodeApps/myApp.sublime-project"
+				"/C/DevOnStudio/workspace/LGCNS.PMS.SA.sublime-project"
 			]
 		],
 		"width": 380.0
