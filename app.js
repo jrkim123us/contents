@@ -1,16 +1,31 @@
+// First extend the express server's prototype
 
-/**
- * Module dependencies.
- */
+var debug = require('debug')('http'),
+  app = require('./libs/config'),
+  server = require('./libs/server')(app),
+  db = require('./libs/db'),
+  handler = require('./libs/handlers')(db);
 
+// Setup routes
+require('./libs/routers')(app, handler);
+
+// All set, start listening!
+server.listen(app.get('port'), function(){
+  debug('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+});
+// debug("Express server listening on port %d in %s mode", server.address().port, process.env.NODE_ENV);
+
+/*
 var express = require('express'),
-	routes = require('./routes'),
-  login = require('./routes/login'),
-	user = require('./routes/user'),
-	http = require('http'),
-	path = require('path');
+    routes = require('./routes'),
+    login = require('./routes/login'),
+    http = require('http'),
+    mongoose = require('mongoose'),
+    path = require('path');
+
 
 var app = express();
+
 
 app.configure(function() {
 	// all environments
@@ -21,29 +36,36 @@ app.configure(function() {
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
-  app.use(express.session({secret: 'this is a secret'}));
+    app.use(express.session({secret: 'this is a secret'}));
 	app.use(express.methodOverride());
 	app.use(app.router);
 	app.use(require('less-middleware')({ src: __dirname + '/public' }));
 	app.use(express.static(path.join(__dirname, 'public')));
 
-
 	// development only
 	if ('development' == app.get('env')) {
 		app.use(express.errorHandler());
 	}
+
 });
+
+mongoose.connect('mongodb://localhost/cms');
+
+var UserSchema = new mongoose.Schema({
+    name  : String,
+    email : String,
+    age   : Number
+}),
+Users = mongoose.model('Users', UserSchema);
 
 // app.get('/', routes.index);
-app.get('/', function(req, res){
-	res.redirect('/login');
-});
+
 app.get('/login', login.index);
 app.post('/login', login.post);
-app.get('/users', user.list);
+app.get('/home', routes.home);
 
 
-/*// dummy database
+// dummy database
 
 var users = {
   tj: { name: 'tj' }
@@ -104,8 +126,9 @@ app.get('/logout', function(req, res){
 
 app.get('/login', function(req, res){
   res.render('login');
-});*/
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+*/

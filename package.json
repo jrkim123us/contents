@@ -1,5 +1,7 @@
 {
-  "name": "application-name",
+  "name": "Content-Management-System",
+  "description": "Content Management System",
+  "author": "Kim Jong Rok",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,7 +11,9 @@
     "express": "3.1.1",
     "jade": "*",
     "less-middleware": "*",
-    "mongoose": "2.7.0"
+    "mongoose": "2.7.0",
+    "debug" : "*",
+    "implementjs": "*"
   },
   "devDependencies": {
     "nodemon": "*",
