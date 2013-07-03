@@ -1,4 +1,5 @@
-var debug = require('debug')('handler');
+var debug = require('debug')('handler'),
+	https = require('https');
 
 // Usually expects "db" as an injected dependency to manipulate the models
 module.exports = function (db) {
@@ -16,10 +17,13 @@ module.exports = function (db) {
 			// res.render('index', {title: "Contens Management System"});
 			// res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
 		},
-// Post		
+		renderHome: function(req, res) {
+			res.render('home', {title: "CMS"});
+		},
+// Post
 		checkLogin: function(req, res) {
 			// login 정보 체크 후 home으로 
-			res.render('index', {title: "Log in"});
+			res.redirect('/home');
 		}
 
 	};

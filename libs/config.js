@@ -1,15 +1,22 @@
 var debug = require('debug')('config'),
 	path = require('path'),
+	fs = require('fs'),
     mongoose = require('mongoose'),
 	express = require('express');
 
 var app = express();
 
+var options = {
+	host : 'cms.lgcns.com',
+	key  : fs.readFileSync(__dirname + '/privatekey.pem').toString(),
+	cert : fs.readFileSync(__dirname + '/certificate.pem').toString()
+};
 
 app.configure(function() {
 	var rootDir = path.resolve(__dirname, '..');
 	// all environments
-	app.set('port', process.env.PORT || 3000);
+	app.set('port', process.env.PORT || 80);
+	app.set('httpsPort', options.port || 443);
 	app.set('views', rootDir + '/views');
 	app.set('view engine', 'jade');
 	app.use(express.favicon());
@@ -40,4 +47,8 @@ app.configure('production', function () {
 	app.use(express.errorHandler());
 });
 
-module.exports = app;
+
+module.exports = {
+	app     : app,
+	options : options
+};

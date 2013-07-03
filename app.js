@@ -1,17 +1,20 @@
 // First extend the express server's prototype
 
 var debug = require('debug')('http'),
-  app = require('./libs/config'),
-  server = require('./libs/server')(app),
+  config = require('./libs/config'),
+  server = require('./libs/server')(config),
   db = require('./libs/db'),
   handler = require('./libs/handlers')(db);
 
 // Setup routes
-require('./libs/routers')(app, handler);
+require('./libs/routers')(config.app, handler);
 
 // All set, start listening!
-server.listen(app.get('port'), function(){
-  debug('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+server.http.listen(config.app.get('port'), function(){
+  debug('Http server listening on port %d in %s mode', config.app.get('port'), config.app.get('env'));
+});
+server.https.listen(443, function() {
+  debug('Https server listening on port %d in %s mode', 443, config.app.get('env'));
 });
 // debug("Express server listening on port %d in %s mode", server.address().port, process.env.NODE_ENV);
 

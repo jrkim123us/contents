@@ -9,11 +9,13 @@ module.exports = function (app, handler) {
 	impl.implements(handler, {
 		renderIndex: impl.F,
 		renderLogin: impl.F,
-		checkLogin: impl.F
+		renderHome: impl.F//,
+		// checkLogin: impl.F
 	});
 
 	app.get('/', handler.renderIndex);
 	app.get('/login', handler.renderLogin);
+	app.get('/home', handler.renderHome);
 
 	app.post('/login', handler.checkLogin);
 };
