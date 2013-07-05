@@ -7,17 +7,10 @@ module.exports = function (app, handler) {
 
 	// Validate handler's interface
 	impl.implements(handler, {
-		renderIndex: impl.F,
-		renderLogin: impl.F,
-		renderHome: impl.F//,
-		// checkLogin: impl.F
+		renderIndex: impl.F
 	});
 
 	app.get('/', handler.renderIndex);
-	app.get('/login', handler.renderLogin);
-	app.get('/home', handler.renderHome);
-
-	app.post('/login', handler.checkLogin);
 };
 
 /*
