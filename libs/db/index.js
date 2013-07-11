@@ -1,6 +1,6 @@
 var debug = require('debug')('db'),
 	mongoose = require('mongoose'),
-	model = require('./person'),
+	model = require('./user'),
 	connString = 'mongodb://localhost/cms';
 	// connString = 'mongodb://' + process.env.MY_USER + ':' + process.env.MY_PWD + '@somehost.com:9999/DbName';
 
@@ -17,4 +17,4 @@ mongoose.connection.on('close', function () {
 	debug('Mongo closed.');
 });
 
-module.exports.Person = model;
+module.exports.User = model;

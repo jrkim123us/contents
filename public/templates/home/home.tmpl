@@ -1,5 +1,115 @@
-<script id="tmpl_ownevents" type="text/x-handlebars-template">
-	<div id="home">
-	    	<p>test text</p>
+<div class="master-head">
+	<div class="container">
+		<ul class="inline">
+			<li>
+				<h3>Welcome</h3>
+			</li>
+			<li class="pull-right">
+				<h3>Content Management System</h3>
+			</li>
+		</ul>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<ul class="nav">
+						<li class="active"><a href="#home" tabindex="-1" class="active">Home</a></li>
+						<li><a href="#todo">ToDo</a></li>
+						<li><a href="#planner">Planner</a></li>
+						<li class="dropdown">
+							<a href="#" tabindex="-1" data-toggle="dropdown" class="dropdown-toggle">
+								Projects
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="nav-header">Setup &amp; Plan</li>
+								<li><a href="#" tabindex="-1">Project profile</a></li>
+								<li class="divider"></li>
+								<li class="nav-header">Exceution &amp; Control</li>
+								<li class="dropdown-submenu">
+									<a href="#" tabindex="-1">Schedule</a>
+									<ul class="dropdown-menu">
+										<li><a href="#" tabindex="-1">MSP Sync/Resource Alloc</a></li>
+										<li><a href="#" tabindex="-1">Weekly Task Direction</a></li>
+										<li><a href="#" tabindex="-1">Weekly Task Result</a></li>
+										<li><a href="#" tabindex="-1">Weekly Task Approval</a></li>
+										<li><a href="#" tabindex="-1">Completion Rate Management</a></li>
+										<li><a href="#" tabindex="-1">Milestone Status</a></li>
+									</ul>
+								</li>
+								<li class="divider"></li>
+								<li class="nav-header">Risks &amp; Issues</li>
+								<li><a href="#" tabindex="-1">Risks</a></li>
+								<li><a href="#" tabindex="-1">Issues</a></li>
+							</ul>
+						</li>
+						<li><a href="#">BBS</a></li>
+						<li><a href="#">Settings</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
-</script>
+</div>
+<div class="master-content">
+	<div id="myCarousel" class="carousel slide">
+		<div class="carousel-inner">
+			{{#each slideImages}}
+				{{#if this.active}}
+					<div class="item active">
+				{{else}}
+					<div class="item">
+				{{/if}}
+					<img src="/img/{{this.img}}" alt="">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Catch phrase</h1>
+							<p class='lead'>
+								ead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+							</p>
+							<a href="#" class="btn btn-large btn-primary">Get started today</a>
+						</div>
+					</div>
+				</div>
+			{{/each}}
+		</div>
+		<a class="left carousel-control"  href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
+	<div class="container">
+		<div class="row-fluid">
+			<div class="row">
+				<div class="span4">
+					<h2>Notice</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+					<p><a href="#" class="btn">View dtails</a></p>
+				</div>
+				<div class="span4">
+					<h2>Risk</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+					<p><a href="#" class="btn">View dtails</a></p>
+				</div>
+				<div class="span4">
+					<h2>Issue</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+					<p><a href="#" class="btn">View dtails</a></p>
+				</div>
+			</div>
+			<div class="row">
+				<div>
+					<h2>Progress chart</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+					<p><a href="#" class="btn">View dtails</a></p>
+				</div>
+				<div>
+					<h2>Calendar</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
+					<p><a href="#" class="btn">View dtails</a></p>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="footer">
+			<p>Company 2013</p>
+		</div>
+	</div>
+</div>

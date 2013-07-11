@@ -1,14 +1,4 @@
 extends ../layout
 
 block content
-	div.signin-masthead
-		div.container
-			form.form-signin(method="post")
-				h2 Please sign in
-				input(type="text", placeholder="Email address")
-				input(type="password", placeholder="Password")
-				label.checkbox Remember me 
-					a(herf="/sessions/forget_password") (forget password)
-					input(type="checkbox", value="remember-me")
-				button.btn.btn-large.btn-primary(type="submit") Sign in
 	script(src="libs/requirejs/require.js", data-main="js/app.build").

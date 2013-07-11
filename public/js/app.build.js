@@ -2,11 +2,12 @@ requirejs.config({
 	baseUrl: '../',
 	paths: {
 		jquery            : 'libs/jquery/jquery.min',
+		'jquery.validate' : 'libs/jquery/jquery.validate',
 		underscore        : 'libs/underscore/underscore.min',
 		backbone          : 'libs/backbone/backbone.min',
 		bootstrap         : 'libs/bootstrap/js/bootstrap.min',
 		handlebars        : 'libs/handlebars/handlebars.runtime',
-		'handlebars.tmpl' : 'libs/handlebars/handlebars.tmpl',
+		'handlebars.tmpl' : 'libs/handlebars/handlebars.tmpl.min',
 		app               : 'js'
 	},
 	shim: {
@@ -19,6 +20,9 @@ requirejs.config({
         },
         "bootstrap": {
 			deps: ["jquery"]
+        },
+        "jquery.validate" : {
+            deps: ["jquery"]
         },
         'handlebars.tmpl' : {
 			deps    : ['handlebars']

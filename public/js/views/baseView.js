@@ -3,7 +3,8 @@
  */
 define([
     'app/views/globalEventAggregatorView',
-    'handlebars.tmpl'
+    'handlebars.tmpl',
+    'jquery.validate'
 ], function(GlobalEventAggregatorView){
     var BaseView = GlobalEventAggregatorView.extend({
         initialize: function() {

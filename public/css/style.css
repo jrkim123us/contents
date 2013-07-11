@@ -2,12 +2,7 @@ body {
   padding-bottom: 60px;
 }
 /* form-signin */
-.box-shadow {
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.signin-masthead {
+.signin-master-head {
   position: absolute;
   top: 0;
   left: 0;
@@ -23,11 +18,8 @@ body {
   margin: 0 auto 20px;
   background-color: #fff;
   border: 1px solid #e5e5e5;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
+}
+.form-signin .box-shadow {
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -36,67 +28,104 @@ body {
 .form-signin .checkbox {
   margin-bottom: 10px;
 }
-.form-signin input[type="text"],
-.form-signin input[type="password"] {
+.form-signin .controls {
+  margin-bottom: 15px;
+}
+.form-signin .controls input[type="text"],
+.form-signin .controls input[type="password"] {
   font-size: 16px;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   padding: 7px 9px;
 }
+.form-signin .controls .help-block {
+  margin-bottom: 5px;
+}
 /* Custom container */
-.masthead {
+.container > hr {
+  margin: 60px 0;
+}
+.master-head {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 10;
+  /* Customize the navbar links to be fill the entire space of the .navbar */
+
 }
-.container {
-  margin: 0 auto;
-  max-width: 1000px;
-}
-/* Customize the navbar links to be fill the entire space of the .navbar */
-.container > hr {
-  margin: 60px 0;
-}
-.navbar .navbar-inner {
+.master-head .navbar .navbar-inner {
   padding: 0;
 }
-.navbar .nav {
+.master-head .navbar .nav {
   margin: 0;
   display: table;
   width: 100%;
 }
-.navbar .nav > li {
+.master-head .navbar .nav > li {
   display: table-cell;
   width: 1%;
   float: none;
 }
-.navbar .nav > li > a {
+.master-head .navbar .nav > li > a {
   font-weight: bold;
   text-align: center;
   border-left: 1px solid rgba(255, 255, 255, 0.75);
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
-.navbar .nav > li:first-child > a {
+.master-head .navbar .nav > li:first-child > a {
   border-left: 0;
   border-radius: 3px 0 0 3px;
 }
-.navbar .nav > li:last-child > a {
+.master-head .navbar .nav > li:last-child > a {
   border-right: 0;
   border-radius: 0 3px 3px 0;
 }
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
-/* Carousel base class */
-.carousel {
+.master-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Carousel base class */
+
+}
+.master-content .carousel {
   margin-bottom: 60px;
 }
-.carousel .container {
+.master-content .carousel .container {
   position: relative;
   z-index: 9;
 }
-.carousel-control {
+.master-content .carousel .item {
+  height: 500px;
+}
+.master-content .carousel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 500px;
+}
+.master-content .carousel .carousel-caption {
+  background-color: transparent;
+  position: static;
+  max-width: 550px;
+  padding: 0 20px;
+  margin-top: 200px;
+}
+.master-content .carousel .carousel-caption h1,
+.master-content .carousel .carousel-caption .lead {
+  margin: 0;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+.master-content .carousel .carousel-caption .btn {
+  margin-top: 10px;
+}
+.master-content .carousel-control {
   height: 80px;
   margin-top: 0;
   font-size: 120px;
@@ -104,49 +133,6 @@ body {
   background-color: transparent;
   border: 0;
   z-index: 10;
-}
-.carousel .item {
-  height: 500px;
-}
-.carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  height: 500px;
-}
-.carousel-caption {
-  background-color: transparent;
-  position: static;
-  max-width: 550px;
-  padding: 0 20px;
-  margin-top: 200px;
-}
-.carousel-caption h1,
-.carousel-caption .lead {
-  margin: 0;
-  line-height: 1.25;
-  color: #fff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-}
-.carousel-caption .btn {
-  margin-top: 10px;
-}
-.catch-phrase {
-  margin: 80px 0;
-  text-align: center;
-}
-.catch-phrase h1 {
-  font-size: 100px;
-  line-height: 1;
-}
-.catch-phrase .lead {
-  font-size: 24px;
-  line-height: 1.25;
-}
-.catch-phrase .btn {
-  font-size: 21px;
-  padding: 14px 24px;
 }
 /* RESPONSIVE CSS
 -------------------------------------------------- */

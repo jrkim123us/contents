@@ -3,19 +3,7 @@ body {
 }
 
 /* form-signin */
-.rounded-corners (@radius: 5px) {
-	-webkit-border-radius: @radius;
-	-moz-border-radius: @radius;
-	-ms-border-radius: @radius;
-	-o-border-radius: @radius;
-	border-radius: @radius;
-}
-.box-shadow {
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	box-shadow: 0 1px 2px rgba(0,0,0,.05);
-}
-.signin-masthead {
+.signin-master-head {
 	position: absolute;
 	top:0;
 	left:0;
@@ -31,132 +19,128 @@ body {
 	margin: 0 auto 20px;
 	background-color: #fff;
 	border: 1px solid #e5e5e5;
-	.rounded-corners;
-	.box-shadow;
+	.rounded-corners (@radius: 5px) {
+		-webkit-border-radius: @radius;
+		-moz-border-radius: @radius;
+		-ms-border-radius: @radius;
+		-o-border-radius: @radius;
+		border-radius: @radius;
+	}
+	.box-shadow {
+		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+		-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+		box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	}
 
 	.form-signin-heading, .checkbox {
-		margin-bottom: 10px;	
+		margin-bottom: 10px;
 	}
-	input[type="text"], input[type="password"] {
-		font-size: 16px;
-		height: auto;
+	.controls {
 		margin-bottom: 15px;
-		padding: 7px 9px;
+		input[type="text"], input[type="password"] {
+			font-size: 16px;
+			height: auto;
+			margin-bottom: 5px;
+			padding: 7px 9px;
+		}
+		.help-block {
+			margin-bottom: 5px;
+		}
 	}
 }
 
 /* Custom container */
-.masthead {
+.container > hr {
+	margin: 60px 0;
+}
+.master-head {
 	position: absolute;
 	top:0;
 	left:0;
 	right:0;
 	z-index: 10;
-}
-.container {
-	margin: 0 auto;
-	max-width: 1000px;
-}
-
-/* Customize the navbar links to be fill the entire space of the .navbar */
-.container > hr {
-	margin: 60px 0;
-}
-.navbar {
-	.navbar-inner {
-		padding: 0;
-	}
-	.nav {
-		margin: 0;
-		display: table;
-		width: 100%;
-		> li {
-			display: table-cell;
-			width: 1%;
-			float: none;
-			> a {
-				font-weight: bold;
-				text-align: center;
-				border-left: 1px solid rgba(255,255,255,.75);
-				border-right: 1px solid rgba(0,0,0,.1);
+	/* Customize the navbar links to be fill the entire space of the .navbar */
+	.navbar {
+		.navbar-inner {
+			padding: 0;
+		}
+		.nav {
+			margin: 0;
+			display: table;
+			width: 100%;
+			> li {
+				display: table-cell;
+				width: 1%;
+				float: none;
+				> a {
+					font-weight: bold;
+					text-align: center;
+					border-left: 1px solid rgba(255,255,255,.75);
+					border-right: 1px solid rgba(0,0,0,.1);
+				}
 			}
-		}
-		> li:first-child > a {
-			border-left: 0;
-			border-radius: 3px 0 0 3px;
-		}
-		> li:last-child > a {
-			border-right: 0;
-			border-radius: 0 3px 3px 0;
+			> li:first-child > a {
+				border-left: 0;
+				border-radius: 3px 0 0 3px;
+			}
+			> li:last-child > a {
+				border-right: 0;
+				border-radius: 0 3px 3px 0;
+			}
 		}
 	}
 }
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
-/* Carousel base class */
-.carousel {
-	margin-bottom: 60px;
-}
-
-.carousel .container {
-	position: relative;
-	z-index: 9;
-}
-
-.carousel-control {
-	height: 80px;
-	margin-top: 0;
-	font-size: 120px;
-	text-shadow: 0 1px 1px rgba(0,0,0,.4);
-	background-color: transparent;
-	border: 0;
-	z-index: 10;
-}
-
-.carousel .item {
-	height: 500px;
-}
-.carousel img {
+.master-content {
 	position: absolute;
-	top: 0;
-	left: 0;
-	min-width: 100%;
-	height: 500px;
-}
+	top:0;
+	left:0;
+	right:0;
+	/* Carousel base class */
+	.carousel {
+		margin-bottom: 60px;
 
-.carousel-caption {
-	background-color: transparent;
-	position: static;
-	max-width: 550px;
-	padding: 0 20px;
-	margin-top: 200px;
-}
-.carousel-caption h1,
-.carousel-caption .lead {
-	margin: 0;
-	line-height: 1.25;
-	color: #fff;
-	text-shadow: 0 1px 1px rgba(0,0,0,.4);
-}
-.carousel-caption .btn {
-	margin-top: 10px;
-}
-
-.catch-phrase {
-	margin: 80px 0;
-	text-align: center;	
-}
-.catch-phrase h1 {
-	font-size: 100px;
-	line-height: 1;
-}
-.catch-phrase .lead {
-	font-size: 24px;
-	line-height: 1.25;
-}
-.catch-phrase .btn {
-	font-size: 21px;
-	padding: 14px 24px;
+		.container {
+			position: relative;
+			z-index: 9;
+		}
+		.item {
+			height: 500px;
+		}
+		img {
+			position: absolute;
+			top: 0;
+			left: 0;
+			min-width: 100%;
+			height: 500px;
+		}
+		.carousel-caption {
+			background-color: transparent;
+			position: static;
+			max-width: 550px;
+			padding: 0 20px;
+			margin-top: 200px;
+			h1,.lead {
+				margin: 0;
+				line-height: 1.25;
+				color: #fff;
+				text-shadow: 0 1px 1px rgba(0,0,0,.4);
+			}
+			.btn {
+				margin-top: 10px;
+			}
+		}
+	}
+	.carousel-control {
+		height: 80px;
+		margin-top: 0;
+		font-size: 120px;
+		text-shadow: 0 1px 1px rgba(0,0,0,.4);
+		background-color: transparent;
+		border: 0;
+		z-index: 10;
+	}
 }
 
 /* RESPONSIVE CSS

@@ -1,15 +1,23 @@
-<div class="signin-masthead">
+<div class="signin-master-head">
 	<div class="container">
 		<form action="" class="form-signin" method="post">
 			<h2>Please sign in</h2>
-			<input type="text" placeholder="Email address">
-			<input type="password" placeholder="Password">
-			<label class="checkbox" for="">
-				Remember me 
+			<div class="control-group">
+				<div class="controls">
+					<input name="email" type="text" placeholder="example@lgcns.com">
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<input name="password" type="password" placeholder="Password">
+				</div>
+			</div>
+			<label class="checkbox" for="remember">
+				Remember me
 				<a href="session/forget_password"> (forget password)</a>
-				<input type="checkbox" value="remember-me">
+				<input id="remember" type="checkbox" value="remember-me">
 			</label>
-			<button class="btn btn-large btn-primary" type="submit">Sign in</button>
+			<button class="btn btn-large btn-primary">Sign in</button>
 		</form>
 	</div>
 </div>
