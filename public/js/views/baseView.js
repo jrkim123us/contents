@@ -13,18 +13,22 @@ define([
         render: function() {
             if(this.tmpl) {
                 var data = this.model ? this.model.toJSON() : {};
-                var html = Handlebars.templates[this.tmpl](data);
+                var html = Handlebars.templates[this.tmpl] ? Handlebars.templates[this.tmpl](data) : '';
 
-                this.$el.html('').append(html);
+                this.$el.html(html);
             }
-
-            // if(bReset)
-            //     this.delegateEvents();
 
             // if($targetEl.i18n)
             //     $targetEl.i18n();
 
             return this;
+        },
+        close: function() {
+            this.remove();
+            this.unbind();
+            if(this.onClose) {
+                this.onClose();
+            }
         }
     });
 
