@@ -5,6 +5,7 @@ define([
 		vent : _.extend({}, Backbone.Event),
 		routes: {
 			"": "root",
+			"login" : "login",
 			"home" : "home",
 			"home/:query/p:page" : "home",
 			"todo" : "todo"
@@ -17,7 +18,6 @@ define([
 				this.login();
 			else
 				this.index();
-
 		},
 		login: function() {
 			require([
@@ -66,8 +66,14 @@ define([
 			viewManager : new ViewManager()
 		});
 
+		App.router.on('route:home', function() {
+			console.warn('called home!');
+		});
+
 		Backbone.history.start();
+		// Backbone.history.start({pushState: true});
 	};
+
 
 	return {
 		initialize : initialize

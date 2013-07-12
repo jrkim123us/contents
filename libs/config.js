@@ -1,8 +1,10 @@
 var debug = require('debug')('config'),
 	path = require('path'),
 	fs = require('fs'),
-    mongoose = require('mongoose'),
-	express = require('express');
+	flash = require('connect-flash'),
+	express = require('express'),
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy;
 
 var app = express();
 
@@ -24,8 +26,13 @@ app.configure(function() {
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
     app.use(express.session({secret: 'this is a secret'}));
+    app.use(flash());
+	// Initialize Passport!  Also use passport.session() middleware, to support
+	// persistent login sessions (recommended).
 	app.use(express.methodOverride());
-	app.use(app.router);
+	app.use(passport.initialize());
+	app.use(passport.session());
+	// app.use(app.router); '/*'를 쓰기 위해서는 comment
 	app.use(require('less-middleware')({ src: rootDir + '/public' }));
 	app.use(express.static(path.join(rootDir, 'public')));
 
@@ -49,6 +56,7 @@ app.configure('production', function () {
 
 
 module.exports = {
-	app     : app,
-	options : options
+	app      : app,
+	passport : passport,
+	options  : options
 };

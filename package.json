@@ -13,7 +13,10 @@
     "less-middleware": "*",
     "mongoose": "2.7.0",
     "debug": "*",
-    "implementjs": "*"
+    "implementjs": "*",
+    "connect-flash": "0.1.x",
+    "passport": " 0.1.17",
+    "passport-local": "0.1.6"
   },
   "devDependencies": {
     "nodemon": "*",

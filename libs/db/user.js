@@ -15,7 +15,7 @@ var handleError = function(err) {
 	for(error in err.errors) {
 		console.log(error.message);
 	}
-}
+};
 // Define some "static" or "instance" methods
 userSchema.statics.getAll = function (callback) {
 	this

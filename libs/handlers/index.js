@@ -5,30 +5,34 @@ var debug = require('debug')('handler'),
 module.exports = function (db) {
 	debug('setting up handlers...');
 
+
 	return {
 		renderIndex: function (req, res) {
-			res.render('index', {title: 'CMS'});
+			debug('called renderIndex');
+			res.render('index', {title: 'CMS', user: req.user});
 		},
 		renderLogin: function(req, res) {
-			res.render('login', {title: 'CMS Sign in'});
+			debug('called renderLogin');
+			res.render('login', {title: 'CMS Sign in', user: req.user, message: req.flash('error')});
 		},
-		postLogin : function(req, res) {
-			req.session.userId = '73007';
-
+		renderLogout: function(req, res) {
+			req.logout();
 			res.redirect('/');
-			// db.User.insert({name : {first : 'kim', last: 'jong'}, email: 'jrkim79@lgcns.com'});
-
-			// db.User.getAll(function(err, user) {
-			// 	if (err) return handleError(err);
-			// 	debug('test %s', user);
-			// });
 		},
-		checkAuthentication: function(req, res, next) {
-			if(!req.session.userId) {
-				res.redirect('/login');
-			} else {
-				next();
+		redirectRoot : function(req, res) {
+			// req.session.userId = '73007';
+			res.redirect('/');
+		},
+		// Simple route middleware to ensure user is authenticated.
+		//   Use this route middleware on any resource that needs to be protected.  If
+		//   the request is authenticated (typically via a persistent login session),
+		//   the request will proceed.  Otherwise, the user will be redirected to the
+		//   login page.
+		ensureAuthenticated: function(req, res, next) {
+			if (req.isAuthenticated()) {
+				return next();
 			}
+			res.redirect('/login');
 		}
 	};
 };
