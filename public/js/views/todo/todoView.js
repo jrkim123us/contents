@@ -1,5 +1,5 @@
 define([
-	'app/views/baseView',
+	'app/views/common/baseView',
 	'bootstrap'
 ], function(BaseView){
 	var TodoView = BaseView.extend({

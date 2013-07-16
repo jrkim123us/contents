@@ -8,11 +8,9 @@ module.exports = function (db) {
 
 	return {
 		renderIndex: function (req, res) {
-			debug('called renderIndex');
 			res.render('index', {title: 'CMS', user: req.user});
 		},
 		renderLogin: function(req, res) {
-			debug('called renderLogin');
 			res.render('login', {title: 'CMS Sign in', user: req.user, message: req.flash('error')});
 		},
 		renderLogout: function(req, res) {
@@ -22,6 +20,19 @@ module.exports = function (db) {
 		redirectRoot : function(req, res) {
 			// req.session.userId = '73007';
 			res.redirect('/');
+		},
+		getMenu: function(req, res) {
+			// db.Menu.getAll(function(arr, data){
+			// 	res.send(data);
+			// });
+			db.Menu.getDescendants(function(arr, data){
+				res.send(data);
+			});
+
+			// db.Menu.insert({name: 'Project', path: '/project'}, function() {
+			// 	// debug('getMenu : %s', db.Menu.getAll());
+
+			// });
 		},
 		// Simple route middleware to ensure user is authenticated.
 		//   Use this route middleware on any resource that needs to be protected.  If

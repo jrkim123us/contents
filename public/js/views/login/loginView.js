@@ -1,5 +1,5 @@
 define([
-	'app/views/baseView',
+	'app/views/common/baseView',
 	'app/utils/form.validate'
 ], function(BaseView, FormValidate){
 	var LoginView = BaseView.extend({
