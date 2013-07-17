@@ -14,7 +14,7 @@ var handleError = function(err) {
 		console.log(error.message);
 	}
 };
-schema.statics.initialize = function () {
+schema.statics.initialize = function (callback) {
 	// http://www.codeproject.com/Articles/521713/Storing-Tree-like-Hierarchy-Structures-With-MongoD
 	var root = new Menu({name : 'Root'});
 
@@ -86,7 +86,7 @@ schema.statics.initialize = function () {
 			});
 			risksIssues.save(function() {
 				risks.save();
-				issues.save();
+				issues.save(callback);
 			});
 		});
 	});
@@ -161,7 +161,7 @@ schema.statics.getAll = function (callback) {
 		.execFind(callback);
 };
 
-schema.statics.getDescendants = function (callback) {
+schema.statics.getChildrenTree = function (callback) {
 	this.findOne({name: 'Root'}, function(err, root) {
 		root.getChildrenTree({
 			columns: 'name link'

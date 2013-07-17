@@ -12,11 +12,18 @@ mongoose.connect(connString);
 // Should you need to do something on open or close...
 mongoose.connection.on('open', function () {
 	debug('Mongo connected.');
-
+	// 메뉴 데이터 초기화
 	Menu.remove({}, function(err) {
-		debug('Menu collection droped');
-		Menu.initialize();
+		Menu.initialize(function() {
+			debug('Menu collection initialized');
+		});
 	});
+
+	User.remove({}, function(err) {
+		User.initialize(function() {
+			debug('User collection initialized');
+		});
+	})
 });
 
 mongoose.connection.on('close', function () {

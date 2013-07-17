@@ -6,7 +6,7 @@ var debug = require('debug')('http'),
     handler = require('./libs/handlers')(db);
 
 //Setup passport
-require('./libs/passport')(config);
+require('./libs/passport')(config, handler);
 // Setup routes
 require('./libs/routers')(config, handler);
 

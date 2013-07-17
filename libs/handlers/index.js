@@ -25,7 +25,7 @@ module.exports = function (db) {
 			// db.Menu.getAll(function(arr, data){
 			// 	res.send(data);
 			// });
-			db.Menu.getDescendants(function(arr, data){
+			db.Menu.getChildrenTree(function(arr, data){
 				res.send(data);
 			});
 
@@ -44,6 +44,12 @@ module.exports = function (db) {
 				return next();
 			}
 			res.redirect('/login');
+		},
+		getUserByEmail: function(email, callback) {
+			db.User.getUserByEmail(email, callback);
+		},
+		getUserById: function(id, callback) {
+			db.User.getUserById(id, callback);
 		}
 	};
 };
