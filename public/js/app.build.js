@@ -13,10 +13,11 @@ requirejs.config({
 	},
 	shim: {
 		"backbone": {
-            deps: ["underscore", "jquery"],
+            deps: ["underscore"],
             exports: "Backbone"  //attaches "Backbone" to the window object
         },
         "underscore": {
+			deps: ["jquery"],
             exports: "_" //attaches "_" to the window object
         },
         "bootstrap": {

@@ -21,15 +21,15 @@
 											{{#each this.childs}} {{! 레벨 3 메뉴}}
 												{{#hasChild this}}
 													<li class="dropdown-submenu">
-														<a href="#" tabindex="-1">Schedule</a>
+														<a tabindex="-1">{{this.name}}</a>
 														<ul class="dropdown-menu">
 															{{#each this.childs}} {{! 레벨 4 메뉴}}
-																<li><a href="#" tabindex="-1">{{this.name}}</a></li>
+																<li><a href="{{this.link}}" tabindex="-1">{{this.name}}</a></li>
 															{{/each}}
 														</ul>
 													</li>
 												{{else}}
-													<li><a href="#" tabindex="-1">{{this.name}}</a></li>
+													<li><a href="{{this.link}}" tabindex="-1">{{this.name}}</a></li>
 												{{/hasChild}}
 											{{/each}}
 											<li class="divider"></li>

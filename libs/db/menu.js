@@ -40,22 +40,22 @@ schema.statics.initialize = function (callback) {
 	execControl.parent = project;
 	risksIssues.parent = project;
 
-	var projectProfile = new Menu({name : 'Project profile', link : '#'}),
+	var projectProfile = new Menu({name : 'Project profile', link : '#project/profile'}),
 		schedule = new Menu({name : 'Schedule', link : '#'}),
-		risks = new Menu({name : 'Risks', link : '#'}),
-		issues = new Menu({name : 'Issues', link : '#'});
+		risks = new Menu({name : 'Risks', link : '#project/risk'}),
+		issues = new Menu({name : 'Issues', link : '#project/issue'});
 
 	projectProfile.parent = setupPlan;
 	schedule.parent       = execControl;
 	risks.parent          = risksIssues;
 	issues.parent         = risksIssues;
 
-	var menu01 = new Menu({name : 'MSP Sync/Resource Alloc', link : '#'});
-	var menu02 = new Menu({name : 'Weekly Task Direction', link : '#'});
-	var menu03 = new Menu({name : 'Weekly Task Result', link : '#'});
-	var menu04 = new Menu({name : 'Weekly Task Approval', link : '#'});
-	var menu05 = new Menu({name : 'Completion Rate Management', link : '#'});
-	var menu06 = new Menu({name : 'Milestone Status', link : '#'});
+	var menu01 = new Menu({name : 'MSP Sync/Resource Alloc', link : '#project/sync'});
+	var menu02 = new Menu({name : 'Weekly Task Direction', link : '#project/direct'});
+	var menu03 = new Menu({name : 'Weekly Task Result', link : '#project/result'});
+	var menu04 = new Menu({name : 'Weekly Task Approval', link : '#project/approval'});
+	var menu05 = new Menu({name : 'Completion Rate Management', link : '#project/progress'});
+	var menu06 = new Menu({name : 'Milestone Status', link : '#project/milestone'});
 
 	menu01.parent = schedule;
 	menu02.parent = schedule;
@@ -166,6 +166,21 @@ schema.statics.getChildrenTree = function (callback) {
 		root.getChildrenTree({
 			columns: 'name link'
 		}, callback);
+	});
+};
+
+schema.statics.getTabs = function (parent, callback) {
+	this.findOne({name: parent}, function(err, parent) {
+		if(parent) {
+			Menu.find({
+				path : {$regex : '^' + parent.path + '#'},
+				link : {$regex : '^.{2,}$'}
+			})
+				.select('name link')
+				.exec(callback);
+		} else {
+			callback();
+		}
 	});
 };
 

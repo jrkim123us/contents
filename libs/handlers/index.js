@@ -21,7 +21,7 @@ module.exports = function (db) {
 			// req.session.userId = '73007';
 			res.redirect('/');
 		},
-		getMenu: function(req, res) {
+		getMenus: function(req, res) {
 			// db.Menu.getAll(function(arr, data){
 			// 	res.send(data);
 			// });
@@ -33,6 +33,20 @@ module.exports = function (db) {
 			// 	// debug('getMenu : %s', db.Menu.getAll());
 
 			// });
+		},
+		getTasks: function(req, res) {
+			res.send([
+				{wbs: '1.3.4.1'},
+				{wbs: '1.3.4.2'},
+				{wbs: '1.3.4.3'},
+				{wbs: '1.3.4.4'},
+				{wbs: '1.3.4.5'}
+			]);
+		},
+		getTabs: function(req, res) {
+			db.Menu.getTabs(req.params.parentId, function(arr, data) {
+				res.send(data);
+			});
 		},
 		// Simple route middleware to ensure user is authenticated.
 		//   Use this route middleware on any resource that needs to be protected.  If

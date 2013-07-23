@@ -33,7 +33,7 @@ module.exports = function (config, handler) {
 					// findByUserMail(email, function(err, user) {
 					handler.getUserByEmail(email, function(err, user) {
 						if (err) { return done(err); }
-						if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+						if (!user) { return done(null, false, { message: 'Unknown user ' + email }); }
 						if (user.passwordHash != password) { return done(null, false, { message: 'Invalid password' }); }
 
 						return done(null, user);

@@ -11,6 +11,7 @@ define([
 			"planner"  : "getTodo",
 			"bbs"      : "getTodo",
 			"settings" : "getTodo",
+			"project/:module" : "getProject",
 			"*other"   : "defaultAction"
 		},
 		initialize: function(options) {
@@ -50,6 +51,24 @@ define([
 			if(this.checkContentView())
 				this.renderContentView(['app/views/todo/todoView']);
 		},
+		getProject: function(module) {
+			var modulePath;
+			var fixedPath = 'app/views/project/';
+			switch (module)
+			{
+				case 'sync':
+					modulePath = fixedPath + 'projectSyncView';
+					break;
+				case 'direct':
+					modulePath = fixedPath + 'projectDirectView';
+					break;
+				default:
+					this.defaultAction();
+			}
+
+			if(modulePath && this.checkContentView())
+				this.renderContentView([modulePath]);
+		},
 		checkContentView: function() {
 			if(window.location.pathname === '/login')
 				return false;
@@ -65,6 +84,7 @@ define([
 			}, this));
 		},
 		defaultAction: function() {
+			console.log('defualtAction: ' + window.location.pathname);
 			this.navigate('/home', {trigger: true});
 		}
 	});

@@ -14,7 +14,9 @@ module.exports = function (config, handler) {
 		redirectRoot        : impl.F,
 		ensureAuthenticated : impl.F,
 
-		getMenu: impl.F
+		getTasks : impl.F,
+		getMenus : impl.F,
+		getTabs  : impl.F
 	});
 	// Note. Router 의 배치 순서 매우 중요함 !!
 	app.get('/login', handler.renderLogin);
@@ -24,8 +26,9 @@ module.exports = function (config, handler) {
 		config.passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
 		handler.redirectRoot
 	);
-
-	app.get('/common/menu', handler.ensureAuthenticated, handler.getMenu);
+	app.get('/project/task/:parentId', handler.ensureAuthenticated, handler.getTasks);
+	app.get('/common/menu', handler.ensureAuthenticated, handler.getMenus);
+	app.get('/common/tab/:parentId', handler.ensureAuthenticated, handler.getTabs);
 	// 순서 중요 맨 마지막에 위치해야 함
 	// app.get('/*', handler.renderIndex);
 	app.get('/', handler.ensureAuthenticated, handler.renderIndex);
