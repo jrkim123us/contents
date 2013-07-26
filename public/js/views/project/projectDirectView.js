@@ -13,6 +13,8 @@ define([
             );
 
 			BaseView.prototype.initialize.call(this);
+
+			this.render();
 		},
 		render: function() {
 			BaseView.prototype.render.call(this);

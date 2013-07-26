@@ -89,6 +89,8 @@ body {
 .master-content {
   /* Carousel base class */
 
+  /* breadcrumb base class */
+
 }
 .master-content .carousel {
   margin-bottom: 60px;
@@ -132,6 +134,9 @@ body {
   background-color: transparent;
   border: 0;
   z-index: 10;
+}
+.master-content .breadcrumb > li.right {
+  float: right;
 }
 .tabs-left > .nav-tabs > li > a,
 .tabs-right > .nav-tabs > li > a {

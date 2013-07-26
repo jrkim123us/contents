@@ -2,6 +2,7 @@ var debug = require('debug')('db'),
 	mongoose = require('mongoose'),
 	User = require('./user'),
 	Menu = require('./menu'),
+	Task = require('./task'),
 	connString = 'mongodb://localhost/cms';
 	// connString = 'mongodb://' + process.env.MY_USER + ':' + process.env.MY_PWD + '@somehost.com:9999/DbName';
 
@@ -23,7 +24,13 @@ mongoose.connection.on('open', function () {
 		User.initialize(function() {
 			debug('User collection initialized');
 		});
-	})
+	});
+// 변경건이 있으면 그때만 하는 걸로.
+	/*Task.remove({}, function(err) {
+		Task.initialize(function() {
+			debug('Task collection initialized');
+		});
+	});*/
 });
 
 mongoose.connection.on('close', function () {
@@ -31,6 +38,7 @@ mongoose.connection.on('close', function () {
 });
 
 module.exports = {
-	User  : User,
-	Menu : Menu
+	User : User,
+	Menu : Menu,
+	Task : Task
 };

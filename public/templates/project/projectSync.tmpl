@@ -3,22 +3,23 @@
 		<hr>
 		<div class="tabbable tabs-right"> <!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
-				<li><a href="#tab1" data-toggle="tab"><i class="icon-th-list"></i> Project profile</a></li>
-				<li class="active"><a href="#tab2" data-toggle="tab"><i class="icon-pencil"></i> Section 2</a></li>
-				<li><a href="#project/direct"><i class="icon-th-large"></i> Section 3</a></li>
-				<li><a href="#tab4" data-toggle="tab"><i class="icon-th"></i></a></li>
-				<li><a href="#tab5" data-toggle="tab"><i class="icon-star-empty"></i></a></li>
-				<li><a href="#tab6" data-toggle="tab"><i class="icon-star"></i></a></li>
-				<li><a href="#tab7" data-toggle="tab"><i class="icon-star"></i></a></li>
+				{{#each tabs}}
+					{{#if this.active}}
+						<li class="active"><a href="#tab" data-toggle="tab"><i class="{{this.icon}}"></i> {{this.name}}</a></li>
+					{{else}}
+						<li><a href="{{this.link}}"><i class="{{this.icon}}"></i> {{this.name}}</a></li>
+					{{/if}}
+				{{/each}}
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab2">
-					<h4>MSP Sync/Resource Alloc</h4>
+					<h4>{{title}}</h4>
 					<hr>
 					<ul class="breadcrumb">
-						<li><a href="#">1</a> <span class="divider">/</span></li>
+						<li><a href="{{parentTask.hash}}/{{parentTask.wbs}}">{{parentTask.wbs}}</a> <span class="divider">/</span></li>
 						<li><a href="#">1.3</a> <span class="divider">/</span></li>
 						<li class="active">1.3.4</li>
+						<li class="active right">{{parentTask.name}}</li>
 					</ul>
 					<hr>
 					<table class="table table-hover">
@@ -34,42 +35,25 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1.3.4.1</td>
-								<td>마일스톤 관리</td>
-								<td>20.0</td>
-								<td>24.0</td>
-								<td>22.0</td>
-								<td>홍길동</td>
-								<td>김철수</td>
-							</tr>
-							<tr>
-								<td>1.3.4.2</td>
-								<td>착수 및 계획 수립</td>
-								<td>33.0</td>
-								<td>22.1</td>
-								<td>22.6</td>
-								<td>홍길동</td>
-								<td>김철수, 김동수</td>
-							</tr>
-							<tr>
-								<td>1.3.4.3</td>
-								<td>실행 및 통제</td>
-								<td>20.0</td>
-								<td>24.0</td>
-								<td>22.0</td>
-								<td>홍길동, 최갑수</td>
-								<td>김철수</td>
-							</tr>
-							<tr>
-								<td>1.3.4.1</td>
-								<td>종료</td>
-								<td>20.0</td>
-								<td>24.0</td>
-								<td>22.0</td>
-								<td>홍길동, 김병장, 최이병</td>
-								<td>김철수,김순이</td>
-							</tr>
+							{{#each tasks}}
+								<tr>
+									<td>{{this.wbs}}</td>
+									<td>{{this.name}}</td>
+									<td>{{this.weight}}</td>
+									<td>{{this.plan}}</td>
+									<td>{{this.act}}</td>
+									<td>
+										{{#listToStr this.worker}}
+											{{this.name}}{{#unless @last}},{{/unless}}
+										{{/listToStr}}
+									</td>
+									<td>
+										{{#listToStr this.approver}}
+											{{this.name}}{{#unless @last}},{{/unless}}
+										{{/listToStr}}
+									</td>
+								</tr>
+							{{/each}}
 						</tbody>
 					</table>
 				</div>

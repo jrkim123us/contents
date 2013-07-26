@@ -4,8 +4,9 @@ var mongoose = require('mongoose'),
 
 var schema = new Schema({
 	name   : {type: String},
-	link   : {type:String},
-	parent : {type:Schema.ObjectId}
+	link   : {type: String},
+	icon   : {type: String},
+	parent : {type: Schema.ObjectId}
 });
 schema.plugin(tree);
 
@@ -40,22 +41,22 @@ schema.statics.initialize = function (callback) {
 	execControl.parent = project;
 	risksIssues.parent = project;
 
-	var projectProfile = new Menu({name : 'Project profile', link : '#project/profile'}),
+	var projectProfile = new Menu({name : 'Project profile', link : '#project/profile', icon: 'icon-home'}),
 		schedule = new Menu({name : 'Schedule', link : '#'}),
-		risks = new Menu({name : 'Risks', link : '#project/risk'}),
-		issues = new Menu({name : 'Issues', link : '#project/issue'});
+		risks = new Menu({name : 'Risks', link : '#project/risk', icon: 'icon-search'}),
+		issues = new Menu({name : 'Issues', link : '#project/issue', icon: 'icon-tag'});
 
 	projectProfile.parent = setupPlan;
 	schedule.parent       = execControl;
 	risks.parent          = risksIssues;
 	issues.parent         = risksIssues;
 
-	var menu01 = new Menu({name : 'MSP Sync/Resource Alloc', link : '#project/sync'});
-	var menu02 = new Menu({name : 'Weekly Task Direction', link : '#project/direct'});
-	var menu03 = new Menu({name : 'Weekly Task Result', link : '#project/result'});
-	var menu04 = new Menu({name : 'Weekly Task Approval', link : '#project/approval'});
-	var menu05 = new Menu({name : 'Completion Rate Management', link : '#project/progress'});
-	var menu06 = new Menu({name : 'Milestone Status', link : '#project/milestone'});
+	var menu01 = new Menu({name : 'Task Sync', link : '#project/sync', icon: 'icon-th-list'});
+	var menu02 = new Menu({name : 'Weekly Task Direction', link : '#project/direct', icon: 'icon-play'});
+	var menu03 = new Menu({name : 'Weekly Task Result', link : '#project/result', icon: 'icon-flag'});
+	var menu04 = new Menu({name : 'Weekly Task Approval', link : '#project/approval', icon: 'icon-lock'});
+	var menu05 = new Menu({name : 'Task Progress', link : '#project/progress', icon: 'icon-signal'});
+	var menu06 = new Menu({name : 'Milestone', link : '#project/milestone', icon: 'icon-th-large'});
 
 	menu01.parent = schedule;
 	menu02.parent = schedule;
@@ -176,7 +177,7 @@ schema.statics.getTabs = function (parent, callback) {
 				path : {$regex : '^' + parent.path + '#'},
 				link : {$regex : '^.{2,}$'}
 			})
-				.select('name link')
+				.select('name link icon')
 				.exec(callback);
 		} else {
 			callback();

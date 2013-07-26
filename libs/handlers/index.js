@@ -22,26 +22,22 @@ module.exports = function (db) {
 			res.redirect('/');
 		},
 		getMenus: function(req, res) {
-			// db.Menu.getAll(function(arr, data){
-			// 	res.send(data);
-			// });
 			db.Menu.getChildrenTree(function(arr, data){
 				res.send(data);
 			});
-
-			// db.Menu.insert({name: 'Project', path: '/project'}, function() {
-			// 	// debug('getMenu : %s', db.Menu.getAll());
-
-			// });
 		},
-		getTasks: function(req, res) {
-			res.send([
-				{wbs: '1.3.4.1'},
-				{wbs: '1.3.4.2'},
-				{wbs: '1.3.4.3'},
-				{wbs: '1.3.4.4'},
-				{wbs: '1.3.4.5'}
-			]);
+		getTasksByParent: function(req, res) {
+			db.Task.getTasksByParent(req.params.parentWbs, function(arr, data) {
+				res.send(data);
+			});
+		},
+		getTask: function(req, res) {
+			db.Task.getTask(req.params.wbs, function(arr, data) {
+				if(!data) {
+					data = {status: 404};
+				}
+				res.send(data);
+			});
 		},
 		getTabs: function(req, res) {
 			db.Menu.getTabs(req.params.parentId, function(arr, data) {

@@ -12,6 +12,7 @@ define([
 			"bbs"      : "getTodo",
 			"settings" : "getTodo",
 			"project/:module" : "getProject",
+			"project/:module/:param" : "getProject",
 			"*other"   : "defaultAction"
 		},
 		initialize: function(options) {
@@ -51,23 +52,36 @@ define([
 			if(this.checkContentView())
 				this.renderContentView(['app/views/todo/todoView']);
 		},
-		getProject: function(module) {
+		getProject: function(module, param) {
 			var modulePath;
 			var fixedPath = 'app/views/project/';
+			var checkParam = true;
 			switch (module)
 			{
+				case 'profile':
+					modulePath = fixedPath + 'projectProfileView';
+					break;
 				case 'sync':
+					checkParam = this.checkProjectTaskParam(param);
 					modulePath = fixedPath + 'projectSyncView';
 					break;
 				case 'direct':
+					checkParam = this.checkProjectTaskParam(param);
 					modulePath = fixedPath + 'projectDirectView';
 					break;
 				default:
 					this.defaultAction();
 			}
 
-			if(modulePath && this.checkContentView())
-				this.renderContentView([modulePath]);
+			if(modulePath && this.checkContentView() & checkParam)
+				this.renderContentView([modulePath], param);
+		},
+		checkProjectTaskParam: function(param) {
+			if(!param) {
+				this.navigate(window.location.hash.replace('#', '/') + '/1', {trigger: true});
+				return false;
+			}
+			return true;
 		},
 		checkContentView: function() {
 			if(window.location.pathname === '/login')
@@ -76,9 +90,12 @@ define([
 			this.getMenu();
 			return true;
 		},
-		renderContentView: function(paths) {
+		renderContentView: function(paths, param) {
 			require(paths,  _.bind(function(View) {
-				var view = new View({vent: this.vent});
+				var view = new View({
+					vent  : this.vent,
+					param : param
+				});
 
 				this.contentViewManager.showView(view);
 			}, this));
@@ -94,9 +111,7 @@ define([
 			if(this.currentView) {
 				this.currentView.close();
 			}
-
 			this.currentView = view;
-			this.currentView.render();
 
 			$("#master-content").html(this.currentView.el);
 		};
