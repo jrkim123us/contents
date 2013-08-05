@@ -30,7 +30,8 @@ define([
 
             this.tasks = new BaseCollection([], {
 				model : Task,
-				url   : '/project/task/' + this.options.param
+				url   : '/project/task/' + this.options.param,
+				hash  : this.hash
             });
 
             this.parentTask = new BaseModel({
@@ -47,17 +48,21 @@ define([
 		},
 	// Model fetch
 		fetchModel : function() {
-            this.tabs.fetch({
-				reset: true,
-				error: this.onModelFetchError
-            });
-            this.tasks.fetch({
-				reset: true,
-				error: this.onModelFetchError
-            });
-            this.parentTask.fetch({
-				error: this.onModelFetchError
-            });
+    //         this.tabs.fetch({
+				// reset: true,
+				// error: this.onModelFetchError
+    //         });
+    //         this.tasks.fetch({
+				// reset: true,
+				// error: this.onModelFetchError
+    //         });
+    //         this.parentTask.fetch({
+				// error: this.onModelFetchError
+    //         });
+// Javascript Promise(Jquery) Pattern
+			$.when(this.tabs.fetch({reset: true}), this.tasks.fetch({reset: true}), this.parentTask.fetch())
+				.done(this.render)
+				.fail(this.onModelFetchError);
 		},
 		render: function() {
 			BaseView.prototype.render.call(this);
@@ -68,10 +73,10 @@ define([
 		},
 		initAfterRendering: function() {
 		},
-		checkModelForRendering: function() {
-			if(this.hasTabs && this.hasTasks && this.hasParentTask)
-				this.render();
-		},
+		// checkModelForRendering: function() {
+		// 	if(this.hasTabs && this.hasTasks && this.hasParentTask)
+		// 		this.render();
+		// },
 // Model Event Processing Start
 		onResettedTabs: function() {
 			this.hasTabs = true;
@@ -81,19 +86,19 @@ define([
 			this.model.set('title', currentTab.get('name'));
 			this.model.set('tabs', this.tabs.toJSON());
 
-			this.checkModelForRendering();
+			// this.checkModelForRendering();
 		},
 		onResettedTasks: function() {
 			this.hasTasks = true;
 			this.model.set('tasks', this.tasks.toJSON());
 
-			this.checkModelForRendering();
+			// this.checkModelForRendering();
 		},
 		onChangedParentTask: function() {
 			this.hasParentTask = true;
 			this.model.set('parentTask', this.parentTask.toJSON());
 
-			this.checkModelForRendering();
+			// this.checkModelForRendering();
 		},
 // Model Event Processing END
 // View Destroy Process

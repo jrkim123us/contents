@@ -16,9 +16,13 @@
 					<h4>{{title}}</h4>
 					<hr>
 					<ul class="breadcrumb">
-						<li><a href="{{parentTask.hash}}/{{parentTask.wbs}}">{{parentTask.wbs}}</a> <span class="divider">/</span></li>
-						<li><a href="#">1.3</a> <span class="divider">/</span></li>
-						<li class="active">1.3.4</li>
+						{{#wbsSplit parentTask}}
+							{{#unless @last}}
+								<li><a href="{{this.hash}}/{{this.wbs}}">{{this.wbs}}</a><span class="divider">/</span> </li>
+							{{else}}
+								<li class="active">{{this.wbs}}</li>
+							{{/unless}}
+						{{/wbsSplit}}
 						<li class="active right">{{parentTask.name}}</li>
 					</ul>
 					<hr>
@@ -37,7 +41,7 @@
 						<tbody>
 							{{#each tasks}}
 								<tr>
-									<td>{{this.wbs}}</td>
+									<td><a href="#project/sync/{{this.wbs}}">{{this.wbs}}</a></td>
 									<td>{{this.name}}</td>
 									<td>{{this.weight}}</td>
 									<td>{{this.plan}}</td>
