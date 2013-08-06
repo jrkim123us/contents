@@ -33,7 +33,7 @@ define([
 			return this;
 		},
 		initAfterRendering: function() {
-			$('#myCarousel').carousel();
+			$('#homeCarousel').carousel();
 		}
 	});
 

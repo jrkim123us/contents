@@ -5,7 +5,7 @@ requirejs.config({
 		'jquery.validate'   : 'libs/jquery/jquery.validate',
 		underscore          : 'libs/underscore/underscore.min',
 		backbone            : 'libs/backbone/backbone.min',
-		bootstrap           : 'libs/bootstrap/js/bootstrap.min',
+		bootstrap           : 'libs/bootstrap/js/bootstrap',
 		handlebars          : 'libs/handlebars/handlebars.runtime',
 		'handlebars.helper' : 'libs/handlebars/handlebars.helper',
 		'handlebars.tmpl'   : 'libs/handlebars/handlebars.tmpl.min',

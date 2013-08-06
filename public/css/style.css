@@ -1,5 +1,6 @@
 body {
   padding-bottom: 60px;
+  padding-top: 70px;
 }
 /* form-signin */
 .signin-master-head {
@@ -42,39 +43,40 @@ body {
   margin-bottom: 5px;
 }
 /* Custom container */
-.master-head {
+.master-menu {
   position: relative;
   z-index: 20;
   /* Customize the navbar links to be fill the entire space of the .navbar */
 
 }
-.master-head .navbar {
+.master-menu .navbar {
   margin-bottom: 0px;
 }
-.master-head .navbar .navbar-inner {
+.master-menu .navbar .navbar-inner {
   padding: 0;
 }
-.master-head .navbar .nav {
-  margin: 0;
-  display: table;
-  width: 100%;
+.master-menu .navbar .nav {
+  /*margin: 0;
+			display: table;
+			width: 100%;*/
+
 }
-.master-head .navbar .nav > li {
+.master-menu .navbar .nav > li {
   display: table-cell;
   width: 1%;
   float: none;
 }
-.master-head .navbar .nav > li > a {
+.master-menu .navbar .nav > li > a {
   font-weight: bold;
   text-align: center;
   border-left: 1px solid rgba(255, 255, 255, 0.75);
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
-.master-head .navbar .nav > li:first-child > a {
+.master-menu .navbar .nav > li:first-child > a {
   border-left: 0;
   border-radius: 3px 0 0 3px;
 }
-.master-head .navbar .nav > li:last-child > a {
+.master-menu .navbar .nav > li:last-child > a {
   border-right: 0;
   border-radius: 0 3px 3px 0;
 }
@@ -89,6 +91,16 @@ body {
 .master-content {
   /* Carousel base class */
 
+  /*.carousel-control {
+		height: 80px;
+		margin-top: 0;
+		font-size: 120px;
+		text-shadow: 0 1px 1px rgba(0,0,0,.4);
+		background-color: transparent;
+		border: 0;
+		z-index: 10;
+	}*/
+
   /* breadcrumb base class */
 
 }
@@ -98,6 +110,10 @@ body {
 .master-content .carousel .container {
   position: relative;
   z-index: 9;
+  /* 방향키 width 가 15% */
+
+  margin-left: 15%;
+  margin-right: 15%;
 }
 .master-content .carousel .item {
   height: 500px;
@@ -118,6 +134,7 @@ body {
 }
 .master-content .carousel .carousel-caption h1,
 .master-content .carousel .carousel-caption .lead {
+  text-align: left;
   margin: 0;
   line-height: 1.25;
   color: #fff;
@@ -125,15 +142,7 @@ body {
 }
 .master-content .carousel .carousel-caption .btn {
   margin-top: 10px;
-}
-.master-content .carousel-control {
-  height: 80px;
-  margin-top: 0;
-  font-size: 120px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-  background-color: transparent;
-  border: 0;
-  z-index: 10;
+  float: left;
 }
 .master-content .breadcrumb > li.right {
   float: right;

@@ -1,57 +1,66 @@
 <div class="master-content home">
-	<div id="myCarousel" class="carousel slide">
+	<div id="homeCarousel" class="carousel slide">
+		{{! Indicators }}
+		<ol class="carousel-indicators">
+			{{#each slideImages}}
+				<li data-target="#homeCarousel" data-slide-to="{{@index}}" {{#if this.active}}class="active"{{/if}}></li>
+			{{/each}}
+		</ol>
 		<div class="carousel-inner">
 			{{#each slideImages}}
-				{{#if this.active}}
-					<div class="item active">
-				{{else}}
-					<div class="item">
-				{{/if}}
+				<div class="item {{#if this.active}}active{{/if}}">
 					<img src="/img/{{this.img}}" alt="">
 					<div class="container">
-						<div class="carousel-caption">
+						<div class="carousel-caption jumbotron">
 							<h1>Catch phrase</h1>
-							<p class='lead'>
+							<p class="lead">
 								ead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
 							</p>
-							<a href="#" class="btn btn-large btn-primary">Get started today</a>
+							<p><a href="#" class="btn btn-lg btn-primary">Get started today</a></p>
 						</div>
 					</div>
 				</div>
 			{{/each}}
 		</div>
-		<a class="left carousel-control"  href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		{{! Controls }}
+		<a class="left carousel-control"  href="#homeCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#homeCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
 	</div>
 	<div class="container">
 		<div class="row-fluid">
 			<div class="row">
-				<div class="span4">
+				<div class="col-12 col-sm-6 col-lg-4">
 					<h2>Notice</h2>
 					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-					<p><a href="#" class="btn">View dtails</a></p>
+					<p><button type="button" class="btn btn-default">View dtails</button></p>
 				</div>
-				<div class="span4">
+				<div class="col-12 col-sm-6 col-lg-4">
 					<h2>Risk</h2>
 					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-					<p><a href="#" class="btn">View dtails</a></p>
+					<p><button type="button" class="btn btn-default">View dtails</button></p>
 				</div>
-				<div class="span4">
+				<div class="col-12 col-sm-6 col-lg-4">
 					<h2>Issue</h2>
 					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-					<p><a href="#" class="btn">View dtails</a></p>
+					<p><button type="button" class="btn btn-default">View dtails</button></p>
 				</div>
 			</div>
 			<div class="row">
-				<div>
+				<div class="col-12 col-sm-12 col-lg-12">
 					<h2>Progress chart</h2>
 					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-					<p><a href="#" class="btn">View dtails</a></p>
+					<p><button type="button" class="btn btn-default">View dtails</button></p>
 				</div>
-				<div>
+			</div>
+			<div class="row">
+				<div class="col-12 col-sm-12 col-lg-12">
 					<h2>Calendar</h2>
 					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
-					<p><a href="#" class="btn">View dtails</a></p>
+					<p><button type="button" class="btn btn-default">View dtails</button></p>
 				</div>
 			</div>
 		</div>

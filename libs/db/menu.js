@@ -3,10 +3,11 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 var schema = new Schema({
-	name   : {type: String},
-	link   : {type: String},
-	icon   : {type: String},
-	parent : {type: Schema.ObjectId}
+	name       : {type: String},
+	parentName : {type: String},
+	link       : {type: String},
+	icon       : {type: String},
+	parent     : {type: Schema.ObjectId}
 });
 schema.plugin(tree);
 
@@ -17,143 +18,70 @@ var handleError = function(err) {
 };
 schema.statics.initialize = function (callback) {
 	// http://www.codeproject.com/Articles/521713/Storing-Tree-like-Hierarchy-Structures-With-MongoD
-	var root = new Menu({name : 'Root'});
+	var menus = [
+		new Menu({name : 'Root'}),
+		// new Menu({parentName: 'Root', name : 'Home', link : '#home'}),
+		new Menu({parentName: 'Root', name : 'ToDo', link : '#todo'}),
+		new Menu({parentName: 'Root', name : 'Planner', link : '#planner'}),
+		new Menu({parentName: 'Root', name : 'Project', link : '#'}),
+		new Menu({parentName: 'Root', name : 'BBS', link : '#bbs'}),
+		new Menu({parentName: 'Root', name : 'Settings', link : '#settings'}),
 
-	var home = new Menu({name : 'Home', link : '#home'}),
-		todo = new Menu({name : 'ToDo', link : '#todo'}),
-		planner = new Menu({name : 'Planner', link : '#planner'}),
-		project = new Menu({name : 'Project', link : '#'}),
-		bbs = new Menu({name : 'BBS', link : '#bbs'}),
-		settings = new Menu({name : 'Settings', link : '#settings'});
+		new Menu({parentName: 'Project', name : 'Setup & Plan', link : '#'}),
+		new Menu({parentName: 'Project', name : 'Exceution & Control', link : '#'}),
+		new Menu({parentName: 'Project', name : 'Risks & Issues', link : '#'}),
 
-	home.parent     = root;
-	todo.parent     = root;
-	planner.parent   = root;
-	project.parent  = root;
-	bbs.parent      = root;
-	settings.parent = root;
+		new Menu({parentName: 'Setup & Plan', name : 'Project profile', link : '#project/profile', icon: 'icon-home'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Task Sync', link : '#project/sync', icon: 'icon-th-list'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Weekly Task Direction', link : '#project/direct', icon: 'icon-play'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Weekly Task Result', link : '#project/result', icon: 'icon-flag'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Weekly Task Approval', link : '#project/approval', icon: 'icon-lock'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Task Progress', link : '#project/progress', icon: 'icon-signal'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Milestone', link : '#project/milestone', icon: 'icon-th-large'}),
+		new Menu({parentName: 'Risks & Issues', name : 'Risks', link : '#project/risk', icon: 'icon-search'}),
+		new Menu({parentName: 'Risks & Issues', name : 'Issues', link : '#project/issue', icon: 'icon-tag'})
+	];
 
-	var setupPlan = new Menu({name : 'Setup & Plan', link : '#'}),
-		execControl = new Menu({name : 'Exceution & Control', link : '#'}),
-		risksIssues = new Menu({name : 'Risks & Issues', link : '#'});
+	var result = [];
 
-	setupPlan.parent   = project;
-	execControl.parent = project;
-	risksIssues.parent = project;
+	// taskInit에 정의된 데이터를 DB에 등록한다.
+	function saveAll() {
+		var menu= menus.shift();
 
-	var projectProfile = new Menu({name : 'Project profile', link : '#project/profile', icon: 'icon-home'}),
-		schedule = new Menu({name : 'Schedule', link : '#'}),
-		risks = new Menu({name : 'Risks', link : '#project/risk', icon: 'icon-search'}),
-		issues = new Menu({name : 'Issues', link : '#project/issue', icon: 'icon-tag'});
+		menu.save(function(err, saved) {
+			if(err) throw err;
+			result.push(saved[0]);
 
-	projectProfile.parent = setupPlan;
-	schedule.parent       = execControl;
-	risks.parent          = risksIssues;
-	issues.parent         = risksIssues;
+			if(menus.length > 0)
+				saveAll();
+			else
+				// 등록된 데이터의 parent 정보를 조회한다.
+				findParent();
+		});
+	}
+	function findParent() {
+		Menu.find({parentName: {$exists: true}}, function(err, data) {
+			if(err) throw err;
+			// 데이터 별로 parent정보를 저장한다.
+			updateParent(data);
+		});
+	}
+	function updateParent(data) {
+		var child = data.shift();
 
-	var menu01 = new Menu({name : 'Task Sync', link : '#project/sync', icon: 'icon-th-list'});
-	var menu02 = new Menu({name : 'Weekly Task Direction', link : '#project/direct', icon: 'icon-play'});
-	var menu03 = new Menu({name : 'Weekly Task Result', link : '#project/result', icon: 'icon-flag'});
-	var menu04 = new Menu({name : 'Weekly Task Approval', link : '#project/approval', icon: 'icon-lock'});
-	var menu05 = new Menu({name : 'Task Progress', link : '#project/progress', icon: 'icon-signal'});
-	var menu06 = new Menu({name : 'Milestone', link : '#project/milestone', icon: 'icon-th-large'});
-
-	menu01.parent = schedule;
-	menu02.parent = schedule;
-	menu03.parent = schedule;
-	menu04.parent = schedule;
-	menu05.parent = schedule;
-	menu06.parent = schedule;
-
-	root.save(function() {
-		home.save();
-		todo.save();
-		planner.save();
-		bbs.save();
-		settings.save();
-		project.save(function() {
-			setupPlan.save(function() {
-				projectProfile.save();
-			});
-			execControl.save(function() {
-				schedule.save(function() {
-					menu01.save();
-					menu02.save();
-					menu03.save();
-					menu04.save();
-					menu05.save();
-					menu06.save();
-				});
-			});
-			risksIssues.save(function() {
-				risks.save();
-				issues.save(callback);
+		Menu.find({name: child.parentName}, function(err, parent) {
+			child.parent = parent[0]._id;
+			child.save(function() {
+				if(data.length > 0)
+					updateParent(data);
+				else
+					callback();
 			});
 		});
-	});
+	}
 
-
-
-
-	// Type 2
-	/*new Menu({name : 'Root', children: ['Home', 'ToDo', 'Planner', 'Project', 'BBS', 'Settings']}).save();
-	new Menu({name : 'Home', link : '#home'}).save();
-	new Menu({name : 'ToDo', link : '#todo'}).save();
-	new Menu({name : 'Planner', link : '#planner'}).save();
-	new Menu({name : 'Project', link : '#', children: ['Setup & Plan', 'Exceution & Control', 'Risks & Issues']}).save();
-	new Menu({name : 'BBS', link : '#bbs'}).save();
-	new Menu({name : 'Settings', link : '#settings'}).save();
-
-	new Menu({name : 'Setup & Plan', link : '#', children: ['Project profile']}).save();
-	new Menu({name : 'Project profile', link : '#'}).save();
-
-	new Menu({name : 'Exceution & Control', link : '#', children: ['Schedule']}).save();
-	new Menu({
-		name : 'Schedule',
-		link : '#',
-		children: [
-			'MSP Sync/Resource Alloc',
-			'Weekly Task Direction',
-			'Weekly Task Result',
-			'Weekly Task Approval',
-			'Completion Rate Management',
-			'Milestone Status'
-		]
-	}).save();
-	new Menu({name : 'MSP Sync/Resource Alloc', link : '#'}).save();
-	new Menu({name : 'Weekly Task Direction', link : '#'}).save();
-	new Menu({name : 'Weekly Task Result', link : '#'}).save();
-	new Menu({name : 'Weekly Task Approval', link : '#'}).save();
-	new Menu({name : 'Completion Rate Management', link : '#'}).save();
-	new Menu({name : 'Milestone Status', link : '#'}).save();
-
-	new Menu({name : 'Risks & Issues', link : '#', children: ['Risks', 'Issues']}).save();
-	new Menu({name : 'Risks', link : '#'}).save();
-	new Menu({name : 'Issues', link : '#'}).save();*/
-
-	// Type 3
-	/*new Menu({name : 'Home', link : '#home', parent: "", ancestors:[""]}).save();
-	new Menu({name : 'ToDo', link : '#todo', parent: "", ancestors:[""]}).save();
-	new Menu({name : 'Planner', link : '#planner', parent: "", ancestors:[""]}).save();
-	new Menu({name : 'Project', link : '#', parent: "", ancestors:[""]}).save();
-	new Menu({name : 'BBS', link : '#bbs', parent: "", ancestors:[""]}).save();
-	new Menu({name : 'Settings', link : '#settings', parent: "", ancestors:[""]}).save();
-
-	new Menu({name : 'Setup & Plan', link : '#', parent: "Project", ancestors:["", "Project"]}).save();
-	new Menu({name : 'Project profile', link : '#', parent: "Setup & Plan", ancestors:["", "Project", "Setup & Plan"]}).save();
-
-	new Menu({name : 'Exceution & Control', link : '#', parent: "Project", ancestors:["", "Project"]}).save();
-	new Menu({name : 'Schedule', link : '#', parent: "Exceution & Control", ancestors:["", "Project", "Exceution & Control"]}).save();
-	new Menu({name : 'MSP Sync/Resource Alloc', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-	new Menu({name : 'Weekly Task Direction', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-	new Menu({name : 'Weekly Task Result', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-	new Menu({name : 'Weekly Task Approval', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-	new Menu({name : 'Completion Rate Management', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-	new Menu({name : 'Milestone Status', link : '#', parent: "Schedule", ancestors:["", "Project", "Exceution & Control", "Schedule"]}).save();
-
-	new Menu({name : 'Risks & Issues', link : '#', parent: "Project", ancestors:["", "Project"]}).save();
-	new Menu({name : 'Risks', link : '#', parent: "Risks & Issues", ancestors:["", "Project", "Risks & Issues"]}).save();
-	new Menu({name : 'Issues', link : '#', parent: "Risks & Issues", ancestors:["", "Project", "Risks & Issues"]}).save();*/
+	// 데이터 등록 시작!!
+	saveAll();
 };
 // Define some "static" or "instance" methods
 schema.statics.getAll = function (callback) {
