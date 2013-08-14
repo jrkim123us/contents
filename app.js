@@ -14,6 +14,7 @@ require('./libs/routers')(config, handler);
 server.http.listen(config.app.get('port'), function(){
     debug('Http server listening on port %d in %s mode', config.app.get('port'), config.app.get('env'));
 });
-server.https.listen(443, function() {
-    debug('Https server listening on port %d in %s mode', 443, config.app.get('env'));
+
+server.https.listen(config.app.get('httpsPort'), function() {
+    debug('Https server listening on port %d in %s mode', config.app.get('httpsPort'), config.app.get('env'));
 });

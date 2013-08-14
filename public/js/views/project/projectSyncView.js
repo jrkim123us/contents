@@ -9,6 +9,7 @@ define([
 		tmpl: 'project/projectSync',
 		events : {
 			// 'click button' : 'onClickedButton'
+			'hidden.bs.collapse div.collapse': 'onHiddenCollapse'
 		},
 		initialize: function() {
 			_.bindAll(this,
@@ -48,17 +49,6 @@ define([
 		},
 	// Model fetch
 		fetchModel : function() {
-    //         this.tabs.fetch({
-				// reset: true,
-				// error: this.onModelFetchError
-    //         });
-    //         this.tasks.fetch({
-				// reset: true,
-				// error: this.onModelFetchError
-    //         });
-    //         this.parentTask.fetch({
-				// error: this.onModelFetchError
-    //         });
 // Javascript Promise(Jquery) Pattern
 			$.when(this.tabs.fetch({reset: true}), this.tasks.fetch({reset: true}), this.parentTask.fetch())
 				.done(this.render)
@@ -72,11 +62,13 @@ define([
 			return this;
 		},
 		initAfterRendering: function() {
+			console.log('initAfterRendering');
+
+			$('div.collapse').on('hidden.bs.collapse', function () {
+				// do something…
+				console.log('initAfterRendering hidden.bs.collapse');
+			});
 		},
-		// checkModelForRendering: function() {
-		// 	if(this.hasTabs && this.hasTasks && this.hasParentTask)
-		// 		this.render();
-		// },
 // Model Event Processing Start
 		onResettedTabs: function() {
 			this.hasTabs = true;
@@ -97,8 +89,9 @@ define([
 		onChangedParentTask: function() {
 			this.hasParentTask = true;
 			this.model.set('parentTask', this.parentTask.toJSON());
-
-			// this.checkModelForRendering();
+		},
+		onHiddenCollapse: function(event) {
+			console.log('onHiddenCollapse');
 		},
 // Model Event Processing END
 // View Destroy Process

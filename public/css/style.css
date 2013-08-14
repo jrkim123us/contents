@@ -11,7 +11,8 @@ body {
   bottom: 0;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #F5F5F5;
+  /*background-color: #F5F5F5;*/
+
 }
 .form-signin {
   max-width: 300px;
@@ -146,6 +147,9 @@ body {
 }
 .master-content .breadcrumb > li.right {
   float: right;
+}
+.master-content .breadcrumb > li.right:before {
+  content: "";
 }
 .tabs-left > .nav-tabs > li > a,
 .tabs-right > .nav-tabs > li > a {

@@ -1,67 +1,58 @@
 <div class="master-content">
 	<div class="container">
-		<hr>
-		<div class="tabbable tabs-right"> <!-- Only required for left/right tabs -->
-			<ul class="nav nav-tabs">
-				{{#each tabs}}
-					{{#if this.active}}
-						<li class="active"><a href="#tab" data-toggle="tab"><i class="{{this.icon}}"></i> {{this.name}}</a></li>
+		<div class="tab-pane active" id="tab2">
+			<h4>{{title}}</h4>
+			<ul class="breadcrumb">
+				{{#wbsSplit parentTask}}
+					{{#unless @last}}
+						<li><a href="{{this.hash}}/{{this.wbs}}">{{this.wbs}}</a></li>
 					{{else}}
-						<li><a href="{{this.link}}"><i class="{{this.icon}}"></i> {{this.name}}</a></li>
-					{{/if}}
-				{{/each}}
+						<li class="active">{{this.wbs}}</li>
+					{{/unless}}
+				{{/wbsSplit}}
+				<li class="active right">{{parentTask.name}}</li>
 			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active" id="tab2">
-					<h4>{{title}}</h4>
-					<hr>
-					<ul class="breadcrumb">
-						{{#wbsSplit parentTask}}
-							{{#unless @last}}
-								<li><a href="{{this.hash}}/{{this.wbs}}">{{this.wbs}}</a></li>
-							{{else}}
-								<li class="active">{{this.wbs}}</li>
-							{{/unless}}
-						{{/wbsSplit}}
-						<li class="active right">{{parentTask.name}}</li>
-					</ul>
-					<hr>
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th>WBS</th>
-								<th>작업 이름</th>
-								<th>가중치(%)</th>
-								<th>계획(%)</th>
-								<th>실적(%)</th>
-								<th>승인자</th>
-								<th>담당자</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{#each tasks}}
-								<tr>
-									<td><a href="#project/sync/{{this.wbs}}">{{this.wbs}}</a></td>
-									<td>{{this.name}}</td>
-									<td>{{this.weight}}</td>
-									<td>{{this.plan}}</td>
-									<td>{{this.act}}</td>
-									<td>
-										{{#listToStr this.worker}}
-											{{this.name}}{{#unless @last}},{{/unless}}
-										{{/listToStr}}
-									</td>
-									<td>
-										{{#listToStr this.approver}}
-											{{this.name}}{{#unless @last}},{{/unless}}
-										{{/listToStr}}
-									</td>
-								</tr>
-							{{/each}}
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>WBS</th>
+						<th>작업 이름</th>
+						<th>가중치(%)</th>
+						<th>계획(%)</th>
+						<th>실적(%)</th>
+						<th>승인자</th>
+						<th>담당자</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each tasks}}
+						<tr>
+							<td><a href="#project/sync/{{this.wbs}}">{{this.wbs}}</a></td>
+							<td><a data-toggle="collapse" href="#row{{@index}}">{{this.name}}</a></td>
+							<td>{{this.weight}}</td>
+							<td>{{this.plan}}</td>
+							<td>{{this.act}}</td>
+							<td>
+								{{#listToStr this.worker}}
+									{{this.name}}{{#unless @last}},{{/unless}}
+								{{/listToStr}}
+							</td>
+							<td>
+								{{#listToStr this.approver}}
+									{{this.name}}{{#unless @last}},{{/unless}}
+								{{/listToStr}}
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7">
+								<div class="collapse" id="row{{@index}}">
+									Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+								</div>
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
