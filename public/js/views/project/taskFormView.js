@@ -5,7 +5,7 @@ define([
 	var TaskFormView = BootstrapView.extend({
 		tmpl: 'project/taskForm',
 		events : {
-			'change'           : 'onChangedForm',
+			'change'       : 'onChangedForm',
 			'click button' : 'onClickedSaveButton'
 		},
 		initialize: function() {
@@ -21,20 +21,25 @@ define([
 					console.log('changed');
 				});
 		},
-		onChangedForm: function(event) {
-			var $target = $(event.target);
-			// console.log($(event.target).val());
-			// this.model.set($target.attr('name'), $target.val());
+		alertNotChanged: function() {
+
 		},
 		onClickedSaveButton: function(event) {
 			// event.preventDefault();
-			var formSet = {};
-			_.each(this.$el.find('input.form-control, textarea.form-control, select.form-control'), function( obj, inx, list) {
-				var $obj = $(obj);
-				formSet[$obj.attr('name')] = $obj.val();
-			});
+			if($(event.target).hasClass('btn-save')) {
+				var formSet = {};
+				_.each(this.$el.find('.form-control'), function( obj, inx, list) {
+					var $obj = $(obj);
+					formSet[$obj.attr('name')] = $obj.val();
+				});
 
-			this.model.set(formSet);
+				this.model.set(formSet);
+
+				if(!this.model.hasChanged())
+					this.alertNotChanged();
+			} else {
+				console.log('cancel button');
+			}
 			return false;
 		},
 		onClose: function() {

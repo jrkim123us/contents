@@ -1,9 +1,15 @@
 doctype 5
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/libs/bootstrap/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/libs/jquery/css/chosen.min.css')
-    link(rel='stylesheet', href='/css/style.css')
-  body
-    block content
+	head
+		title= title
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		link(rel='stylesheet', href='/libs/bootstrap/css/bootstrap.min.css')
+		//- link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootswatch/3.0.0/amelia/bootstrap.min.css')
+		link(rel='stylesheet', href='/libs/jquery/css/chosen.min.css')
+		link(rel='stylesheet', href='/css/style.css')
+
+		//if lt IE 9
+			script(src='libs/bootstrap/js/html5shiv.js')
+			script(src='libs/bootstrap/js/respond.min.js')
+	body
+		block content
