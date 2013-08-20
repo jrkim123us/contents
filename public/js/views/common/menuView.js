@@ -15,7 +15,7 @@ define([
                 'onResettedCollection',
                 'isSubMenuByHash'
             );
-            BaseView.prototype.initialize.call(this);
+            BaseView.prototype.initialize.apply(this, arguments);
 
             this.collection = new Backbone.Collection([], {
                 url : '/common/menu'

@@ -1,8 +1,7 @@
 define([
-	'app/views/common/baseView',
-	'bootstrap'
-], function(BaseView){
-	var HomeView = BaseView.extend({
+	'app/views/common/bootstrapView'
+], function(BootstrapView){
+	var HomeView = BootstrapView.extend({
 		tmpl: 'home/home',
 		events : {
 			'click button' : 'onClickedButton'
@@ -12,7 +11,7 @@ define([
                 'render', 'initAfterRendering'
             );
 
-			BaseView.prototype.initialize.call(this);
+			BootstrapView.prototype.initialize.call(this);
 
 			this.model = new Backbone.Model({
 				slideImages : [
@@ -26,7 +25,7 @@ define([
 			this.render();
 		},
 		render: function() {
-			BaseView.prototype.render.call(this);
+			BootstrapView.prototype.render.call(this);
 
 			this.initAfterRendering();
 

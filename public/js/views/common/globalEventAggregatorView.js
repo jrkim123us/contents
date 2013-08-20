@@ -7,18 +7,14 @@ define([
     var GlobalEventAggregatorView = Backbone.View.extend({
         attachEventsSplitter: /^(\S+)\s*(.*)$/,
         initialize: function() {
-            Backbone.View.prototype.initialize.call(this);
+            Backbone.View.prototype.initialize.apply(this, arguments);
 
-            if(this.options.vent) {
-                this.vent = this.options.vent;
-                this.delegateVentEvents();
+            var options = arguments[0] || this.options;
+
+            if(options && options.vent) {
+                this.vent = options.vent;
             }
-        },
-        remove: function() {
-            if(this.options.vent) {
-                this.undelegateVentEvents();
-            }
-            Backbone.View.prototype.remove.call(this);
+            this.delegateVentEvents();
         },
         /**
          * ventEvent로 정의된 event 집합을 한번에 vent에 등록해 줌
@@ -47,6 +43,8 @@ define([
          * @return {[type]}        [description]
          */
         undelegateVentEvents: function(events) {
+            if (!(events || (events = this.ventEvents))) return;
+
             for (var key in events) {
                 var method = events[key];
                 var match = key.match(this.attachEventsSplitter);
@@ -54,6 +52,9 @@ define([
 
                 this.vent.off(eventName, method);
             }
+        },
+        onClose: function() {
+            this.undelegateVentEvents();
         }
     });
 

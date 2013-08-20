@@ -1,8 +1,8 @@
 define([
-	'app/views/common/baseView',
+	'app/views/common/bootstrapView',
 	'app/utils/form.validate'
-], function(BaseView, FormValidate){
-	var LoginView = BaseView.extend({
+], function(BootstrapView, FormValidate){
+	var LoginView = BootstrapView.extend({
 		el: 'body',
 		tmpl: 'login/login',
 		events : {
@@ -14,7 +14,7 @@ define([
                 'submitHandler'
             );
 
-			BaseView.prototype.initialize.call(this);
+			BootstrapView.prototype.initialize.call(this);
 
 			this.render();
 
@@ -22,7 +22,7 @@ define([
 
 		},
 		render: function() {
-			BaseView.prototype.render.call(this);
+			BootstrapView.prototype.render.call(this);
 
 			return this;
 		},
@@ -65,18 +65,7 @@ define([
 			return $('.form-signin').valid();
 		},
 		submitHandler: function(form) {
-			// $.post(url, params)
-			// 	.done(function(data, textStatus, jqXHR){
-			// 	})
-			// 	.fail(function(jqXHR, textStatus, errorThrown){
-			// 		if(jqXHR.responseText !== '') {
-			// 			var response = $.parseXML(jqXHR.responseText);
-			// 		}
-			// 	})
-			// 	.always(function(){
-			// 	});
 			$(form).ajaxSubmit();
-
 		}
 	});
 

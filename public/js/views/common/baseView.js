@@ -4,8 +4,7 @@
 define([
     'app/views/common/globalEventAggregatorView',
     'handlebars.tmpl',
-    'jquery.validate',
-    'bootstrap'
+    'jquery.validate'
 ], function(GlobalEventAggregatorView){
     var BaseView = GlobalEventAggregatorView.extend({
         initialize: function() {
@@ -13,7 +12,7 @@ define([
                 'onModelFetchError'
             );
 
-            GlobalEventAggregatorView.prototype.initialize.call(this);
+            GlobalEventAggregatorView.prototype.initialize.apply(this, arguments);
         },
         render: function() {
             if(this.tmpl) {
@@ -27,6 +26,18 @@ define([
             //     $targetEl.i18n();
 
             return this;
+        },
+        setSubView: function($target, viewId, SubViewClass, model) {
+            if(!this.subViews) this.subViews = {};
+            if(this.subViews[viewId]) {
+                this.subViews[viewId].close();
+            }
+            this.subViews[viewId] = new SubViewClass({
+                model : model
+            });
+
+            $target.html(this.subViews[viewId].el);
+
         },
 // TODO: 추후 상세 구현
         onModelFetchError: function(model, error) {
@@ -42,9 +53,9 @@ define([
 // subview 가 정의 되어 있으나, 종료 시까지 해제가 되어 있지 않는 경우
 // 한꺼번에 해지해 준다.
         onClose: function() {
-            if(this.subviews) {
-                _.each(this.subviews, function(subview, subviewName, list) {
-                    subview.close();
+            if(this.subViews) {
+                _.each(this.subViews, function(subView, subViewName, list) {
+                    subView.close();
                 });
             }
         }

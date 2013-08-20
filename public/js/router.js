@@ -2,7 +2,7 @@ define([
     'backbone'
 ], function(){
 	var Router = Backbone.Router.extend({
-		vent : _.extend({}, Backbone.Event),
+		vent : _.extend({}, Backbone.Events),
 		routes: {
 			""         : "root",
 			"login"    : "getLogin",

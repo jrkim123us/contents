@@ -1,0 +1,131 @@
+<div class="container">
+	<div class="row">
+		<div class="col-offset-1 col-lg-10">
+			<div class="well">
+				<form action="" class="form-horizontal" role="form" method="PUT">
+					<fieldset>
+						<legend>{{name}}</legend>
+						<div class="form-group">
+							<label for="wbs" class="col-lg-2 control-label">WBS</label>
+							<div class="col-lg-10">
+								<input class="form-control" name="wbs" type="text" placeholder="Enter wbs" value="{{wbs}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">작업 이름</label>
+							<div class="col-lg-10">
+								<input class="form-control" name="name" type="text" placeholder="Enter name" value="{{name}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">승인자</label>
+							<div class="col-lg-10">
+								<input class="form-control" name="approver" type="text" placeholder="Enter name"
+									value="{{#listToStr approver}}{{this.name}}{{#unless @last}},{{/unless}}{{/listToStr}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">담당자</label>
+							<div class="col-lg-10">
+								<input class="form-control" name="worker" type="text" placeholder="Enter name"
+									value="{{#listToStr worker}}{{this.name}}{{#unless @last}},{{/unless}}{{/listToStr}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">담당자 Selector</label>
+							<div class="col-lg-10">
+								<select data-placeholder="Choose Workers" name="chosenWorker" multiple class="form-control chosen-select">
+									<option value=""></option>
+									<optgroup label="기본조직">
+										<option value="00001" selected>김종록</option>
+										<option value="00002" selected>김후정</option>
+										<option value="00003">최철수</option>
+										<option value="00004">이영희</option>
+									</optgroup>
+									<optgroup label="NFC EAST">
+										<option>Dallas Cowboys</option>
+										<option>New York Giants</option>
+										<option>Philadelphia Eagles</option>
+										<option>Washington Redskins</option>
+									</optgroup>
+									<optgroup label="NFC NORTH">
+										<option selected>Chicago Bears </option>
+										<option>Detroit Lions</option>
+										<option>Green Bay Packers</option>
+										<option>Minnesota Vikings</option>
+									</optgroup>
+									<optgroup label="NFC SOUTH">
+										<option>Atlanta Falcons</option>
+										<option>Carolina Panthers</option>
+										<option>New Orleans Saints</option>
+										<option>Tampa Bay Buccaneers</option>
+									</optgroup>
+									<optgroup label="NFC WEST">
+										<option>Arizona Cardinals</option>
+										<option>St. Louis Rams</option>
+										<option>San Francisco 49ers</option>
+										<option>Seattle Seahawks</option>
+									</optgroup>
+									<optgroup label="AFC EAST">
+										<option>Buffalo Bills</option>
+										<option>Miami Dolphins</option>
+										<option>New England Patriots</option>
+										<option>New York Jets</option>
+									</optgroup>
+									<optgroup label="AFC NORTH">
+										<option>Baltimore Ravens</option>
+										<option>Cincinnati Bengals</option>
+										<option>Cleveland Browns</option>
+										<option>Pittsburgh Steelers</option>
+									</optgroup>
+									<optgroup label="AFC SOUTH">
+										<option>Houston Texans</option>
+										<option>Indianapolis Colts</option>
+										<option>Jacksonville Jaguars</option>
+										<option>Tennessee Titans</option>
+									</optgroup>
+									<optgroup label="AFC WEST">
+										<option>Denver Broncos</option>
+										<option>Kansas City Chiefs</option>
+										<option>Oakland Raiders</option>
+										<option>San Diego Chargers</option>
+									</optgroup>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">가중치</label>
+							<div class="col-lg-10">
+								<input class="form-control" name="weight" type="number" placeholder="Enter weight point" value="{{weight}}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-lg-2 control-label">작업 설명</label>
+							<div class="col-lg-10">
+								<textarea class="form-control" name="desc" rows="5" placeholder="Enter description" value=""></textarea>
+							</div>
+						</div>
+						<!--
+						<div class="form-group">
+							<div class="col-offset-2 col-lg-10">
+								<div class="checkbox">
+									<label for="remember">
+										<input id="remember" type="checkbox" value="remember-me">Remember me
+										<a href="session/forget_password"> (forget password)</a>
+									</label>
+								</div>
+							</div>
+						</div>
+						-->
+						<div class="form-group">
+							<div class="col-offset-2 col-lg-10">
+								<button class="btn btn-primary">Save</button>
+								<button class="btn btn-default">Cancel</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

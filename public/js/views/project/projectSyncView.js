@@ -1,27 +1,35 @@
 define([
-	'app/views/common/baseView',
+	'app/views/common/bootstrapView',
+	'app/views/project/taskFormView',
 	'app/collections/common/baseCollection',
 	'app/models/common/baseModel',
 	'app/models/project/task'
-], function(BaseView, BaseCollection, BaseModel, Task){
-	var ProjectSyncView = BaseView.extend({
+
+], function(BootstrapView, TaskFormView, BaseCollection, BaseModel, Task){
+	var ProjectSyncView = BootstrapView.extend({
 		hash: '#project/sync',
 		tmpl: 'project/projectSync',
+		formTmpl: 'project/taskForm',
 		events : {
-			// 'click button' : 'onClickedButton'
-			'hidden.bs.collapse div.collapse': 'onHiddenCollapse'
+			'click #wbs' : 'onClickedWbs',
+			'hover .hover' : 'onHoveredItem'
+		},
+		bsEvents : {
+			'show.bs.collapse div.collapse' : 'onShowCollapse',
+			'hidden.bs.collapse div.collapse' : 'onHiddenCollapse'
 		},
 		initialize: function() {
 			_.bindAll(this,
+				'delegateEvents',
                 'render', 'initAfterRendering',
                 'onResettedTabs', 'onResettedTasks', 'onChangedParentTask'
             );
 
-			BaseView.prototype.initialize.call(this);
+			BootstrapView.prototype.initialize.call(this);
 
 			this.initializeModel();
 		},
-	// Model 초기화
+// Model 초기화
 		initializeModel : function() {
 			this.model = new BaseModel();
 
@@ -42,63 +50,69 @@ define([
 
             this.tabs.on('reset', this.onResettedTabs);
             this.tasks.on('reset', this.onResettedTasks);
+
+            this.tasks.on('change', function() {
+				console.log('task changed');
+            });
             // model은 reset 이벤트가 없음
             this.parentTask.on('change', this.onChangedParentTask);
 
             this.fetchModel();
 		},
-	// Model fetch
+// Model fetch
 		fetchModel : function() {
 // Javascript Promise(Jquery) Pattern
 			$.when(this.tabs.fetch({reset: true}), this.tasks.fetch({reset: true}), this.parentTask.fetch())
-				.done(this.render)
+				.then(this.render)
 				.fail(this.onModelFetchError);
 		},
 		render: function() {
-			BaseView.prototype.render.call(this);
+			BootstrapView.prototype.render.call(this);
 
 			this.initAfterRendering();
 
 			return this;
 		},
 		initAfterRendering: function() {
-			console.log('initAfterRendering');
-
-			$('div.collapse').on('hidden.bs.collapse', function () {
-				// do something…
-				console.log('initAfterRendering hidden.bs.collapse');
-			});
 		},
 // Model Event Processing Start
 		onResettedTabs: function() {
-			this.hasTabs = true;
 			var currentTab = this.tabs.where({link : this.hash})[0];
 			currentTab.set('active', true);
 
 			this.model.set('title', currentTab.get('name'));
 			this.model.set('tabs', this.tabs.toJSON());
-
-			// this.checkModelForRendering();
 		},
 		onResettedTasks: function() {
-			this.hasTasks = true;
 			this.model.set('tasks', this.tasks.toJSON());
-
-			// this.checkModelForRendering();
 		},
 		onChangedParentTask: function() {
-			this.hasParentTask = true;
 			this.model.set('parentTask', this.parentTask.toJSON());
 		},
+		onShowCollapse: function(event) {
+			var $target = $(event.target);
+			var wbs = $target.attr('wbs');
+			var viewId = 'wbs_' + wbs;
+			var task = this.tasks.where({wbs : wbs})[0];
+			// baseView 에 정의되어 있는 setSubView 사용
+			this.setSubView($target, viewId, TaskFormView, task);
+
+			$target.parent().removeClass('collapse');
+		},
 		onHiddenCollapse: function(event) {
-			console.log('onHiddenCollapse');
+			$(event.target).parent().addClass('collapse');
+		},
+		onHoveredItem: function(event) {
+			console.log('onHoveredItem');
 		},
 // Model Event Processing END
 // View Destroy Process
 		onClose: function() {
             this.tabs.close();
             this.tasks.close();
-            BaseView.prototype.onClose.call(this);
+            this.parentTask.close();
+
+            BootstrapView.prototype.onClose.call(this);
         }
 	});
 
