@@ -23,14 +23,15 @@ mongoose.connection.on('open', function () {
 	User.remove({}, function(err) {
 		User.initialize(function() {
 			debug('User collection initialized');
+			// 변경건이 있으면 그때만 하는 걸로.
+			Task.remove({}, function(err) {
+				Task.initialize(function() {
+					debug('Task collection initialized');
+					Task.initializeUser(User);
+				});
+			});
 		});
 	});
-// 변경건이 있으면 그때만 하는 걸로.
-	/*Task.remove({}, function(err) {
-		Task.initialize(function() {
-			debug('Task collection initialized');
-		});
-	});*/
 });
 
 mongoose.connection.on('close', function () {

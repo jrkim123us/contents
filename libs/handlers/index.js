@@ -28,6 +28,7 @@ module.exports = function (db) {
 		},
 		getTasksByParent: function(req, res) {
 			db.Task.getTasksByParent(req.params.parentWbs, function(arr, data) {
+				if(arr) throw arr;
 				res.send(data);
 			});
 		},
@@ -38,6 +39,10 @@ module.exports = function (db) {
 				}
 				res.send(data);
 			});
+		},
+		setTask: function(req, res) {
+			debug('setTask /' + req.params.wbs + '/' + req.body.name);
+			res.send();
 		},
 		getTabs: function(req, res) {
 			db.Menu.getTabs(req.params.parentId, function(arr, data) {

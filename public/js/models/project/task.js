@@ -20,6 +20,8 @@ define([
                 attrs.plan   = parseFloat(attrs.plan).toFixed(1);
             if(attrs.act && !isNaN(attrs.act))
                 attrs.act    = parseFloat(attrs.act).toFixed(1);
+            if(attrs.wbs)
+                this.url = '/project/task/' + attrs.wbs;
 
             Backbone.Model.prototype.set.apply(this, arguments);
         },

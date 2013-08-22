@@ -6,7 +6,7 @@ define([
 		tmpl: 'project/taskForm',
 		events : {
 			'change'       : 'onChangedForm',
-			'click button' : 'onClickedSaveButton'
+			'click button.btn' : 'onClickedSaveButton'
 		},
 		initialize: function() {
 			BootstrapView.prototype.initialize.apply(this, arguments);
@@ -15,14 +15,17 @@ define([
 			// backbone view에서 jquery selector를 사용하면
 			// this.$el.find()로 동작해야 하나 적용 안됨
 			// bootstrap.js 에서 overwrite 하지 않나 추측..
-			this.$el.find('.chosen-select').chosen({width: "100%"})
-				// .change(console.log('changed'));
-				.change(function() {
-					console.log('changed');
-				});
+			this.$el.find('.chosen-select').chosen({width: "100%"});
 		},
-		alertNotChanged: function() {
-
+		alertHasNotChanged: function() {
+            this.bsAlertDismissable(this.$el.find('.taskForm-alert'), {
+				alertType : 'alert-info',
+				strong : 'Note!',
+				message : '변경된 데이터가 존재하지 않습니다.'
+            });
+		},
+		hideCollapse: function() {
+			this.$el.parent().collapse('hide');
 		},
 		onClickedSaveButton: function(event) {
 			// event.preventDefault();
@@ -35,10 +38,12 @@ define([
 
 				this.model.set(formSet);
 
-				if(!this.model.hasChanged())
-					this.alertNotChanged();
+				if(this.model.hasChanged())
+					this.model.save();
+				else
+					this.alertHasNotChanged();
 			} else {
-				console.log('cancel button');
+				this.hideCollapse();
 			}
 			return false;
 		},

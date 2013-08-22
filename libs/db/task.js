@@ -15,8 +15,11 @@ var schema = new Schema({
 	end       : {type:String},
 	startDate : {type: Date},
 	endDate   : {type: Date},
-	worker    : {type : Schema.Types.Mixed},
-	approver  : {type : Schema.Types.Mixed}
+	// worker    : {type : Schema.Types.Mixed},
+	// approver  : {type : Schema.Types.Mixed},
+	worker    : [{type: Schema.ObjectId, ref: 'User'}],
+	approver  : [{type: Schema.ObjectId, ref: 'User'}]
+	// test : [ {type: Schema.ObjectId, ref: 'User'}]
 });
 schema.plugin(tree);
 
@@ -86,9 +89,25 @@ schema.statics.initialize = function (callback) {
 	saveAll();
 };
 
+schema.statics.initializeUser = function (User, allback) {
+	User.getAllId(function(err, userDoc){
+		Task.update({},{
+			worker   : [userDoc[0]._id, userDoc[1]._id],
+			approver : [userDoc[2]._id, userDoc[3]._id]
+		}, {multi:true}, function(err){
+			if(err) throw err;
+		});
+		/*Task.find({}, function(err, doc) {
+			doc.test = userDoc;
+			doc.save();
+		})*/
+	});
+};
+
 schema.statics.getTasksByParent = function (parentWbs, callback) {
 	this.find({parentWbs : parentWbs})
-		.select('-_id wbs name weight plan act start end worker.name approver.name')
+		.select('-_id wbs name weight plan act start end worker approver test')
+		.populate('worker approver', 'name email')
 		.exec(callback);
 };
 schema.statics.getTask = function (wbs, callback) {

@@ -33,7 +33,8 @@ define([
                 this.subViews[viewId].close();
             }
             this.subViews[viewId] = new SubViewClass({
-                model : model
+                model : model,
+                vent  : this.vent
             });
 
             $target.html(this.subViews[viewId].el);

@@ -11,7 +11,7 @@ define([
 		tmpl: 'project/projectSync',
 		formTmpl: 'project/taskForm',
 		events : {
-			'click #wbs' : 'onClickedWbs',
+			'click #wbs'   : 'onClickedWbs',
 			'hover .hover' : 'onHoveredItem'
 		},
 		bsEvents : {

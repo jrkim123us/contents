@@ -16,15 +16,40 @@ var handleError = function(err) {
 	}
 };
 schema.statics.initialize = function (callback) {
-	var user01 = new User({name : {first:'jong rok', last: 'kim'}, email: 'jrkim79@lgcns.com', passwordHash: 'a'});
+	var users = [
+		new User({name : {first:'종록', last: '김'}, email: 'jrkim79@lgcns.com', passwordHash: 'a'}),
+		new User({name : {first:'후정', last: '김'}, email: 'hoojungkim@lgcns.com', passwordHash: 'a'}),
+		new User({name : {first:'태호', last: '조'}, email: 'taiho@cnspartner.com', passwordHash: 'a'}),
+		new User({name : {first:'철수', last: '박'}, email: 'chulsu@lgcns.com', passwordHash: 'a'})
+	];
+	var result = [];
+	// user01.save(callback);
+	function saveAll() {
+		var user= users.shift();
 
-	user01.save(callback);
+		user.save(function(err, saved) {
+			if(err) throw err;
+			result.push(saved[0]);
+
+			if(users.length > 0)
+				saveAll();
+			else
+				callback();
+		});
+	}
+	saveAll();
 };
 // Define some "static" or "instance" methods
 schema.statics.getAll = function (callback) {
 	this
 		.find({})
 		.limit(10)
+		.exec(callback);
+};
+schema.statics.getAllId = function(callback) {
+	this
+		.find({})
+		.select('_id')
 		.exec(callback);
 };
 schema.statics.getUserByEmail = function (email, callback) {

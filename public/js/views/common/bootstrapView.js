@@ -24,6 +24,9 @@ define([
             }
             BaseView.prototype.remove.call(this);
         },
+        bsAlertDismissable: function($target, params) {
+            $target.html(Handlebars.templates['common/alert-dismissable'](params));
+        },
         /**
          * bsEvent로 정의된 event 집합을 한번에 bootstrap event에 등록해 줌
          * @param  {[type]} evnets [description]

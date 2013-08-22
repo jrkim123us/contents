@@ -28,6 +28,9 @@ table .hover:hover .icon-pencil {
   background-position: 0 -72px;
 }
 /* Task Form Start (jquery.chosen extension) */
+.form-group.taskForm-group {
+  margin-bottom: 0px;
+}
 .chosen-container-multi {
   color: #000;
 }

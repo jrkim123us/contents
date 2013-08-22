@@ -16,6 +16,7 @@ module.exports = function (config, handler) {
 
 		getTasksByParent : impl.F,
 		getTask          : impl.F,
+		setTask          : impl.F,
 		getMenus         : impl.F,
 		getTabs          : impl.F
 	});
@@ -28,8 +29,9 @@ module.exports = function (config, handler) {
 		handler.redirectRoot
 	);
 
-	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
+	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
+	app.post('/project/task/:wbs', handler.ensureAuthenticated, handler.setTask);
 
 	app.get('/common/menu', handler.ensureAuthenticated, handler.getMenus);
 	app.get('/common/tab/:parentId', handler.ensureAuthenticated, handler.getTabs);

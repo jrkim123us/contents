@@ -1,39 +1,39 @@
 <div class="container">
 	<div class="row">
-		<div class="col-offset-1 col-lg-10">
+		<div class="col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10">
 			<div class="well">
 				<form action="" class="form-horizontal" role="form" method="PUT">
 					<fieldset>
 						<legend>{{name}}</legend>
 						<div class="form-group">
-							<label for="wbs" class="col-lg-2 control-label">WBS</label>
-							<div class="col-lg-10">
+							<label for="wbs" class="col-md-2 col-lg-2 control-label">WBS</label>
+							<div class="col-md-10 col-lg-10">
 								<p class="form-control-static">{{wbs}}</p>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">작업 이름</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">작업 이름</label>
+							<div class="col-md-10 col-lg-10">
 								<input class="form-control" name="name" type="text" placeholder="Enter name" value="{{name}}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">승인자</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">승인자</label>
+							<div class="col-md-10 col-lg-10">
 								<input class="form-control" name="approver" type="text" placeholder="Enter name"
-									value="{{#listToStr approver}}{{this.name}}{{#unless @last}},{{/unless}}{{/listToStr}}">
+									value="{{#listToStr approver}}{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}{{/listToStr}}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">담당자</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">담당자</label>
+							<div class="col-md-10 col-lg-10">
 								<input class="form-control" name="worker" type="text" placeholder="Enter name"
-									value="{{#listToStr worker}}{{this.name}}{{#unless @last}},{{/unless}}{{/listToStr}}">
+									value="{{#listToStr worker}}{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}{{/listToStr}}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">담당자 Selector</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">담당자 Selector</label>
+							<div class="col-md-10 col-lg-10">
 								<select data-placeholder="Choose Workers" name="chosenWorker" multiple class="form-control chosen-select">
 									<option value=""></option>
 									<optgroup label="기본조직">
@@ -94,20 +94,20 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">가중치</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">가중치</label>
+							<div class="col-md-10 col-lg-10">
 								<input class="form-control" name="weight" type="number" placeholder="Enter weight point" value="{{weight}}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name" class="col-lg-2 control-label">작업 설명</label>
-							<div class="col-lg-10">
+							<label for="name" class="col-md-2 col-lg-2 control-label">작업 설명</label>
+							<div class="col-md-10 col-lg-10">
 								<textarea class="form-control" name="desc" rows="5" placeholder="Enter description" value=""></textarea>
 							</div>
 						</div>
 						<!--
 						<div class="form-group">
-							<div class="col-offset-2 col-lg-10">
+							<div class="col-offset-2 col-md-10 col-lg-10">
 								<div class="checkbox">
 									<label for="remember">
 										<input id="remember" type="checkbox" value="remember-me">Remember me
@@ -118,9 +118,13 @@
 						</div>
 						-->
 						<div class="form-group">
-							<div class="col-offset-2 col-lg-10">
-								<button class="btn btn-primary btn-save">Save</button>
+							<div class="col-md-offset-2 col-md-10 col-lg-offset-2 col-lg-10">
+								<button class="btn btn-primary btn-save" data-loading-text="Saving...">Save</button>
 								<button class="btn btn-default btn-cancel">Cancel</button>
+							</div>
+						</div>
+						<div class="form-group taskForm-group">
+							<div class="taskForm-alert col-md-offset-2 col-md-10 col-lg-offset-2 col-lg-10">
 							</div>
 						</div>
 					</fieldset>
