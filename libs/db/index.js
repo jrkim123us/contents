@@ -3,6 +3,7 @@ var debug = require('debug')('db'),
 	User = require('./user'),
 	Menu = require('./menu'),
 	Task = require('./task'),
+	Org = require('./org'),
 	connString = 'mongodb://localhost/cms';
 	// connString = 'mongodb://' + process.env.MY_USER + ':' + process.env.MY_PWD + '@somehost.com:9999/DbName';
 
@@ -14,20 +15,43 @@ mongoose.connect(connString);
 mongoose.connection.on('open', function () {
 	debug('Mongo connected.');
 	// 메뉴 데이터 초기화
-	Menu.remove({}, function(err) {
+	/*Menu.remove({}, function(err) {
 		Menu.initialize(function() {
 			debug('Menu collection initialized');
 		});
-	});
-
-	User.remove({}, function(err) {
+	});*/
+	// 사용자 데이터 초기화 (Full set)
+	/*User.remove({}, function(err) {
 		User.initialize(function() {
 			debug('User collection initialized');
 			// 변경건이 있으면 그때만 하는 걸로.
 			Task.remove({}, function(err) {
 				Task.initialize(function() {
 					debug('Task collection initialized');
+					// Task 안에 사용자 정보 추가
 					Task.initializeUser(User);
+				});
+			});
+
+			Org.remove({}, function(err) {
+				Org.initialize(function() {
+					debug('Org collection initialized');
+					Org.initializeUser(User);
+				});
+			});
+		});
+	});*/
+	// 사용자 데이터 초기화 (Task 제외)
+	User.remove({}, function(err) {
+		User.initialize(function() {
+			debug('User collection initialized');
+			// Task 안에 사용자 정보 추가
+			Task.initializeUser(User);
+
+			Org.remove({}, function(err) {
+				Org.initialize(function() {
+					debug('Org collection initialized');
+					Org.initializeUser(User);
 				});
 			});
 		});
@@ -40,6 +64,7 @@ mongoose.connection.on('close', function () {
 
 module.exports = {
 	User : User,
+	Org  : Org,
 	Menu : Menu,
 	Task : Task
 };

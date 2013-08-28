@@ -20,77 +20,15 @@
 						<div class="form-group">
 							<label for="name" class="col-md-2 col-lg-2 control-label">승인자</label>
 							<div class="col-md-10 col-lg-10">
-								<input class="form-control" name="approver" type="text" placeholder="Enter name"
-									value="{{#listToStr approver}}{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}{{/listToStr}}">
+								<select data-placeholder="Enter name" name="approver" multiple class="form-control chosen-select"></select>
+								{{!select option 추가하는 부분}}
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="name" class="col-md-2 col-lg-2 control-label">담당자</label>
 							<div class="col-md-10 col-lg-10">
-								<input class="form-control" name="worker" type="text" placeholder="Enter name"
-									value="{{#listToStr worker}}{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}{{/listToStr}}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="name" class="col-md-2 col-lg-2 control-label">담당자 Selector</label>
-							<div class="col-md-10 col-lg-10">
-								<select data-placeholder="Choose Workers" name="chosenWorker" multiple class="form-control chosen-select">
-									<option value=""></option>
-									<optgroup label="기본조직">
-										<option value="00001" selected>김종록</option>
-										<option value="00002" selected>김후정</option>
-										<option value="00003">최철수</option>
-										<option value="00004">이영희</option>
-									</optgroup>
-									<optgroup label="NFC EAST">
-										<option>Dallas Cowboys</option>
-										<option>New York Giants</option>
-										<option>Philadelphia Eagles</option>
-										<option>Washington Redskins</option>
-									</optgroup>
-									<optgroup label="NFC NORTH">
-										<option selected>Chicago Bears </option>
-										<option>Detroit Lions</option>
-										<option>Green Bay Packers</option>
-										<option>Minnesota Vikings</option>
-									</optgroup>
-									<optgroup label="NFC SOUTH">
-										<option>Atlanta Falcons</option>
-										<option>Carolina Panthers</option>
-										<option>New Orleans Saints</option>
-										<option>Tampa Bay Buccaneers</option>
-									</optgroup>
-									<optgroup label="NFC WEST">
-										<option>Arizona Cardinals</option>
-										<option>St. Louis Rams</option>
-										<option>San Francisco 49ers</option>
-										<option>Seattle Seahawks</option>
-									</optgroup>
-									<optgroup label="AFC EAST">
-										<option>Buffalo Bills</option>
-										<option>Miami Dolphins</option>
-										<option>New England Patriots</option>
-										<option>New York Jets</option>
-									</optgroup>
-									<optgroup label="AFC NORTH">
-										<option>Baltimore Ravens</option>
-										<option>Cincinnati Bengals</option>
-										<option>Cleveland Browns</option>
-										<option>Pittsburgh Steelers</option>
-									</optgroup>
-									<optgroup label="AFC SOUTH">
-										<option>Houston Texans</option>
-										<option>Indianapolis Colts</option>
-										<option>Jacksonville Jaguars</option>
-										<option>Tennessee Titans</option>
-									</optgroup>
-									<optgroup label="AFC WEST">
-										<option>Denver Broncos</option>
-										<option>Kansas City Chiefs</option>
-										<option>Oakland Raiders</option>
-										<option>San Diego Chargers</option>
-									</optgroup>
-								</select>
+								<select data-placeholder="Enter name" name="worker" multiple class="form-control chosen-select"></select>
+								{{!select option 추가하는 부분}}
 							</div>
 						</div>
 						<div class="form-group">

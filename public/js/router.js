@@ -10,7 +10,7 @@ define([
 			"todo"     : "getTodo",
 			"planner"  : "getTodo",
 			"bbs"      : "getTodo",
-			"settings" : "getTodo",
+			"settings" : "getSetting",
 			"project/:module" : "getProject",
 			"project/:module/:param" : "getProject",
 			"*other"   : "defaultAction"
@@ -51,6 +51,10 @@ define([
 		getTodo: function() {
 			if(this.checkContentView())
 				this.renderContentView(['app/views/todo/todoView']);
+		},
+		getSetting: function() {
+			if(this.checkContentView())
+				this.renderContentView(['app/views/setting/settingView']);
 		},
 		getProject: function(module, param) {
 			var modulePath;

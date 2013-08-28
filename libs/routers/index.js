@@ -18,6 +18,8 @@ module.exports = function (config, handler) {
 		getTask          : impl.F,
 		setTask          : impl.F,
 		getMenus         : impl.F,
+		getOrgs          : impl.F,
+		getUsers         : impl.F,
 		getTabs          : impl.F
 	});
 	// Note. Router 의 배치 순서 매우 중요함 !!
@@ -35,6 +37,8 @@ module.exports = function (config, handler) {
 
 	app.get('/common/menu', handler.ensureAuthenticated, handler.getMenus);
 	app.get('/common/tab/:parentId', handler.ensureAuthenticated, handler.getTabs);
+	app.get('/common/org', handler.ensureAuthenticated, handler.getOrgs);
+	app.get('/common/user', handler.ensureAuthenticated, handler.getUsers);
 	// 순서 중요 맨 마지막에 위치해야 함
 	// app.get('/*', handler.renderIndex);
 	app.get('/', handler.ensureAuthenticated, handler.renderIndex);

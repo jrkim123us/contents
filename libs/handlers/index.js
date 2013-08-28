@@ -22,18 +22,18 @@ module.exports = function (db) {
 			res.redirect('/');
 		},
 		getMenus: function(req, res) {
-			db.Menu.getChildrenTree(function(arr, data){
+			db.Menu.getChildrenTree(function(err, data){
 				res.send(data);
 			});
 		},
 		getTasksByParent: function(req, res) {
-			db.Task.getTasksByParent(req.params.parentWbs, function(arr, data) {
-				if(arr) throw arr;
+			db.Task.getTasksByParent(req.params.parentWbs, function(err, data) {
+				if(err) throw err;
 				res.send(data);
 			});
 		},
 		getTask: function(req, res) {
-			db.Task.getTask(req.params.wbs, function(arr, data) {
+			db.Task.getTask(req.params.wbs, function(err, data) {
 				if(!data) {
 					data = {status: 404};
 				}
@@ -45,7 +45,22 @@ module.exports = function (db) {
 			res.send();
 		},
 		getTabs: function(req, res) {
-			db.Menu.getTabs(req.params.parentId, function(arr, data) {
+			db.Menu.getTabs(req.params.parentId, function(err, data) {
+				res.send(data);
+			});
+		},
+
+		getOrgs: function(req, res) {
+			db.Org.getOrgs(function(err, data) {
+				if(err) throw err;
+
+				res.send(data);
+			});
+		},
+		getUsers: function(req, res) {
+			db.User.getAll(function(err, data) {
+				if(err) throw err;
+
 				res.send(data);
 			});
 		},

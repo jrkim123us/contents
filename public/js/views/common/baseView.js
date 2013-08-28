@@ -27,14 +27,15 @@ define([
 
             return this;
         },
-        setSubView: function($target, viewId, SubViewClass, model) {
+        setSubView: function($target, viewId, SubViewClass, model, params) {
             if(!this.subViews) this.subViews = {};
             if(this.subViews[viewId]) {
                 this.subViews[viewId].close();
             }
             this.subViews[viewId] = new SubViewClass({
-                model : model,
-                vent  : this.vent
+                model  : model,
+                vent   : this.vent,
+                params : params
             });
 
             $target.html(this.subViews[viewId].el);

@@ -7,6 +7,10 @@ var schema = new Schema({
 		last: {type: String}
 	},
 	email : {type: String, required: true},
+	org : [{
+		_id : {type: Schema.ObjectId, ref: 'Org'},
+		leader : {type: Boolean, default: false}
+	}],
 	passwordHash : {type: String}
 });
 
@@ -43,7 +47,8 @@ schema.statics.initialize = function (callback) {
 schema.statics.getAll = function (callback) {
 	this
 		.find({})
-		.limit(10)
+		.limit(100)
+		.select('-_id name email')
 		.exec(callback);
 };
 schema.statics.getAllId = function(callback) {
