@@ -28,9 +28,9 @@
 				</thead>
 				<tbody>
 					{{#each tasks}}
-						<tr>
+						<tr id="{{this._id}}">
 							<td><a href="#project/sync/{{this.wbs}}">{{this.wbs}}</a></td>
-							<td><a data-toggle="collapse" data-target="#row{{@index}}">{{this.name}}</a></td>
+							<td><a data-toggle="collapse" data-target="#row{{@index}}" name="name">{{this.name}}</a></td>
 							<td class="hover">
 								{{#listToStr this.approver}}
 									{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}
@@ -42,7 +42,7 @@
 									{{this.name.last}}{{this.name.first}}{{#unless @last}},{{/unless}}
 								{{/listToStr}}
 							</td>
-							<td class="text-right text-muted">{{this.weight}}</td>
+							<td class="text-right text-muted" name="weight">{{this.weight}}</td>
 							<td class="text-right text-info">{{this.plan}}</td>
 							<td class="text-right text-primary">{{this.act}}</td>
 						</tr>

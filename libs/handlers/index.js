@@ -21,11 +21,20 @@ module.exports = function (db) {
 			// req.session.userId = '73007';
 			res.redirect('/');
 		},
+
+// Start Menu
 		getMenus: function(req, res) {
 			db.Menu.getChildrenTree(function(err, data){
 				res.send(data);
 			});
 		},
+		getTabs: function(req, res) {
+			db.Menu.getTabs(req.params.parentId, function(err, data) {
+				res.send(data);
+			});
+		},
+// End Menu
+// Task Start
 		getTasksByParent: function(req, res) {
 			db.Task.getTasksByParent(req.params.parentWbs, function(err, data) {
 				if(err) throw err;
@@ -34,22 +43,24 @@ module.exports = function (db) {
 		},
 		getTask: function(req, res) {
 			db.Task.getTask(req.params.wbs, function(err, data) {
-				if(!data) {
-					data = {status: 404};
-				}
+				if(err) throw err;
 				res.send(data);
 			});
 		},
 		setTask: function(req, res) {
-			debug('setTask /' + req.params.wbs + '/' + req.body.name);
-			res.send();
-		},
-		getTabs: function(req, res) {
-			db.Menu.getTabs(req.params.parentId, function(err, data) {
-				res.send(data);
+			db.Task.setTask(req.body, function(err, data) {
+				if(err) throw err;
+
+				/*if(!data) data = {};
+				res.send({saved : data});
+				debug('setTast : ' + data);*/
+				res.end('{}');
 			});
 		},
+// Task End
 
+
+// Start Org
 		getOrgs: function(req, res) {
 			db.Org.getOrgs(function(err, data) {
 				if(err) throw err;
@@ -57,6 +68,8 @@ module.exports = function (db) {
 				res.send(data);
 			});
 		},
+// Start Org
+
 		getUsers: function(req, res) {
 			db.User.getAll(function(err, data) {
 				if(err) throw err;

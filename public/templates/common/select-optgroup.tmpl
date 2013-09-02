@@ -2,7 +2,7 @@
 {{#each this}}
 <optgroup label="{{this.name}}">
 	{{#each this.member}}
-		<option value="{{this.email}}" {{#if this.selected}}selected{{/if}}>{{this.name.last}}{{this.name.first}}</option>
+		<option value="{{this._id}}" {{#if this.selected}}selected{{/if}}>{{this.name.last}}{{this.name.first}}</option>
 	{{/each}}
 </optgroup>
 {{/each}}

@@ -12,11 +12,14 @@ define([
 		initialize: function(options) {
 			_.bindAll(this,
                 'render',
-                'syncFailHandler'
+                'onChangedTaskName',
+                'syncDoneHandler', 'syncFailHandler'
             );
 			BootstrapView.prototype.initialize.apply(this, arguments);
 
 			this.selectOptions = options.params;
+
+			this.model.on('change:name', this.onChangedTaskName);
 
 			this.render();
 		},
@@ -37,7 +40,7 @@ define([
 			_.each(chosenSelectNames, _.bind(function(name) {
 				var $target = this.$el.find('select[name*="' + name + '"]');
 				this.checkOptionSelected(name);
-				$target.html(Handlebars.templates['common/select-optgroup'](this.selectOptions.toJSON()));
+				this.renderTarget('common/select-optgroup', $target, this.selectOptions.toJSON());
 				$target.chosen({width: "100%"});
 			}, this));
 		},
@@ -57,7 +60,7 @@ define([
 					message : '변경된 데이터가 존재하지 않습니다.'
 				});
 		},
-		syncDoneHandler: function(res) {
+		syncDoneHandler: function(data, textStatus, jqXHR) {
 			var $target = this.$el.find('.taskForm-alert');
 			this.bsAlertDismissable($target, {
 				alertType : 'alert-success',
@@ -65,7 +68,7 @@ define([
 				message : '저장되었습니다.'
 			});
 		},
-		syncFailHandler: function(res) {
+		syncFailHandler: function(jqXHR, textStatus, errorThrown) {
 			var $target = this.$el.find('.taskForm-alert');
 			this.bsAlertDismissable($target, {
 				alertType : 'alert-danger',
@@ -98,6 +101,9 @@ define([
 			},this));
 
 			this.model.set(formSet);
+		},
+		onChangedTaskName: function(model, changedName, options) {
+			$('legend').text(changedName);
 		},
 		onClickedSaveButton: function(event) {
 			var hasChanged = false;

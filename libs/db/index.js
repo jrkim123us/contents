@@ -29,7 +29,9 @@ mongoose.connection.on('open', function () {
 				Task.initialize(function() {
 					debug('Task collection initialized');
 					// Task 안에 사용자 정보 추가
-					Task.initializeUser(User);
+					Task.initializeUser(User, function(err){
+						if(err) throw err;
+					});
 				});
 			});
 
@@ -46,7 +48,9 @@ mongoose.connection.on('open', function () {
 		User.initialize(function() {
 			debug('User collection initialized');
 			// Task 안에 사용자 정보 추가
-			Task.initializeUser(User);
+			Task.initializeUser(User, function(err){
+				if(err) throw err;
+			});
 
 			Org.remove({}, function(err) {
 				Org.initialize(function() {

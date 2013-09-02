@@ -27,6 +27,9 @@ define([
 
             return this;
         },
+        renderTarget: function(tmplId, $target, jsonObj) {
+            $target.html(Handlebars.templates[tmplId](jsonObj));
+        },
         setSubView: function($target, viewId, SubViewClass, model, params) {
             if(!this.subViews) this.subViews = {};
             if(this.subViews[viewId]) {

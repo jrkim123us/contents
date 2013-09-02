@@ -38,7 +38,7 @@ schema.statics.initialize = function (callback) {
 	saveAll();
 };
 
-schema.statics.initializeUser = function (User, allback) {
+schema.statics.initializeUser = function (User, callback) {
 	User.getAllId(function(err, userDoc){
 		Org.update({name : '사업관리'}, {
 			leader: userDoc[1]._id,

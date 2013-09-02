@@ -22,7 +22,9 @@ define([
 			_.bindAll(this,
 				'delegateEvents',
                 'render', 'initAfterRendering',
-                'onResettedTabs', 'onResettedTasks', 'onChangedParentTask'
+                'onResettedTabs',
+                'onResettedTasks', 'onChangedTasks',
+                'onChangedParentTask'
             );
 
 			BootstrapView.prototype.initialize.call(this);
@@ -59,10 +61,7 @@ define([
 		attachEventsToModels: function() {
             this.tabs.on('reset', this.onResettedTabs);
             this.tasks.on('reset', this.onResettedTasks);
-
-            this.tasks.on('change', function() {
-				console.log('task changed');
-            });
+            this.tasks.on('change', this.onChangedTasks);
             // model은 reset 이벤트가 없음
             this.parentTask.on('change', this.onChangedParentTask);
 		},
@@ -83,6 +82,15 @@ define([
 		},
 		onResettedTasks: function() {
 			this.model.set('tasks', this.tasks.toJSON());
+		},
+		onChangedTasks: function(model, options) {
+			// console.log(model.changed);
+			var $target = $('#' + model.get('_id'));
+
+			_.each(model.changed, function(val, key, obj) {
+				console.log(key + ' : ' + val);
+				$target.find('[name*="' + key + '"]').text(val);
+			});
 		},
 		onChangedParentTask: function() {
 			this.model.set('parentTask', this.parentTask.toJSON());
