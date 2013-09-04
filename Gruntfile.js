@@ -86,9 +86,13 @@ module.exports = function(grunt) {
         compass: {                  // Task
             dist: {                   // Target
                 options: {              // Target options
+                    outputStyle : 'expanded',
                     sassDir     : 'public/libs/jquery.chosen/sass',
                     cssDir      : 'public/libs/jquery.chosen/css',
-                    imagesDir   : 'public/libs/jquery.chosen/public',
+
+                    imagesDir      : 'public/libs/jquery.chosen/public',
+                    httpImagesPath : '../public',
+
                     environment : 'production'
                 }
             }
@@ -102,7 +106,8 @@ module.exports = function(grunt) {
                     'public/libs/jquery.chosen/js/chosen.jquery.js': ['public/libs/jquery.chosen/coffee/lib/*.coffee', 'public/libs/jquery.chosen/coffee/*.coffee']
                 }
             }
-        }
+        },
+        clean: ["public/libs/jquery.chosen/css", "public/libs/jquery.chosen/js"]
     });
 
     // Load the plugin that provides the "uglify" task.
@@ -111,7 +116,7 @@ module.exports = function(grunt) {
     // grunt.loadNpmTasks('grunt-contrib-jshint');
     // grunt.loadNpmTasks("grunt-contrib-handlebars");
 
-
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-compass');
 
@@ -119,6 +124,7 @@ module.exports = function(grunt) {
     // grunt.registerTask('default', ['uglify']);
     // grunt.registerTask('default', ['handlebars']);
     grunt.registerTask('src-compile', [
+        'clean',
         'coffee',
         'compass'
     ]);
