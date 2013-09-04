@@ -1,3 +1,4 @@
+require('coffee-script');
 var debug = require('debug')('config'),
 	path = require('path'),
 	fs = require('fs'),
@@ -33,7 +34,7 @@ app.configure(function() {
 	app.use(passport.initialize());
 	app.use(passport.session());
 	// app.use(app.router); '/*'를 쓰기 위해서는 comment
-	app.use(require('less-middleware')({ src: rootDir + '/public' }));
+	app.use(require('less-middleware')({ src: rootDir + '/public/css' }));
 	app.use(express.static(path.join(rootDir, 'public')));
 
 	// development only

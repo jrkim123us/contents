@@ -2,7 +2,7 @@
   "name"        : "Content-Management-System",
   "description" : "Content Management System",
   "author"      : "Kim Jong Rok",
-  "version"     : "0.0.1",
+  "version"     : "0.0.2",
   "private"     : true,
   "scripts": {
     "start": "node app.js"
@@ -11,8 +11,10 @@
     "express"         : "3.1.1",
     "jade"            : "*",
     "less-middleware" : "*",
+    "node-sass"       : "*",
+    "coffee-script"   : "*",
     "mongoose"        : "*",
-    "mongoose-tree2"   : "*",
+    "mongoose-tree2"  : "*",
     "debug"           : "*",
     "implementjs"     : "*",
     "connect-flash"   : "0.1.x",
@@ -22,10 +24,13 @@
   "devDependencies": {
     "nodemon": "*",
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-handlebars": "~0.5.9",
-    "grunt-contrib-watch": "~0.4.0"
+
+    "grunt-contrib-jshint"     : "~0.6.0",
+    "grunt-contrib-nodeunit"   : "~0.2.0",
+    "grunt-contrib-uglify"     : "~0.2.2",
+    "grunt-contrib-handlebars" : "~0.5.9",
+    "grunt-contrib-watch"      : "~0.4.0",
+    "grunt-contrib-compass"    : "*",
+    "grunt-contrib-coffee"     : "*"
   }
 }

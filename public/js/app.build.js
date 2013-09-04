@@ -1,23 +1,17 @@
 requirejs.config({
 	baseUrl: '../',
-	map: {
-		'*': {
-			'css' : 'libs/requirejs/css'
-		}
-	},
+
 	paths: {
-		jquery              : 'libs/jquery/js/jquery.min',
-		'jquery.validate'   : 'libs/jquery/js/jquery.validate',
-		'jquery.chosen'     : 'libs/jquery/js/jquery.chosen',
-		'jquery.css'        : 'libs/jquery/css',
-		underscore          : 'libs/underscore/underscore.min',
-		backbone            : 'libs/backbone/backbone.min', //backbone.js 로 처리하면 비정상 동작함.
-		bootstrap           : 'libs/bootstrap/js/bootstrap',
-		handlebars          : 'libs/handlebars/handlebars.runtime',
-		'handlebars.helper' : 'libs/handlebars/handlebars.helper',
+		'jquery'            : 'libs/jquery/jquery.min',
+		'jquery.validate'   : 'libs/jquery.validation/jquery.validate',
+		'jquery.chosen'     : 'libs/jquery.chosen/js/chosen.jquery',
+		'underscore'        : 'libs/underscore/underscore-min',
+		'backbone'          : 'libs/backbone/backbone-min', //backbone.js 로 처리하면 비정상 동작함.
+		'bootstrap'         : 'libs/bootstrap/dist/js/bootstrap',
+		'handlebars'        : 'libs/handlebars/handlebars.runtime',
 		'handlebars.tmpl'   : 'libs/handlebars/handlebars.tmpl.min',
-		app                 : 'js',
-		css                 : 'css'
+		'handlebars.helper' : 'js/utils/handlebars.helper',
+		app                 : 'js'
 	},
 	shim: {
 		"backbone": {

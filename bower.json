@@ -1,0 +1,26 @@
+{
+  "name": "CMS",
+  "version": "0.1.0",
+  "authors": [
+    "김종록 <jrkim123@gmail.com>"
+  ],
+  "dependencies": {
+    "jquery"            : "jquery#latest",
+    "jquery.validation" : "jquery.validation#latest",
+    "jquery.chosen"     : "chosen#latest",
+    "bootstrap"         : "bootstrap#latest",
+    "html5shiv"         : "html5shiv#latest",
+    "respond"           : "respond#latest",
+    "requirejs"         : "requirejs#latest",
+    "underscore"        : "underscore#latest",
+    "backbone"          : "backbone#latest",
+    "handlebars"        : "handlebars#latest"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
