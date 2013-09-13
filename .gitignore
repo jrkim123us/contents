@@ -2,3 +2,4 @@
 /public/libs
 /*.log
 /.sass-cache
+/bower_components

@@ -1,20 +1,23 @@
 {
   "name": "CMS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     "김종록 <jrkim123@gmail.com>"
   ],
   "dependencies": {
-    "jquery"            : "jquery#latest",
-    "jquery.validation" : "jquery.validation#latest",
-    "jquery.chosen"     : "chosen#latest",
-    "bootstrap"         : "bootstrap#latest",
-    "html5shiv"         : "html5shiv#latest",
-    "respond"           : "respond#latest",
-    "requirejs"         : "requirejs#latest",
-    "underscore"        : "underscore#latest",
-    "backbone"          : "backbone#latest",
-    "handlebars"        : "handlebars#latest"
+    "angular"          : "angular#latest",
+    "angular-cookies"  : "angular-cookies#latest",
+    "angular-loader"   : "angular-loader#latest",
+    "angular-resource" : "angular-resource#latest",
+    "angular-sanitize" : "angular-sanitize#latest",
+
+    "html5shiv" : "html5shiv#~3.6.2",
+    "respond"   : "respond#~1.3.0",
+    "bootstrap" : "bootstrap#latest"
+  },
+  "devDependencies" : {
+    "angular-mocks"    : "angular-mocks#latest",
+    "angular-scenario" : "angular-scenario#latest"
   },
   "ignore": [
     "**/.*",

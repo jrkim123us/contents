@@ -1,16 +1,16 @@
 doctype 5
-html
+html(ng-app)
 	head
 		title= title
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		link(rel='stylesheet', href='/libs/bootstrap/dist/css/bootstrap.min.css')
-		link(rel='stylesheet', href='/libs/bootstrap/dist/css/bootstrap-theme.min.css')
+		link(rel='stylesheet', href='/libs/bootstrap/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/libs/bootstrap/css/bootstrap-theme.min.css')
 		//- link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootswatch/3.0.0/amelia/bootstrap.min.css')
-		link(rel='stylesheet', href='/libs/jquery.chosen/css/chosen.css')
+		//- link(rel='stylesheet', href='/libs/jquery.chosen/css/chosen.css')
 		link(rel='stylesheet', href='/css/style.css')
 
 		//if lt IE 9
-			script(src='libs/html5shiv/dist/html5shiv.js')
+			script(src='libs/html5shiv/html5shiv.js')
 			script(src='libs/respond/respond.min.js')
 	body
 		block content
