@@ -78,7 +78,14 @@ module.exports = function(grunt) {
         copy : {
             html5shiv          : {expand: true, cwd: 'bower_components/html5shiv/dist/', src: '**', dest : 'app/libs/html5shiv/'},
             respond            : {expand: true, cwd: 'bower_components/respond/', src: ['*.js'], dest : 'app/libs/respond/'},
+            requirejs          : {expand: true, cwd: 'bower_components/requirejs/', src: 'require.js', dest : 'app/libs/requirejs/'},
+            jquery             : {expand: true, cwd: 'bower_components/jquery/', src: ['jquery.js', 'jquery.min.js', 'jquery.min.map'], dest : 'app/libs/jquery/'},
             bootstrap          : {expand: true, cwd: 'bower_components/bootstrap/dist/', src: '**', dest : 'app/libs/bootstrap/'},
+            'angular'          : {expand: true, cwd: 'bower_components/angular/', src: ['*.js'], dest : 'app/libs/angular/'},
+            'angular-cookies'  : {expand: true, cwd: 'bower_components/angular-cookies/', src: ['*.js'], dest : 'app/libs/angular/'},
+            'angular-loader'   : {expand: true, cwd: 'bower_components/angular-loader/', src: ['*.js'], dest : 'app/libs/angular/'},
+            'angular-resource' : {expand: true, cwd: 'bower_components/angular-resource/', src: ['*.js'], dest : 'app/libs/angular/'},
+            'angular-sanitize' : {expand: true, cwd: 'bower_components/angular-sanitize/', src: ['*.js'], dest : 'app/libs/angular/'},
             'angular-scenario' : {expand: true, cwd: 'bower_components/angular-scenario/', src: ['*.js'], dest : 'test/libs/angular/'},
             'angular-mocks'    : {expand: true, cwd: 'bower_components/angular-mocks/', src: 'angular-mocks.js', dest : 'test/libs/angular/'}
         },
@@ -151,7 +158,6 @@ module.exports = function(grunt) {
     grunt.registerTask('package', [
         'bower',
         'clean',
-        'buildall',
         'copy'
     ]);
 

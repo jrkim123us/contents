@@ -2,7 +2,6 @@ cmsFiles = {
   'angularSrc': [
     'bower_components/angular/angular.js',
     'bower_components/angular-cookies/angular-cookies.js',
-    'bower_components/angular-loader/angular-loader.js',
     'bower_components/angular-resource/angular-resource.js',
     'bower_components/angular-santize/angular-santize.js'
   ],
@@ -10,7 +9,6 @@ cmsFiles = {
   'angularMinSrc': [
     'bower_components/angular/angular.min.js',
     'bower_components/angular-cookies/angular-cookies.min.js',
-    'bower_components/angular-loader/angular-loader.min.js',
     'bower_components/angular-resource/angular-resource.min.js',
     'bower_components/angular-santize/angular-santize.min.js'
   ],

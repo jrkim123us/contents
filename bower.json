@@ -5,6 +5,8 @@
     "김종록 <jrkim123@gmail.com>"
   ],
   "dependencies": {
+    "requirejs"          : "requirejs#latest",
+
     "angular"          : "angular#latest",
     "angular-cookies"  : "angular-cookies#latest",
     "angular-loader"   : "angular-loader#latest",
