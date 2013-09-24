@@ -1,8 +1,10 @@
 
 require.config({
+	baseUrl : 'js/',
 	paths: {
-		jquery  : '../libs/jquery/jquery.min',
-		angular : '../libs/angular/angular',
+		jquery   : '../libs/jquery/jquery.min',
+		domReady : '../libs/requirejs/domReady',
+		angular  : '../libs/angular/angular',
 		'angular-resource': '../libs/angular/angular-resource'
 	},
 	shim: {
@@ -12,10 +14,9 @@ require.config({
 	}
 });
 
-// require(['angular', 'app', 'services/services', 'controllers/loginControllers', 'directives/loginDirectives'], function (angular) {
-require(['angular', 'routes/loginRoute'], function (angular, app) {
+require(['angular', 'routes/loginRoute', 'domReady'], function (angular, app, domReady) {
 	'use strict';
-	$(function() {
+	domReady(function() {
 		angular.bootstrap(document, [app.name]);
 	});
 });

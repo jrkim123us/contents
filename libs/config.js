@@ -1,4 +1,4 @@
-require('coffee-script');
+// require('coffee-script');
 var debug = require('debug')('config'),
 	path = require('path'),
 	fs = require('fs'),

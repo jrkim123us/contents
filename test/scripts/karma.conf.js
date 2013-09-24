@@ -1,31 +1,73 @@
 module.exports = function(config){
-  config.set({
-    basePath : '../',
+    config.set({
+        basePath : '../..',
+        // frameworks: ['jasmine', 'requirejs'],
+        frameworks: ['jasmine', 'requirejs'],
+        files : [
+            {pattern : 'app/js/*.js', included: false},
+            {pattern : 'app/js/**/*.js', included: false},
+            {pattern : 'app/libs/**/*.js', included: false},
+            {pattern : 'test/libs/**/*.js', included: false},
+            {pattern : 'test/unit/**/*Spec.js', included: false},
+            // {pattern : 'test/e2e/**/*.js', included: false},
+            'test/scripts/test.build.js'
+        ],
+        exclude: [
+            'app/js/app.build.js'
+        ],
 
-    files : [
-      'app/libs/angular/angular.js',
-      'test/libs/angular/angular-mocks.js',
-      'app/js/**/*.js',
-      'test/unit/**/*.js'
-    ],
+        // test results reporter to use
+        // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+        reporters: ['progress'],
 
-    autoWatch : true,
 
-    frameworks: ['jasmine'],
+        // web server port
+        port: 81,
 
-    browsers : ['Chrome'],
 
-    plugins : [
-            'karma-junit-reporter',
-            'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-jasmine'
-            ],
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
 
-    junitReporter : {
-      outputFile: 'test_out/unit.xml',
-      suite: 'unit'
-    }
 
-  });
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_DEBUG,
+
+
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
+
+
+        // Start these browsers, currently available:
+        // - Chrome
+        // - ChromeCanary
+        // - Firefox
+        // - Opera
+        // - Safari (only Mac)
+        // - PhantomJS
+        // - IE (only Windows)
+        browsers: ['PhantomJS'],
+
+
+        // If browser does not capture in given timeout [ms], kill it
+        captureTimeout: 60000,
+
+
+        // Continuous Integration mode
+        // if true, it capture browsers, run tests and exit
+        singleRun: false
+
+        // plugins : [
+        //     'karma-junit-reporter',
+        //     'karma-chrome-launcher',
+        //     'karma-firefox-launcher',
+        //     'karma-jasmine'
+        // ]
+
+        // junitReporter : {
+        //     outputFile: 'test_out/unit.xml',
+        //     suite: 'unit'
+        // }
+
+    });
 };

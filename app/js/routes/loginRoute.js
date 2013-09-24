@@ -3,8 +3,8 @@ define(['app' , 'controllers/loginController'] , function (app) {
 	'use strict';
 
 	return app.config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('', {templateUrl: 'partials/loginForm.html', controller: 'loginController'});
-        // $routeProvider.when('', {templateUrl: 'partials/loginForm.html', controller: require('controllers/loginController')});
+        // $routeProvider.when('', {templateUrl: 'partials/loginForm.html', controller: 'loginController'});
+        $routeProvider.when('', {templateUrl: 'partials/loginForm.html', controller: require('controllers/loginController')});
         $routeProvider.otherwise({redirectTo: ''});
     }]);
 });

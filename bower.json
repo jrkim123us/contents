@@ -6,6 +6,7 @@
   ],
   "dependencies": {
     "requirejs"          : "requirejs#latest",
+    "requirejs-domready" : "requirejs-domready#~2.0.1",
 
     "angular"          : "angular#latest",
     "angular-cookies"  : "angular-cookies#latest",
