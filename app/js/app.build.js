@@ -5,16 +5,22 @@ require.config({
 		jquery   : '../libs/jquery/jquery.min',
 		domReady : '../libs/requirejs/domReady',
 		angular  : '../libs/angular/angular',
-		'angular-resource': '../libs/angular/angular-resource'
+		app : 'app'
 	},
 	shim: {
-		jquery             : {exports : '$'},
-		angular            : {exports : 'angular', deps : ['jquery']},
-		'angular-resource' : {deps : ['angular']},
+		jquery  : {exports : '$'} ,
+		angular : {exports : 'angular', deps : ['jquery']},
+		'app'   : {exports : 'app', deps: ['angular']}
 	}
 });
 
-require(['angular', 'routes/loginRoute', 'domReady'], function (angular, app, domReady) {
+/*require(['angular', 'routes/loginRoute', 'domReady'], function (angular, app, domReady) {
+	'use strict';
+	domReady(function() {
+		angular.bootstrap(document, [app.name]);
+	});
+});*/
+require(['app', 'domReady'], function (app, domReady) {
 	'use strict';
 	domReady(function() {
 		angular.bootstrap(document, [app.name]);

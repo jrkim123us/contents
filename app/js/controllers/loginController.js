@@ -1,8 +1,7 @@
 'use strict';
 
-/* Controllers */
-define(['angular', 'app'], function(angular, app) {
-	app.controller('loginController', ['$scope', function ($scope) {
+define(['app'], function(app) {
+	app.lazy.controller('LoginController', ['$scope', function ($scope) {
 		$scope.master = {};
 
 		$scope.update = function(user) {

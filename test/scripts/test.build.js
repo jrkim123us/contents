@@ -10,19 +10,22 @@ for (var file in window.__karma__.files) {
 require.config({
 	baseUrl : "/base/app/js",
 	paths: {
-		jquery   : '../libs/jquery/jquery.min',
+		jquery   : '../libs/jquery/jquery',
 		domReady : '../libs/requirejs/domReady',
 
 		angular            : '../libs/angular/angular',
-		'angular-resource' : '../libs/angular/angular-resource',
+		// 'angular-resource' : '../libs/angular/angular-resource',
 		'angular-mocks'    : '../../test/libs/angular/angular-mocks',
+		'app' : 'app',
 		'unitTests'        : '../../test/unit'
 	},
 	shim: {
 		jquery             : {exports : '$'},
 		angular            : {exports : 'angular', deps : ['jquery']},
-		'angular-resource' : {deps : ['angular']},
-		'angular-mocks'    : {deps : ['angular-resource']}
+		// 'angular-resource' : {deps : ['angular']},
+		// 'angular-mocks'    : {exports : 'angular.mock', deps : ['angular-resource']}
+		'angular-mocks'    : {exports : 'angular.mock', deps : ['angular']},
+		'app' : {exports : 'app', deps: ['angular']}
 	},
 	priority : [
 		'angular'
