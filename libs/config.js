@@ -17,12 +17,15 @@ var options = {
 
 app.configure(function() {
 	var rootDir = path.resolve(__dirname, '..');
+	var distFolder = path.resolve(__dirname, '../client/dist'),staticUrl = '/static';
+
 	// all environments
 	app.set('port', process.env.PORT || 80);
 	app.set('httpsPort', options.port || 443);
 	/*app.set('port', process.env.PORT || 8080);
 	app.set('httpsPort', options.port || 444);*/
-	app.set('views', rootDir + '/views');
+	// app.set('views', rootDir + '/views');
+	app.set('views', distFolder);
 	app.set('view engine', 'jade');
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
@@ -37,7 +40,9 @@ app.configure(function() {
 	app.use(passport.session());
 	// app.use(app.router); '/*'를 쓰기 위해서는 comment
 	app.use(require('less-middleware')({ src: rootDir + '/app/css' }));
-	app.use(express.static(path.join(rootDir, 'app')));
+	app.use(staticUrl, express.compress());
+  	app.use(staticUrl, express.static(distFolder));
+	// app.use(express.static(path.join(rootDir, 'app')));
 
 	// development only
 	if ('development' == app.get('env')) {

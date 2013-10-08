@@ -21,7 +21,9 @@ module.exports = function (db) {
 			// req.session.userId = '73007';
 			res.redirect('/');
 		},
-
+		getCurrentUser: function(req, res) {
+			res.send({user : null});
+		},
 // Start Menu
 		getMenus: function(req, res) {
 			db.Menu.getChildrenTree(function(err, data){

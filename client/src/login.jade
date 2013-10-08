@@ -1,0 +1,18 @@
+doctype 5
+html
+	head(lang="en", ng-app="app")
+		title= title
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		link(rel='stylesheet', href="/static/<%= grunt.config.get('pkg.name') %>.css")
+
+		//if lt IE 9
+			script(src='libs/html5shiv/html5shiv.js')
+			script(src='libs/respond/respond.min.js')
+		script(src="/static/angular.js").
+		script(src="/static/bootstrap.js").
+		script(src="/static/<%= grunt.config.get('pkg.name') %>.js").
+	body(ng-controller="AppCtrl")
+		div(ng-include="header.tpl.html")
+		div.container-fluid(ng-include="'notifications.tpl.html'")
+		div.container-fluid(ng-view)
+		div(ng-view)

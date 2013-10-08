@@ -14,6 +14,7 @@ module.exports = function (config, handler) {
 		redirectRoot        : impl.F,
 		ensureAuthenticated : impl.F,
 
+		getCurrentUser      : impl.F,
 		getTasksByParent : impl.F,
 		getTask          : impl.F,
 		setTask          : impl.F,
@@ -25,6 +26,7 @@ module.exports = function (config, handler) {
 	// Note. Router 의 배치 순서 매우 중요함 !!
 	app.get('/login', handler.renderLogin);
 	app.get('/logout', handler.renderLogout);
+	app.get('/current-user', handler.getCurrentUser);
 
 	app.post('/login',
 		config.passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
