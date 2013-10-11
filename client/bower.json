@@ -11,7 +11,7 @@
         "angular"           : "1.2.0-rc.2",
         "angular-route"    : "angular-route#master",
         "angular-mocks"     : "angular-mocks#master",
-        "angular-bootstrap" : "angular-bootstrap#master",
+        "angular-bootstrap" : "angular-bootstrap#bootstrap3_bis2",
         "bootstrap"         : "~3.x"
     },
     "devDependencies" : {

@@ -1,41 +1,47 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
 angular.module('security.service', [
-  'security.retryQueue',    // Keeps track of failed requests that need to be retried once the user logs in
-  'security.login',         // Contains the login form template and controller
-  'ui.bootstrap.dialog'     // Used to display the login form as a modal dialog.
+    'security.retryQueue',    // Keeps track of failed requests that need to be retried once the user logs in
+    'security.login',         // Contains the login form template and controller
+    'ui.bootstrap'     // Used to display the login form as a modal dialog.
 ])
 
-.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$dialog', function($http, $q, $location, queue, $dialog) {
+.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$modal', function($http, $q, $location, queue, $modal) {
 
-  // Redirect to the given url (defaults to '/')
-  function redirect(url) {
-    url = url || '/';
-    $location.path(url);
-  }
+    // Redirect to the given url (defaults to '/')
+    function redirect(url) {
+        url = url || '/';
+        $location.path(url);
+    }
 
-  // Login form dialog stuff
-  var loginDialog = null;
-  function openLoginDialog() {
-    if ( loginDialog ) {
-      throw new Error('Trying to open a dialog that is already open!');
+    // Login form dialog stuff
+    var loginModal = null;
+    function openLoginModal() {
+        // if ( loginModal ) {
+        //     throw new Error('Trying to open a dialog that is already open!');
+        // }
+        // loginModal = $dialog.dialog();
+        // loginModal = $modal;
+        loginModal = $modal.open( {
+            templateUrl : 'security/login/form.tpl.html',
+            controller  :  'LoginFormController'
+            // backdrop    : true,
+            // keyboard    : false
+        });
     }
-    loginDialog = $dialog.dialog();
-    loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
-  }
-  function closeLoginDialog(success) {
-    if (loginDialog) {
-      loginDialog.close(success);
+    function closeLoginModal(success) {
+        if (loginModal) {
+            loginModal.close(success);
+        }
     }
-  }
-  function onLoginDialogClose(success) {
-    loginDialog = null;
-    if ( success ) {
-      queue.retryAll();
-    } else {
-      queue.cancelAll();
-      redirect();
+    function onLoginModalClose(success) {
+        loginModal = null;
+        if ( success ) {
+            queue.retryAll();
+        } else {
+            queue.cancelAll();
+            redirect();
+        }
     }
-  }
 
   // Register a handler for when an item is added to the retry queue
   queue.onItemAddedCallbacks.push(function(retryItem) {
@@ -54,7 +60,7 @@ angular.module('security.service', [
 
     // Show the modal login dialog
     showLogin: function() {
-      openLoginDialog();
+      openLoginModal();
     },
 
     // Attempt to authenticate a user by the given email and password
@@ -63,14 +69,14 @@ angular.module('security.service', [
       return request.then(function(response) {
         service.currentUser = response.data.user;
         if ( service.isAuthenticated() ) {
-          closeLoginDialog(true);
+          closeLoginModal(true);
         }
       });
     },
 
     // Give up trying to login and clear the retry queue
     cancelLogin: function() {
-      closeLoginDialog(false);
+      closeLoginModal(false);
       redirect();
     },
 

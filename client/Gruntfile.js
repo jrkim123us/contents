@@ -114,7 +114,7 @@ module.exports = function (grunt) {
                 dest : '<%= testVendorDir%>/angular/angular-mocks.js'
             },
             bootstrap: {
-                src:['<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls.js'],
+                src:['<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js'],
                 dest: '<%= distdir %>/bootstrap.js'
             },
             jquery: {
