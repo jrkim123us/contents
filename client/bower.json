@@ -1,29 +1,27 @@
 {
-  "name": "CMS",
-  "version": "0.1.1",
-  "authors": [
-    "김종록 <jrkim123@gmail.com>"
-  ],
-  "dependencies": {
-    "html5shiv" : "html5shiv#~3.6.2",
-    "respond"   : "respond#~1.3.0",
+    "name": "CMS",
+    "version": "0.1.1",
+    "authors": [
+        "김종록 <jrkim123@gmail.com>"
+    ],
+    "dependencies": {
+        "html5shiv" : "html5shiv#~3.6.2",
+        "respond"   : "respond#~1.3.0",
 
-    "angular"           : "~1.0.7",
-    "angular-mocks"     : "~1.0.7",
-    "bootstrap"         : "~2.3.2",
-    "angular-bootstrap" : "~0.3.0",
-    "angular-ui-router" : "~0.0.1",
-    "angular-ui-utils"  : "~0.0.3"
+        "angular"           : "1.2.0-rc.2",
+        "angular-route"    : "angular-route#master",
+        "angular-mocks"     : "angular-mocks#master",
+        "angular-bootstrap" : "angular-bootstrap#master",
+        "bootstrap"         : "~3.x"
+    },
+    "devDependencies" : {
 
-  },
-  "devDependencies" : {
-
-  },
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
 }

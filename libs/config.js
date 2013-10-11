@@ -31,8 +31,8 @@ app.configure(function() {
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
-    app.use(express.session({secret: 'this is a secret'}));
-    app.use(flash());
+	app.use(express.session({secret: 'this is a secret'}));
+	app.use(flash());
 	// Initialize Passport!  Also use passport.session() middleware, to support
 	// persistent login sessions (recommended).
 	app.use(express.methodOverride());
@@ -40,7 +40,7 @@ app.configure(function() {
 	app.use(passport.session());
 	// app.use(app.router); '/*'를 쓰기 위해서는 comment
 	app.use(require('less-middleware')({ src: rootDir + '/app/css' }));
-	app.use(staticUrl, express.compress());
+	// app.use(staticUrl, express.compress());
   	app.use(staticUrl, express.static(distFolder));
 	// app.use(express.static(path.join(rootDir, 'app')));
 

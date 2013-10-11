@@ -43,8 +43,9 @@ module.exports = function (config, handler) {
 	app.get('/common/user', handler.ensureAuthenticated, handler.getUsers);
 	// 순서 중요 맨 마지막에 위치해야 함
 	// app.get('/*', handler.renderIndex);
-	app.get('/', handler.ensureAuthenticated, handler.renderIndex);
-	app.get('/*', handler.ensureAuthenticated, handler.redirectRoot);
+	// app.get('/', handler.ensureAuthenticated, handler.renderIndex);
+	app.get('/', handler.renderIndex);
+	// app.get('/*', handler.ensureAuthenticated, handler.redirectRoot);
 };
 
 /*

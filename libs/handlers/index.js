@@ -88,7 +88,8 @@ module.exports = function (db) {
 			if (req.isAuthenticated()) {
 				return next();
 			}
-			res.redirect('/login');
+			// res.redirect('/login');
+			res.redirect('/');
 		},
 		getUserByEmail: function(email, callback) {
 			db.User.getUserByEmail(email, callback);
