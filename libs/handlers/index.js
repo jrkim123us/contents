@@ -2,11 +2,32 @@ var debug = require('debug')('handler'),
 	https = require('https');
 
 // Usually expects "db" as an injected dependency to manipulate the models
-module.exports = function (db) {
+module.exports = function (config, db) {
 	debug('setting up handlers...');
 
-
 	return {
+		getLogin: function(req, res) {
+			/*res.send({
+				user: {
+					firstName : 'jong rok',
+					lastName  : 'kim'
+				}
+			});*/
+			config.passport.authenticate('local', function(err, user) {
+				if (err) { return next(err); }
+				if(!user) {return res.json({user:null})}
+				res.json({user : user.name})
+			})(req,res);
+		},
+		getCurrentUser: function(req, res) {
+			// res.send({user : null});
+			res.json(200, filterUser(req.user));
+    			res.end();
+		},
+		getLogout: function(req, res) {
+			req.logout();
+			res.send(204);
+		},
 		renderIndex: function (req, res) {
 			res.render('index', {title: 'CMS', user: req.user});
 		},
@@ -20,9 +41,6 @@ module.exports = function (db) {
 		redirectRoot : function(req, res) {
 			// req.session.userId = '73007';
 			res.redirect('/');
-		},
-		getCurrentUser: function(req, res) {
-			res.send({user : null});
 		},
 // Start Menu
 		getMenus: function(req, res) {

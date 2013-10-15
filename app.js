@@ -3,7 +3,7 @@ var debug = require('debug')('http'),
     config = require('./libs/config'),
     server = require('./libs/server')(config),
     db = require('./libs/db'),
-    handler = require('./libs/handlers')(db);
+    handler = require('./libs/handlers')(config, db);
 
 //Setup passport
 require('./libs/passport')(config, handler);

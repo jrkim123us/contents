@@ -1,51 +1,34 @@
-    <form action=""  class="form-signin" role="form" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Please sign in</h4>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <input class="form-control" name="email" type="text" placeholder="example@lgcns.com">
-            </div>
-            <div class="form-group">
-                <input class="form-control" name="password" type="password" placeholder="Password">
-            </div>
-            <div class="checkbox">
-                <label for="remember">Remember me
-                    <a href="session/forget_password"> (forget password)</a>
-                    <input id="remember" type="checkbox" value="remember-me">
-                </label>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-large btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-large btn-primary">Sign in</button>
-        </div>
-    </form>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-            <div class="well">
-                <form action=""  class="form-signin" role="form" method="post">
-                    <fieldset>
-                        <legend>Please sign in</legend>
-                        <div class="form-group">
-                            <input class="form-control" name="email" type="text" placeholder="example@lgcns.com">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" name="password" type="password" placeholder="Password">
-                        </div>
-                        <div class="checkbox">
-                            <label for="remember">Remember me
-                                <a href="session/forget_password"> (forget password)</a>
-                                <input id="remember" type="checkbox" value="remember-me">
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-large btn-primary">Sign in</button>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<form name="form" novalidate>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelLogin()">&times;</button>
+		<h4 class="modal-title">Please sign in</h4>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-warning" ng-show="authReason">
+			{{authReason}}
+		</div>
+		<div class="alert alert-danger" ng-show="authError">
+			{{authError}}
+		</div>
+		<div class="alert alert-info" ng-hide="authReason || authError">Please enter your sign in details</div>
+		<div class="form-group" ng-class="{'has-success' : form.email.$valid, 'has-warning' : form.email.$invalid &amp;&amp;  form.email.$dirty}">
+			<input class="form-control" id="email" name="email" type="email" ng-model="user.email" placeholder="example@lgcns.com" required autofocus>
+			<p ng-show="form.email.$error.required &amp;&amp;  form.password.$dirty" class="text-warning">Email is required.</p>
+			<p ng-show="form.email.$error.email &amp;&amp;  form.password.$dirty" class="text-warning">Please enter a valid email address.</p>
+		</div>
+		<div class="form-group" ng-class="{'has-success' : form.password.$valid, 'has-warning' : form.password.$invalid &amp;&amp;  form.password.$dirty}">
+			<input class="form-control" name="password" type="password" ng-model="user.password" placeholder="Password" required>
+			<p ng-show="form.password.$error.required &amp;&amp;  form.password.$dirty" class="text-warning">Password is required.</p>
+		</div>
+		<div class="checkbox">
+			<input id="remember" type="checkbox">
+			<label for="remember">Remember me
+				<a href="session/forget_password"> (forget password)</a> </label>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="reset" class="btn btn-large btn-default">Clear</button>
+		<button type="button" class="btn btn-large btn-default" data-dismiss="modal" ng-click="cancelLogin()">Close</button>
+		<button type="submit" class="btn btn-large btn-primary" ng-click="login()" ng-disabled="form.$invalid">Sign in</button>
+	</div>
+</form>

@@ -28,10 +28,9 @@ module.exports = function (config, handler) {
 	app.get('/logout', handler.renderLogout);
 	app.get('/current-user', handler.getCurrentUser);
 
-	app.post('/login',
-		config.passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-		handler.redirectRoot
-	);
+	app.post('/login', handler.getLogin);
+	app.post('/logout', handler.getLogout);
+	// app.post('/login', handler.getLogin);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);

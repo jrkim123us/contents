@@ -1,15 +1,15 @@
 <ul class="nav navbar-nav navbar-right">
     <li ng-show="isAuthenticated()">
-        <a href="#">{{currentUser.firstName}} {{currentUser.lastName}}</a>
+        <a href="#">{{currentUser.first}} {{currentUser.last}}</a>
     </li>
     <li ng-show="isAuthenticated()">
         <form class="navbar-form" role="search">
-            <button type="submit" class="btn btn-default" ng-click="logout()">Log out</button>
+            <button type="submit" class="btn btn-default logout" ng-click="logout()">Log out</button>
         </form>
     </li>
     <li ng-hide="isAuthenticated()">
         <form class="navbar-form" role="search">
-            <button type="submit" class="btn btn-default" ng-click="login()">Log in</button>
+            <button type="submit" class="btn btn-default login" ng-click="login()">Log in</button>
         </form>
     </li>
 </ul>

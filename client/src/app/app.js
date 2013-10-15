@@ -22,11 +22,11 @@ angular.module('app').constant('I18N.MESSAGES', {
     'crud.user.save.error':"Something went wrong when saving a user...",
     'crud.project.save.success':"A project with id '{{id}}' was saved successfully.",
     'crud.project.remove.success':"A project with id '{{id}}' was removed successfully.",
-    'crud.project.save.error':"Something went wrong when saving a project...",
+    'crud.project.save.error':"Something went wrong when saving a project...",*/
     'login.reason.notAuthorized':"You do not have the necessary access permissions.  Do you want to login as someone else?",
     'login.reason.notAuthenticated':"You must be logged in to access this part of the application.",
     'login.error.invalidCredentials': "Login failed.  Please check your credentials and try again.",
-    'login.error.serverError': "There was a problem with authenticating: {{exception}}."*/
+    'login.error.serverError': "There was a problem with authenticating: {{exception}}."
 });
 
 
@@ -35,11 +35,11 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     $routeProvider.otherwise({redirectTo:'/'});
 }]);
 
-/*angular.module('app').run(['security', function(security) {
+angular.module('app').run(['security', function(security) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
-}]);*/
+}]);
 angular.module('app').run( function run () {
 });
 

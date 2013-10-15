@@ -63,6 +63,7 @@ module.exports = function (grunt) {
         },
         karma: {
             unit: { options: karmaConfig('test/config/unit.js') },
+            e2e: { options: karmaConfig('test/config/e2e.js') },
             watch: { options: karmaConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
         },
         html2js: {
@@ -112,6 +113,10 @@ module.exports = function (grunt) {
             angularMock : {
                 src: ['<%= vendorDir %>/angular-mocks/angular-mocks.js'],
                 dest : '<%= testVendorDir%>/angular/angular-mocks.js'
+            },
+            angularScenario : {
+                src: ['<%= vendorDir %>/angular-scenario/angular-scenario.js'],
+                dest : '<%= testVendorDir%>/angular/angular-scenario.js'
             },
             bootstrap: {
                 src:['<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js'],
