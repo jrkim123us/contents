@@ -15,11 +15,11 @@ mongoose.connect(connString);
 mongoose.connection.on('open', function () {
 	debug('Mongo connected.');
 	// 메뉴 데이터 초기화
-	/*Menu.remove({}, function(err) {
+	Menu.remove({}, function(err) {
 		Menu.initialize(function() {
 			debug('Menu collection initialized');
 		});
-	});*/
+	});
 	// 사용자 데이터 초기화 (Full set)
 	/*User.remove({}, function(err) {
 		User.initialize(function() {

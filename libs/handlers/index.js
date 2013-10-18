@@ -5,6 +5,16 @@ var debug = require('debug')('handler'),
 module.exports = function (config, db) {
 	debug('setting up handlers...');
 
+	function filterUser(user) {
+		var filteredUser = {user : null};
+		if(user)
+			filteredUser.user = {
+				firstName : user.name.first,
+				lastName : user.name.last
+			}
+		return filteredUser;
+	}
+
 	return {
 		getLogin: function(req, res) {
 			/*res.send({
@@ -16,13 +26,16 @@ module.exports = function (config, db) {
 			config.passport.authenticate('local', function(err, user) {
 				if (err) { return next(err); }
 				if(!user) {return res.json({user:null})}
-				res.json({user : user.name})
+				res.json(filterUser(user))
+
+				req.logIn(user, function(err) {
+					if ( err ) { return next(err); }
+					return res.json(filterUser(user));
+				});
 			})(req,res);
 		},
 		getCurrentUser: function(req, res) {
-			// res.send({user : null});
 			res.json(200, filterUser(req.user));
-    			res.end();
 		},
 		getLogout: function(req, res) {
 			req.logout();

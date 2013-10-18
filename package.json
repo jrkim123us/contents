@@ -1,48 +1,26 @@
 {
-  "name"        : "Content-Management-System",
-  "description" : "Content Management System",
-  "author"      : "Kim Jong Rok",
-  "version"     : "0.0.2",
-  "private"     : true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "express"         : "3.1.1",
-    "jade"            : "*",
-    "less-middleware" : "*",
-    "mongoose"        : "*",
-    "mongoose-tree2"  : "*",
-    "debug"           : "*",
-    "implementjs"     : "*",
-    "connect-flash"   : "0.1.x",
-    "passport"        : " 0.1.17",
-    "passport-local"  : "0.1.6"
-  },
-  "devDependencies": {
-    "grunt" : "~0.4.1",
-    "bower" : "~1.2.2",
-
-    "grunt-contrib-handlebars" : "~0.5.9",
-    "grunt-contrib-watch"      : "~0.4.0",
-
-    "grunt-contrib-jshint"     : "~0.6.0",
-    "grunt-contrib-nodeunit"   : "~0.2.0",
-    "grunt-contrib-uglify"     : "~0.2.2",
-    "grunt-contrib-compass"    : "*",
-    "grunt-contrib-coffee"     : "*",
-
-    "grunt-contrib-clean" : "*",
-    "grunt-contrib-jade"  : "~0.8.0",
-    "grunt-contrib-copy"  : "~0.4.1",
-    "grunt-shell"         : "~0.3.1",
-    "grunt-css"           : "~0.5.4",
-    "shelljs"             : "~0.1.4",
-
-    "phantomjs" : "*",
-    "karma" : "*",
-    "karma-junit-reporter"  : "*",
-    "karma-jasmine"         : "*",
-    "karma-ng-scenario"     : "*"
-  }
+	"name"        : "Content-Management-System",
+	"description" : "Content Management System",
+	"author"      : "Kim Jong Rok",
+	"version"     : "0.0.2",
+	"private"     : true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"express"         : "3.1.1",
+		"jade"            : "*",
+		"less-middleware" : "*",
+		"mongoose"        : "*",
+		"mongoose-tree2"  : "*",
+		"debug"           : "*",
+		"implementjs"     : "*",
+		"connect-flash"   : "0.1.x",
+		"passport"        : " 0.1.17",
+		"passport-local"  : "0.1.6"
+	},
+	"devDependencies": {
+		"grunt" : "~0.4.1",
+		"bower" : "~1.2.2"
+	}
 }

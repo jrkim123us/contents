@@ -24,7 +24,8 @@ schema.statics.initialize = function (callback) {
 		new User({name : {first:'종록', last: '김'}, email: 'jrkim79@lgcns.com', passwordHash: 'a'}),
 		new User({name : {first:'후정', last: '김'}, email: 'hoojungkim@lgcns.com', passwordHash: 'a'}),
 		new User({name : {first:'태호', last: '조'}, email: 'taiho@cnspartner.com', passwordHash: 'a'}),
-		new User({name : {first:'철수', last: '박'}, email: 'chulsu@lgcns.com', passwordHash: 'a'})
+		new User({name : {first:'철수', last: '박'}, email: 'chulsu@lgcns.com', passwordHash: 'a'}),
+		new User({name : {first:'Mike', last: 'Lee'}, email: 'mike@test.com', passwordHash: 'a'})
 	];
 	var result = [];
 	// user01.save(callback);

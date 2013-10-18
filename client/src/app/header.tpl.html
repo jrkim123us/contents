@@ -1,17 +1,26 @@
 <nav class="navbar navbar-fixed-top navbar-default" role="navigation" ng-controller="HeaderCtrl">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-topmenu-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a href="#" class="navbar-brand">CMS 1</a>
-    </div>
-    <div class="collapse navbar-collapse navbar-topmenu-collapse" role="navigation">
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Link</a></li>
-        </ul>
-        <login-toolbar></login-toolbar>
-    </div>
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-topmenu-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a href="#" class="navbar-brand" ng-click="home()">CMS</a>
+	</div>
+	<div class="collapse navbar-collapse navbar-topmenu-collapse" role="navigation">
+		<ul class="nav navbar-nav" menu-toolbar="menus">
+			<li class="active"><a href="#">Link</a></li>
+
+			<li ng-repeat="menu in menus" class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle">{{menu.name}}<b class="caret"></b></a>
+			</li>
+
+			<li ng-repeat="menu in menus">
+				<a href="#">{{menu.name}}</a>
+			</li>
+		</ul>
+		<menu-toolbar></menu-toolbar>
+		<login-toolbar></login-toolbar>
+	</div>
 </nav>
