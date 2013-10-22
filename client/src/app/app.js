@@ -2,6 +2,7 @@ angular.module('app', [
 	'ngRoute',
 	'ngResource',
 	'home',
+	'projects',
 	/*'dashboard',
 	'projects',
 	'admin',*/
@@ -12,7 +13,7 @@ angular.module('app', [
 	/*'directives.crud',*/
 	'templates.app',
 	'templates.common',
-	'resources.menus'
+	'resources'
 ]);
 
 //TODO: move those messages to a separate module
@@ -34,7 +35,7 @@ angular.module('app').constant('I18N.MESSAGES', {
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 	$locationProvider.html5Mode(true);
-	$routeProvider.otherwise({redirectTo:'/'});
+	$routeProvider.otherwise({redirectTo:'/home'});
 }]);
 
 angular.module('app').run(['security', function(security) {
@@ -78,7 +79,7 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 
 	$scope.home = function () {
 		if (security.isAuthenticated()) {
-			$location.path('/dashboard');
+			$location.path('/home');
 		} else {
 			$location.path('/projectsinfo');
 		}
