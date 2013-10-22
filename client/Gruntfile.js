@@ -12,8 +12,8 @@ module.exports = function (grunt) {
 
 	// Default task.
 	grunt.registerTask('default', ['jshint','build','karma:unit']);
-	grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy:bootstrapFont']);
-	grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy:bootstrapFont']);
+	grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy']);
+	grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy']);
 	grunt.registerTask('test-watch', ['karma:watch']);
 
 	// Print a timestamp (useful for when watching)

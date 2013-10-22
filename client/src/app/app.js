@@ -1,7 +1,7 @@
 angular.module('app', [
 	'ngRoute',
 	'ngResource',
-	'projectsinfo',
+	'home',
 	/*'dashboard',
 	'projects',
 	'admin',*/
@@ -64,7 +64,17 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 	$scope.isAuthenticated = security.isAuthenticated;
 	$scope.isAdmin = security.isAdmin;
 
-	$scope.menus = Menus.query();
+	$scope.$watch(function() {
+		return security.currentUser;
+	}, function(currentUser) {
+		if(security.isAuthenticated())
+			// $scope.menus = Menus.query();
+			Menus.query(function(menus) {
+				$scope.menus = menus;
+			});
+		else
+			$scope.menus = {};
+	});
 
 	$scope.home = function () {
 		if (security.isAuthenticated()) {
@@ -88,50 +98,39 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 }])
 .directive('menuToolbar', function($parse, $compile, $timeout) {
 
-  var buildTemplate = function(items, ul) {
-    if(!ul) ul = ['<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">', '</ul>'];
-    angular.forEach(items, function(item, index) {
-      if(item.divider) return ul.splice(index + 1, 0, '<li class="divider"></li>');
-      var li = '<li' + (item.submenu && item.submenu.length ? ' class="dropdown-submenu"' : '') + '>' +
-        '<a tabindex="-1" ng-href="' + (item.href || '') + '"' + (item.click ? '" ng-click="' + item.click + '"' : '') + (item.target ? '" target="' + item.target + '"' : '') + (item.method ? '" data-method="' + item.method + '"' : '') + '>' +
-        (item.icon && '<i class="' + item.icon + '"></i>&nbsp;' || '') +
-        (item.text || '') + '</a>';
-      if(item.submenu && item.submenu.length) li += buildTemplate(item.submenu).join('\n');
-      li += '</li>';
-      ul.splice(index + 1, 0, li);
-    });
-    return ul;
-  };
+	var buildTemplate = function(items, level) {
+		var element = '';
+		angular.forEach(items, function(item, index) {
+			if(item.childs.length === 0)
+				element += '<li><a href="' + item.link +'" >' + item.name + '</a></li>';
+			else
+				switch(level) {
+					case 0:
+						element +='<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">' + item.name + '<b class="caret"></b></a>' + '<ul class="dropdown-menu">' + buildTemplate(item.childs, level + 1) + '</ul>';
+						break;
+					case 1:
+						element += '<li class="dropdown-header">' + item.name + '</li>' + buildTemplate(item.childs, level + 1) + '<li class="divider"></li>';
+						break;
+					case 2:
+						element += '<li><a href="{{this.link}}">' + item.name + '</a></li>';
+						break;
+				}
+		});
+		return element;
+	};
 
-  return {
-    restrict: 'EA',
-    scope: true,
-    link: function postLink(scope, iElement, iAttrs) {
+	return {
+		restrict: 'A',
+		link: function($scope, $element, $attrs, $controller) {
+			$scope.$watch('menus', function() {
+				var items = $scope.menus;
 
-      var getter = $parse(iAttrs.bsDropdown),
-          items = getter(scope);
-
-      // Defer after any ngRepeat rendering
-      $timeout(function() {
-
-        if(!angular.isArray(items)) {
-          // @todo?
-        }
-
-        var dropdown = angular.element(buildTemplate(items).join(''));
-        // dropdown.insertAfter(iElement);
-        iElement.append(dropdown);
-
-        // Compile dropdown-menu
-        $compile(iElement.next('ul.dropdown-menu'))(scope);
-
-      });
-
-      iElement
-        .addClass('dropdown-toggle')
-        .attr('data-toggle', 'dropdown');
-
-    }
-  };
+				var level = 0;
+				$element.html('');
+				if(angular.isArray(items) && items.length > 0)
+					$element.append($compile(buildTemplate(items, level))($scope));
+			});
+		}
+	};
 
 });
