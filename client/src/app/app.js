@@ -2,7 +2,7 @@ angular.module('app', [
 	'ngRoute',
 	'ngResource',
 	'home',
-	'projects',
+	'tasks',
 	/*'dashboard',
 	'projects',
 	'admin',*/
@@ -97,7 +97,7 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 		return true;
 	};
 }])
-.directive('menuToolbar', function($parse, $compile, $timeout) {
+.directive('menuToolbar', function($parse, $compile) {
 
 	var buildTemplate = function(items, level) {
 		var element = '';

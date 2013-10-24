@@ -103,16 +103,26 @@ schema.statics.initializeUser = function (User, callback) {
 };
 
 schema.statics.getTasksByParent = function (parentWbs, callback) {
+// schema.statics.getTasksByParent = function (parentWbs) {
 	this.find({parentWbs : parentWbs})
 		.select('_id wbs name weight plan act start end worker approver test')
 		.populate('worker approver', 'name email')
 		.sort({wbs : 1})
 		.exec(callback);
+	/*return this.find({parentWbs : parentWbs})
+		.select('_id wbs name weight plan act start end worker approver test')
+		.populate('worker approver', 'name email')
+		.sort({wbs : 1})
+		.exec();*/
 };
 schema.statics.getTask = function (wbs, callback) {
+// schema.statics.getTask = function (wbs) {
 	this.findOne({wbs : wbs})
 		.select('-_id wbs name')
 		.exec(callback);
+	/*return this.findOne({wbs : wbs})
+		.select('-_id wbs name')
+		.exec();*/
 };
 schema.statics.setTask = function (task, callback) {
 	delete task._id;

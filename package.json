@@ -17,7 +17,8 @@
 		"implementjs"     : "*",
 		"connect-flash"   : "0.1.x",
 		"passport"        : " 0.1.17",
-		"passport-local"  : "0.1.6"
+		"passport-local"  : "0.1.6",
+		"async" : "0.2.9"
 	},
 	"devDependencies": {
 		"grunt" : "~0.4.1",

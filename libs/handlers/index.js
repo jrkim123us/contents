@@ -1,5 +1,7 @@
 var debug = require('debug')('handler'),
-	https = require('https');
+	https = require('https'),
+	async = require('async');
+
 
 // Usually expects "db" as an injected dependency to manipulate the models
 module.exports = function (config, db) {
@@ -75,10 +77,40 @@ module.exports = function (config, db) {
 			});
 		},
 		getTask: function(req, res) {
-			db.Task.getTask(req.params.wbs, function(err, data) {
+			var wbs = req.params.wbs || '1';
+			var data = {};
+
+			async.parallel({
+				task: function(callback) {
+					return db.Task.getTask(wbs, function(err, result) {
+						return callback(err, result);
+					});
+				},
+				childs: function(callback) {
+					return db.Task.getTasksByParent(wbs, function(err, result) {
+						return callback(err, result);
+					});
+				}
+			}, function(err, data) {
+				return res.send(data);
+			});
+
+			/*db.Task.getTask(wbs)
+				.then(function(err, task) {
+					if(err) throw err;
+					data.task = task;
+				})
+				.then(db.Task.getTasksByParent(wbs))
+				.then(function(err, childs) {
+					if(err) throw err;
+					data.childs = childs;
+
+					res.send(data);
+				});*/
+			/*db.Task.getTask(wbs, function(err, data) {
 				if(err) throw err;
 				res.send(data);
-			});
+			});*/
 		},
 		setTask: function(req, res) {
 			db.Task.setTask(req.body, function(err, data) {

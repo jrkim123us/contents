@@ -31,7 +31,8 @@ module.exports = function (config, handler) {
 	app.get('/current-user', handler.getCurrentUser);
 	app.post('/login', handler.getLogin);
 	app.post('/logout', handler.getLogout);
-	app.post('/menus', handler.ensureAuthenticated, handler.getMenus);
+	app.get('/menus', handler.ensureAuthenticated, handler.getMenus);
+	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
