@@ -50,21 +50,3 @@ angular.module('tasks', ['services.crud'])
 		return results;
 	}
 }]);
-/*.directive('ngWbs', function($parse, $compile) {
-	return {
-		restrict: 'A',
-		controller : 'TasksController',
-		template:
-				'<li ng-repeat="parent in breadcrumbList">' +
-					'<a href="{{parent.href}}">{{parent.wbs}}</a>' +
-				'</li>' +
-				'<li class="active">' +
-					'{{currentWbs}}' +
-				'</li>',
-		link: function($scope, $element, $attrs, $controller) {
-			$scope.$watch('currentWbsName', function(newValue, oldValue, $scope) {
-				console.log('wbsBreadcrumb called');
-			});
-		}
-	};
-}); directive의 활용도가 생각보다 적어 tpl로 이동*/
