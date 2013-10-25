@@ -29,7 +29,7 @@ angular.module('tasks', ['services.crud'])
  			sortNum = 0;
 
  		angular.forEach(wbs.split('.'), function(value, inx){
- 			sortNum = value * Math.pow(100, inx);
+ 			sortNum += value * Math.pow(100, inx);
  		});
 		return sortNum;
 	}
