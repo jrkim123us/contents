@@ -4,7 +4,13 @@ angular.module('tasks', ['services.crud'])
 	$routeProvider.when('/tasks/sync/:wbs', {
 		templateUrl:'tasks/tasks.tpl.html',
 		controller:'TasksController'
+	})
+	.when('/tasks/gantt/:wbs', {
+		templateUrl:'tasks/gantt.tpl.html',
+		controller:'TasksGanttController'
 	});
+}])
+.controller('TasksGanttController', ['$scope', '$location', '$routeParams', 'Tasks', function ($scope, $location, $routeParams, Tasks) {
 }])
 .controller('TasksController', ['$scope', '$location', '$routeParams', 'Tasks', function ($scope, $location, $routeParams, Tasks) {
 	$scope.currentWbs = $routeParams.wbs;
