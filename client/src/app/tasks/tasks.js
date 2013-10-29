@@ -18,7 +18,7 @@ angular.module('tasks', [
 		 	forceHelperSize: true,
 			axis: 'y',
 			helper : getSortHelper, // postion:absolute 상태에서 diplay:table-cell 정상 표시 안되는 문제 해결
-			start  : onSortStarted,
+			// start  : onSortStarted,
 			update : onSortUpdated
 		}
 	};
@@ -29,17 +29,8 @@ angular.module('tasks', [
 		return angular.element(element)
 					.find('tbody').append(angular.element(event.target).closest('tr').clone()).end().appendTo('div.container');
 	}
-	function onSortStarted(event, ui) {
-		var test01 = angular.element('.ui-sortable').sortable('toArray'),
-			test02 = angular.element('.ui-sortable').sortable('serialize');
-
-		console.log(test01 + '/' + test02);
-	}
 	function onSortUpdated(event, ui) {
-		var test01 = angular.element('.ui-sortable').sortable('toArray'),
-			test02 = angular.element('.ui-sortable').sortable('serialize');
-
-		console.log(test01 + '/' + test02);
+		var updatedOrders = angular.element('.ui-sortable').sortable('toArray', {attribute: 'wbs'});
 	}
 
 	return taskSortable;

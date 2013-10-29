@@ -22,7 +22,7 @@
 				</tr>
 			</thead>
 			<tbody ui-sortable="sortableOptions" ng-model="subTaskList">
-				<tr ng-repeat="task in subTaskList | orderBy:sortWbs">
+				<tr wbs="{{task.wbs}}" ng-repeat="task in subTaskList | orderBy:sortWbs">
 					<td><a href="{{currentPath}}{{task.wbs}}">{{task.wbs}}</a></td>
 					<td>{{task.name}} </td>
 					<td class="hover"> test01</td>
