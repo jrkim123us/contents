@@ -14,6 +14,10 @@ var schema = new Schema({
 	passwordHash : {type: String}
 });
 
+schema.virtual('name.full').get(function () {
+	return this.name.first + ' ' + this.name.last;
+})
+
 var handleError = function(err) {
 	for(var error in err.errors) {
 		console.log(error.message);
