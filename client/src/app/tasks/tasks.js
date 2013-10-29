@@ -1,5 +1,7 @@
-angular.module('tasks', ['services.crud'])
-
+angular.module('tasks', [
+	'services.crud',
+	'ui.sortable'
+])
 .config(['$routeProvider', function ($routeProvider) {
 	$routeProvider.when('/tasks/sync/:wbs', {
 		templateUrl:'tasks/tasks.tpl.html',
@@ -12,9 +14,37 @@ angular.module('tasks', ['services.crud'])
 }])
 .controller('TasksGanttController', ['$scope', '$location', '$routeParams', 'Tasks', function ($scope, $location, $routeParams, Tasks) {
 }])
-.controller('TasksController', ['$scope', '$location', '$routeParams', 'Tasks', function ($scope, $location, $routeParams, Tasks) {
+.factory('taskSortable', function(){
+	var taskSortable = {
+		sortableOptions : {
+			cursor: "intersect",
+			tolerance: 'pointer',
+			revert: 'invalid',
+			placeholder: 'active',
+		 	forceHelperSize: true,
+			axis: 'y',
+			helper : getSortHelper, // postion:absolute �태�서 diplay:table-cell �상 �시 �되문제 �결
+			// start  : onSortStarted,
+			update : onSortUpdated
+		}
+	};
+	function getSortHelper(event) {
+		var element = 	'<div class="table-responsive">' +
+							'<table  class="table"><tbody></tbody></table>' +
+						'</div>';
+		return angular.element(element)
+					.find('tbody').append(angular.element(event.target).closest('tr').clone()).end().appendTo('div.container');
+	}
+	function onSortUpdated(event, ui) {
+		var updatedOrders = angular.element('.ui-sortable').sortable('toArray', {attribute: 'wbs'});
+	}
+
+	return taskSortable;
+})
+.controller('TasksController', ['$scope', '$location', '$routeParams', 'Tasks', 'taskSortable', function ($scope, $location, $routeParams, Tasks, taskSortable) {
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentPath = $location.path().replace($routeParams.wbs, '');
+	$scope.sortableOptions = taskSortable.sortableOptions;
 
 	$scope.$watch('currentWbs', function() {
 		$scope.getTask();
@@ -27,9 +57,9 @@ angular.module('tasks', ['services.crud'])
 			$scope.breadcrumbList = getParentsWbs(result.task.wbs);
 		});
 	}
-	// wbs 기준으로 sorting 하기
-	// angular 제공하는 sort는 compare 방식이 아니라서
-	// 각 level 별 제곱수를 더하여 sorting 함
+	// wbs 기�로 sorting �기
+	// angular �공�는 sortcompare 방식�니�서
+	// �level 볜곱�� �하sorting 
 	$scope.sortWbs = function(task) {
 		var wbs = task.wbs,
  			sortNum = 0;

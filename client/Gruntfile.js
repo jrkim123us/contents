@@ -123,11 +123,20 @@ module.exports = function (grunt) {
 				dest : '<%= testVendorDir%>/angular/angular-scenario.js'
 			},
 			bootstrap: {
-				src:['<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js'],
+				src:[
+					'<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js',
+					'<%= vendorDir %>/angular-ui-sortable/src/sortable.js'
+				],
 				dest: '<%= distdir %>/bootstrap.js'
 			},
 			jquery: {
-				src:['<%= vendorDir %>/jquery/*.js'],
+				src:[
+					'<%= vendorDir %>/jquery/jquery.js',
+					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.core.js',
+					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.widget.js',
+					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.mouse.js',
+					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js'
+				],
 				dest: '<%= distdir %>/jquery.js'
 			}
 		},

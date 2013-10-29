@@ -8,28 +8,30 @@
 		</li>
 		<li class="active">{{currentWbs}}</li>
 	</ul>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>WBS</th>
-				<th>작업 이름</th>
-				<th>승인자</th>
-				<th>담당자</th>
-				<th class="text-right">가중치(%)</th>
-				<th class="text-right">계획(%)</th>
-				<th class="text-right">실적(%)</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="task in subTaskList | orderBy:sortWbs">
-				<td><a href="{{currentPath}}{{task.wbs}}">{{task.wbs}}</a></td>
-				<td>{{task.name}} </td>
-				<td class="hover"> test01</td>
-				<td class="hover"> test02</td>
-				<td class="text-right text-muted" name="weight">{{task.weight}}</td>
-				<td class="text-right text-info">{{task.plan}}</td>
-				<td class="text-right text-primary">{{task.act}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>WBS</th>
+					<th>작업 이름</th>
+					<th>승인자</th>
+					<th>담당자</th>
+					<th class="text-right">가중치(%)</th>
+					<th class="text-right">계획(%)</th>
+					<th class="text-right">실적(%)</th>
+				</tr>
+			</thead>
+			<tbody ui-sortable="sortableOptions" ng-model="subTaskList">
+				<tr wbs="{{task.wbs}}" ng-repeat="task in subTaskList | orderBy:sortWbs">
+					<td><a href="{{currentPath}}{{task.wbs}}">{{task.wbs}}</a></td>
+					<td>{{task.name}} </td>
+					<td class="hover"> test01</td>
+					<td class="hover"> test02</td>
+					<td class="text-right text-muted" name="weight">{{task.weight}}</td>
+					<td class="text-right ">{{task.plan}}</td>
+					<td class="text-right text-primary">{{task.act}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

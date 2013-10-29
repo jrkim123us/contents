@@ -106,7 +106,7 @@ schema.statics.getTasksByParent = function (parentWbs, callback) {
 // schema.statics.getTasksByParent = function (parentWbs) {
 	this.find({parentWbs : parentWbs})
 		.select('_id wbs name weight plan act start end worker approver test')
-		.populate('worker approver', 'name email')
+		.populate('worker approver', 'name.full email')
 		.sort({wbs : 1})
 		.exec(callback);
 	/*return this.find({parentWbs : parentWbs})
