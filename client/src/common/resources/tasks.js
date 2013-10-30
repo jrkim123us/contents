@@ -1,4 +1,7 @@
-angular.module('resources.tasks', ['ngResource']);
-angular.module('resources.tasks').factory('Tasks', ['$resource', function ($resource) {
+angular.module('resources.tasks', ['ngResource'])
+.factory('Tasks', ['$resource', function ($resource) {
 	return  $resource('/tasks/:wbsId', {});
+}])
+.factory('Gantt', ['$resource', function ($resource) {
+	return  $resource('/gantt/:wbsId', {});
 }]);

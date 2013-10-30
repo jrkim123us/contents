@@ -14,9 +14,11 @@ module.exports = function (config, handler) {
 		redirectRoot        : impl.F,
 		ensureAuthenticated : impl.F,
 
-		getCurrentUser      : impl.F,
+		getCurrentUser : impl.F,
+		getGantt     : impl.F,
+		getTask        : impl.F,
+
 		getTasksByParent : impl.F,
-		getTask          : impl.F,
 		setTask          : impl.F,
 		getMenus         : impl.F,
 		getOrgs          : impl.F,
@@ -32,6 +34,7 @@ module.exports = function (config, handler) {
 	app.post('/login', handler.getLogin);
 	app.post('/logout', handler.getLogout);
 	app.get('/menus', handler.ensureAuthenticated, handler.getMenus);
+	app.get('/gantt/:wbs', handler.ensureAuthenticated, handler.getGantt);
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);

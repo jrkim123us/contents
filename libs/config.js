@@ -20,13 +20,11 @@ app.configure(function() {
 	var distFolder = path.resolve(__dirname, '../client/dist'),staticUrl = '/static';
 
 	// all environments
-	/*app.set('port', process.env.PORT || 80); 
-	app.set('httpsPort', options.port || 443);*/
+	app.set('port', process.env.PORT || 80);
+	app.set('httpsPort', options.port || 443);
 
-	app.set('port', process.env.PORT || 3000); // for Mac - 80 in use
-	app.set('httpsPort', options.port || 3001);
-	/*app.set('port', process.env.PORT || 8080);
-	app.set('httpsPort', options.port || 444);*/
+	/*app.set('port', process.env.PORT || 3000); // for Mac - 80 in use
+	app.set('httpsPort', options.port || 3001);*/
 	// app.set('views', rootDir + '/views');
 	app.set('views', distFolder);
 	app.set('view engine', 'jade');

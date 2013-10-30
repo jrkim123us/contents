@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 
 	// Default task.
 	grunt.registerTask('default', ['jshint','build','karma:unit']);
-	grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy']);
+	grunt.registerTask('build', ['clean','html2js', 'recess:build', 'concat','copy']);
 	grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy']);
 	grunt.registerTask('test-watch', ['karma:watch']);
 
@@ -138,6 +138,14 @@ module.exports = function (grunt) {
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js'
 				],
 				dest: '<%= distdir %>/jquery.js'
+			},
+			dhtmlx: {
+				src: ['<%= vendorDir %>/dhtmlx/dhtmlxgantt.js'],
+				dest: '<%= distdir %>/dhtmlx.js'
+			},
+			dhtmlxCss: {
+				src: ['<%= vendorDir %>/dhtmlx/dhtmlxgantt_terrace.css'],
+				dest: '<%= distdir %>/dhtmlx.css'
 			}
 		},
 		uglify: {

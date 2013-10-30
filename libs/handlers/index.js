@@ -76,6 +76,25 @@ module.exports = function (config, db) {
 				res.send(data);
 			});
 		},
+		getGantt: function(req, res) {
+			var wbs = req.params.wbs || '1';
+			async.parallel({
+				task: function(callback) {
+					return db.Task.getTask(wbs, function(err, result) {
+						return callback(err, result);
+					});
+				},
+				data: function(callback) {
+					db.Task.getGantt(wbs, function(err, result){
+						// 중간 레벨 조회 시 parent 정보가 없어야 정상 조회됨
+						result[0].parent = undefined;
+						return callback(err, result);
+					});
+				}
+			}, function(err, data) {
+				return res.send(data);
+			})
+		},
 		getTask: function(req, res) {
 			var wbs = req.params.wbs || '1';
 			var data = {};
@@ -94,23 +113,6 @@ module.exports = function (config, db) {
 			}, function(err, data) {
 				return res.send(data);
 			});
-
-			/*db.Task.getTask(wbs)
-				.then(function(err, task) {
-					if(err) throw err;
-					data.task = task;
-				})
-				.then(db.Task.getTasksByParent(wbs))
-				.then(function(err, childs) {
-					if(err) throw err;
-					data.childs = childs;
-
-					res.send(data);
-				});*/
-			/*db.Task.getTask(wbs, function(err, data) {
-				if(err) throw err;
-				res.send(data);
-			});*/
 		},
 		setTask: function(req, res) {
 			db.Task.setTask(req.body, function(err, data) {

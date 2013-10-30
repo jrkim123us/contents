@@ -15,7 +15,7 @@ var schema = new Schema({
 });
 
 schema.virtual('name.full').get(function () {
-	return this.name.first + ' ' + this.name.last;
+	return [this.name.first, this.name.last].join(' ');
 })
 
 var handleError = function(err) {

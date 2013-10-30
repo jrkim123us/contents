@@ -21,6 +21,24 @@ var schema = new Schema({
 	approver  : [{type: Schema.ObjectId, ref: 'User'}]
 	// test : [ {type: Schema.ObjectId, ref: 'User'}]
 });
+schema.virtual('text').get(function () {
+	return this.name
+});
+schema.virtual('start_date').get(function () {
+	if(!this.startDate) return;
+
+	return this.startDate.getDate() + '-' + this.startDate.getMonth() + '-' + this.startDate.getFullYear();
+});
+schema.virtual('progress').get(function () {
+	return this.act
+});
+schema.virtual('duration').get(function () {
+	var msecPerDay = 1000 * 60 * 60 * 24;
+	return (this.endDate  === undefined || this.startDate === undefined) ? undefined : (this.endDate.getTime() - this.startDate.getTime()) / msecPerDay;
+});
+schema.set('toJSON', {
+	virtuals: true
+});
 schema.plugin(tree);
 
 var handleError = function(err) {
@@ -102,18 +120,15 @@ schema.statics.initializeUser = function (User, callback) {
 	});
 };
 
-schema.statics.getTasksByParent = function (parentWbs, callback) {
-// schema.statics.getTasksByParent = function (parentWbs) {
-	this.find({parentWbs : parentWbs})
-		.select('_id wbs name weight plan act start end worker approver test')
-		.populate('worker approver', 'name.full email')
+schema.statics.getGantt = function (wbs, callback) {
+	var regWbs;
+	wbs = wbs.replace('.', '\.');
+	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
+
+	this.find({wbs : regWbs})
+		.select('_id parent wbs name act startDate endDate text start_date progress duration')
 		.sort({wbs : 1})
 		.exec(callback);
-	/*return this.find({parentWbs : parentWbs})
-		.select('_id wbs name weight plan act start end worker approver test')
-		.populate('worker approver', 'name email')
-		.sort({wbs : 1})
-		.exec();*/
 };
 schema.statics.getTask = function (wbs, callback) {
 // schema.statics.getTask = function (wbs) {
@@ -123,6 +138,13 @@ schema.statics.getTask = function (wbs, callback) {
 	/*return this.findOne({wbs : wbs})
 		.select('-_id wbs name')
 		.exec();*/
+};
+schema.statics.getTasksByParent = function (parentWbs, callback) {
+	this.find({parentWbs : parentWbs})
+		.select('_id wbs name weight plan act start end worker approver')
+		.populate('worker approver', 'name email')
+		.sort({wbs : 1})
+		.exec(callback);
 };
 schema.statics.setTask = function (task, callback) {
 	delete task._id;
