@@ -30,7 +30,7 @@ schema.virtual('start_date').get(function () {
 	return this.startDate.getDate() + '-' + this.startDate.getMonth() + '-' + this.startDate.getFullYear();
 });
 schema.virtual('progress').get(function () {
-	return this.act
+	return this.act / 100.0
 });
 schema.virtual('duration').get(function () {
 	var msecPerDay = 1000 * 60 * 60 * 24;

@@ -40,127 +40,101 @@ angular.module('tasks', [
 	return taskSortable;
 })
 .factory('ganttConfig', function() {
-	var ganttConfig = {
-		scale_unit : "month",
-		step : 1,
-		date_scale : "%F, %Y",
-		min_column_width : 50,
-		scale_height : 90,
-		subscales : [
-			{unit:"week", step:1, template : subscalesTmpl },
-			{unit:"day", step:1, date:"%D" }
-		],
-		templates : {
-			task_cell_class : task_cell_class, // 주말 표시
-			progress_text : progress_text
-		}
-	};
-
-	function subscalesTmpl(date) {
-		var dateToStr = gantt.date.date_to_str("%d %M");
-		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
-		return dateToStr(date) + " - " + dateToStr(endDate);
-	}
-	/* gantt 전체 영역 template 정의 */
-	function task_cell_class(item, date) {
-		if(date.getDay() === 0 || date.getDay() === 6){
-			return "gantt_weekend";
-		}
-	}
-	function progress_text(start, end, task) {
-		return "<span style='text-align:left;'>"+Math.round(task.progress*100)+ "% </span>";
-	}
-
+	// scale 기준에 대한 설정값
 	var options = {
 		day : {
-			config : {
-				scale_unit : "day",
-				step : 1,
-				date_scale : "%d %M",
-				scale_height : 27,
-				subscales : []
-			},
-			templates : {
-				date_scale : null
-			}
-		},
-		week : {
-			config : {
-				scale_unit : "week",
-				step : 1,
-				scale_height : 50,
-				subscales : [
-					{unit:"day", step:1, date:"%D" }
-				]
-			},
-			templates : {
-				date_scale : weekScaleTemplate
-			}
+			scale_unit : "month", step : 1, date_scale : "%F, %Y", min_column_width : 50, scale_height : 90,
+			subscales : [
+				{unit:"week", step:1, template : weekScaleTemplate },
+				{unit:"day", step:1, date:"%D" }
+			]
 		},
 		month : {
-			config : {
-				scale_unit : "month",
-				date_scale : "%F, %Y",
-				scale_height : 50,
-				subscales : [
-					{unit:"day", step:1, date:"%j, %D" }
-				]
-			},
-			templates : {
-				date_scale : null
-			}
+			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 50, scale_height : 90,
+			subscales : [
+				{unit:"month", step:3, template:monthScaleTemplate},
+				{unit:"month", step:1, date:"%M" }
+			]
 		},
 		year : {
-			config : {
-				scale_unit : "year",
-				step : 1,
-				date_scale : "%Y",
-				min_column_width : 50,
-				scale_height : 90,
-				subscales : [
-					{unit:"month", step:3, template:monthScaleTemplate},
-					{unit:"month", step:1, date:"%M" }
-				]
-			},
- 			templates : {
- 				date_scale : null
- 			}
+			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 80, scale_height : 90,
+			subscales : [
+				{unit:"month", step:3, template:monthScaleTemplate}
+			]
 		}
 	}
+	// return Object
+	var ganttConfig = {
+		initOptions: initOptions,
+		resetOptions : resetOptions
+	};
+
+	function initOptions(type) {
+		var results = options[type];
+		// results.templates = options[type].templates;
+		results.templates = {
+			task_cell_class : task_cell_class,  // 주말 표시
+			progress_text : progress_text
+		};
+
+		return results;
+	}
+
+	function resetOptions(gantt, type) {
+		angular.forEach(options[type], function(value, key){
+			gantt.config[key] = value;
+		});
+
+		gantt.render();
+	}
+	// gantt 꾸미기 template 함수
 	function monthScaleTemplate (date){
 		var dateToStr = gantt.date.date_to_str("%M");
 		var endDate = gantt.date.add(date, 2, "month");
 		return dateToStr(date) + " - " + dateToStr(endDate);
 	};
 
-	function weekScaleTemplate(date){
+	function weekScaleTemplate(date) {
 		var dateToStr = gantt.date.date_to_str("%d %M");
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
-	};
-
-
-
+	}
+	/* gantt 전체 영역 template 정의 */
+	function task_cell_class(item, date) {
+		if(gantt.config.scale_unit ==="month" && (date.getDay() === 0 || date.getDay() === 6)){
+			return "gantt_weekend";
+		}
+	}
+	function progress_text(start, end, task) {
+		return "<span style='text-align:left;'>"+Math.round(task.progress*100)+ "% </span>";
+	}
 	return ganttConfig;
 })
 .directive('dhtmlxGantt', [function() {
+	function initGantt(scope, element, attrs) {
+		var opts = angular.extend({}, {}, scope.$eval(attrs.dhtmlxGantt)),
+			ganttOption = opts.initOptions(scope.currentScale);
+
+
+		scope.gantt = element.dhx_gantt(ganttOption);
+
+		angular.forEach(ganttOption.templates, function(fn, key){
+			scope.gantt.templates[key] = fn;
+		});
+	}
 	return {
 		require: '?ngModel',
 		restrict : 'A',
 		refresh: false,
 		link: function(scope, element, attrs, ngModel) {
-			opts = angular.extend({}, {}, scope.$eval(attrs.dhtmlxGantt));
 
 			if (ngModel) {
 				ngModel.$render = function() {
 					//To-Do: refresh
 				}
 			};
-			scope.gantt = element.dhx_gantt(opts);
 
-			angular.forEach(opts.templates, function(fn, key){
-				scope.gantt.templates[key] = fn;
-			});
+			initGantt(scope, element, attrs);
 		}
 	}
 }])
@@ -189,7 +163,8 @@ angular.module('tasks', [
 		$scope.getTask();
 	}); // initialize the watch
 	$scope.$watch('currentScale', function() {
-		console.log('currentScale changed : ' + $scope.currentScale);
+		if($scope.gantt)
+			ganttConfig.resetOptions($scope.gantt, $scope.currentScale);
 	}); // initialize the watch
 
 	$scope.getTask = function () {
