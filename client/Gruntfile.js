@@ -142,7 +142,8 @@ module.exports = function (grunt) {
 			dhtmlx: {
 				src: [
 					'<%= vendorDir %>/dhtmlx/dhtmlxgantt.js',
-					'<%= vendorDir %>/dhtmlx/dhtmlxgantt_tooltip.js'
+					'<%= vendorDir %>/dhtmlx/dhtmlxgantt_quick_info.js',
+					'<%= vendorDir %>/dhtmlx/dhtmlxgantt_locale_kr.js'
 				],
 				dest: '<%= distdir %>/dhtmlx.js'
 			},

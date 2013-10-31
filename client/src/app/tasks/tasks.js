@@ -44,12 +44,14 @@ angular.module('tasks', [
 		order_branch : true,
 		// grid column customization
 		grid_width : 450,
+		xml_date : "%Y-%m-%d",
+		// drag_links : false,
 		columns : [
 			{name:"wbs", label:"WBS", tree:true, width:150 },
 			{name:"text", label:"Task name", align: "left", width:100},
 			{name:"start_date", label:"Start time", align: "center", width:90 },
 			{name:"duration",   label:"Duration",   align: "center", width:70 },
-			{name:"add",        label:"", width:40 }
+			{name:"add", label:"", width:40 }
 		]
 	}
 	// scale 기준에 대한 설정값
@@ -64,7 +66,7 @@ angular.module('tasks', [
 		month : {
 			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 50, scale_height : 90,
 			subscales : [
-				{unit:"month", step:3, template:monthScaleTemplate},
+				{unit:"month", step:3, template:quarterScaleTemplate},
 				{unit:"month", step:1, date:"%M" }
 			]
 		},
@@ -80,6 +82,17 @@ angular.module('tasks', [
 		progress_text : progress_text
 	}
 	// gantt 꾸미기 template 함수
+	function quarterScaleTemplate(date) {
+		var result,dateToStr = gantt.date.date_to_str("%M");
+
+		switch(dateToStr(date)) {
+			case "Jan" : result = "1Q"; break;
+			case "Apr" : result = "2Q"; break;
+			case "Jul" : result = "3Q"; break;
+			case "Oct" : result = "4Q"; break;
+		}
+		return result;
+	}
 	function monthScaleTemplate (date){
 		var dateToStr = gantt.date.date_to_str("%M");
 		var endDate = gantt.date.add(date, 2, "month");
@@ -87,7 +100,7 @@ angular.module('tasks', [
 	};
 
 	function weekScaleTemplate(date) {
-		var dateToStr = gantt.date.date_to_str("%d %M");
+		var dateToStr = gantt.date.date_to_str("%M %d ");
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
 	}
