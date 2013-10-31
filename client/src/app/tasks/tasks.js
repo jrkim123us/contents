@@ -39,9 +39,21 @@ angular.module('tasks', [
 
 	return taskSortable;
 })
-.factory('ganttConfig', function() {
+.factory('ganttOptions', function() {
+	var common = {
+		order_branch : true,
+		// grid column customization
+		grid_width : 450,
+		columns : [
+			{name:"wbs", label:"WBS", tree:true, width:150 },
+			{name:"text", label:"Task name", align: "left", width:100},
+			{name:"start_date", label:"Start time", align: "center", width:90 },
+			{name:"duration",   label:"Duration",   align: "center", width:70 },
+			{name:"add",        label:"", width:40 }
+		]
+	}
 	// scale 기준에 대한 설정값
-	var options = {
+	var optionsPerType = {
 		day : {
 			scale_unit : "month", step : 1, date_scale : "%F, %Y", min_column_width : 50, scale_height : 90,
 			subscales : [
@@ -63,47 +75,9 @@ angular.module('tasks', [
 			]
 		}
 	}
-	// return Object
-	var ganttConfig = {
-		initOptions: initOptions,
-		resetOptions : resetOptions
-	};
-
-	function getCommonOptions(options) {
-		// drag & drop 으로 순서 변경
-		options.order_branch = true;
-		// grid column customization
-		options.grid_width = 450;
-		gantt.config.columns = [
-			{name:"wbs", label:"WBS", tree:true, width:150 },
-			{name:"text", label:"Task name", align: "left", width:100},
-			{name:"start_date", label:"Start time", align: "center", width:90 },
-			{name:"duration",   label:"Duration",   align: "center", width:70 },
-			{name:"add",        label:"", width:40 }
-		];
-
-		options.templates = {
-			task_cell_class : task_cell_class,  // 주말 표시
-			progress_text : progress_text
-		};
-
-	}
-
-	function initOptions(type) {
-		var results = options[type];
-		// scale 외에 공통 적용되는 설정값은 아래에서 적용한다.
-		getCommonOptions(results);
-
-
-		return results;
-	}
-
-	function resetOptions(gantt, type) {
-		angular.forEach(options[type], function(value, key){
-			gantt.config[key] = value;
-		});
-
-		gantt.render();
+	var templates = {
+		task_cell_class : task_cell_class,  // 주말 표시
+		progress_text : progress_text
 	}
 	// gantt 꾸미기 template 함수
 	function monthScaleTemplate (date){
@@ -126,20 +100,47 @@ angular.module('tasks', [
 	function progress_text(start, end, task) {
 		return "<span style='text-align:left;'>"+Math.round(task.progress*100)+ "% </span>";
 	}
-	return ganttConfig;
-})
-.directive('dhtmlxGantt', [function() {
-	function initGantt(scope, element, attrs) {
-		var opts = angular.extend({}, {}, scope.$eval(attrs.dhtmlxGantt)),
-			ganttOption = opts.initOptions(scope.currentScale);
 
+	function set(type) {
+		var options = {};
 
-		scope.gantt = element.dhx_gantt(ganttOption);
+		angular.extend(angular.copy(common, options), optionsPerType[type]);
 
-		angular.forEach(ganttOption.templates, function(fn, key){
-			scope.gantt.templates[key] = fn;
+		angular.forEach(options, function(value, key){
+			gantt.config[key] = value;
+		});
+
+		angular.forEach(templates, function(value, key){
+			gantt.templates[key] = value;
 		});
 	}
+	return {
+		set : set
+	};
+})
+.factory('ganttHadler', ['ganttOptions', function(ganttOptions) {
+	function init(element, type) {
+		ganttOptions.set(type);
+
+		element.dhx_gantt({});
+	}
+	function parse(data) {
+		gantt.clearAll();
+		gantt.parse(data);
+	}
+
+	function render(type) {
+		ganttOptions.set(type);
+
+		gantt.render(type);
+	}
+	return {
+		init : init,
+		parse : parse,
+		render : render
+	};
+}])
+.directive('dhtmlxGantt', ['ganttHadler', function(ganttHadler) {
 	return {
 		require: '?ngModel',
 		restrict : 'A',
@@ -152,18 +153,17 @@ angular.module('tasks', [
 				}
 			};
 
-			initGantt(scope, element, attrs);
+			ganttHadler.init(element, scope.currentScale);
 		}
 	}
 }])
-.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttConfig'
-	, function ($scope, $location, $route, $routeParams, Gantt, ganttConfig) {
+.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttHadler'
+	, function ($scope, $location, $route, $routeParams, Gantt, ganttHadler) {
 	var firstRoute = $route.current
 		defaultScale = 'day';
 
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
-	$scope.ganttOption = ganttConfig;
 
 	// wbsId 또는 scale 값이 변경 되었을 때 page reload 없이 처리하기 위함
 	$scope.$on('$locationChangeSuccess', function(event, newPath, prevPath) {
@@ -181,8 +181,7 @@ angular.module('tasks', [
 		$scope.getTask();
 	}); // initialize the watch
 	$scope.$watch('currentScale', function() {
-		if($scope.gantt)
-			ganttConfig.resetOptions($scope.gantt, $scope.currentScale);
+		ganttHadler.render($scope.currentScale);
 	}); // initialize the watch
 
 	$scope.getTask = function () {
@@ -190,8 +189,7 @@ angular.module('tasks', [
 			$scope.currentTaskName = result.task.name;
 			$scope.currentWbs = result.task.wbs;
 
-			$scope.gantt.clearAll();
-			$scope.gantt.parse({data : result.data});
+			ganttHadler.parse({data : result.data})
 		});
 	}
 }])
