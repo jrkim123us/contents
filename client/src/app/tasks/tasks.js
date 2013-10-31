@@ -69,13 +69,31 @@ angular.module('tasks', [
 		resetOptions : resetOptions
 	};
 
-	function initOptions(type) {
-		var results = options[type];
-		// results.templates = options[type].templates;
-		results.templates = {
+	function getCommonOptions(options) {
+		// drag & drop 으로 순서 변경
+		options.order_branch = true;
+		// grid column customization
+		options.grid_width = 450;
+		gantt.config.columns = [
+			{name:"wbs", label:"WBS", tree:true, width:150 },
+			{name:"text", label:"Task name", align: "left", width:100},
+			{name:"start_date", label:"Start time", align: "center", width:90 },
+			{name:"duration",   label:"Duration",   align: "center", width:70 },
+			{name:"add",        label:"", width:40 }
+		];
+
+		options.templates = {
 			task_cell_class : task_cell_class,  // 주말 표시
 			progress_text : progress_text
 		};
+
+	}
+
+	function initOptions(type) {
+		var results = options[type];
+		// scale 외에 공통 적용되는 설정값은 아래에서 적용한다.
+		getCommonOptions(results);
+
 
 		return results;
 	}
