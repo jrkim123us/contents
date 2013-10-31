@@ -44,12 +44,14 @@ angular.module('tasks', [
 		order_branch : true,
 		// grid column customization
 		grid_width : 450,
+		xml_date : "%Y-%m-%d",
+		// drag_links : false,
 		columns : [
 			{name:"wbs", label:"WBS", tree:true, width:150 },
 			{name:"text", label:"Task name", align: "left", width:100},
 			{name:"start_date", label:"Start time", align: "center", width:90 },
 			{name:"duration",   label:"Duration",   align: "center", width:70 },
-			{name:"add",        label:"", width:40 }
+			{name:"add", label:"", width:40 }
 		]
 	}
 	// scale 기준에 대한 설정값

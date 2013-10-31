@@ -15,26 +15,24 @@ var schema = new Schema({
 	end       : {type:String},
 	startDate : {type: Date},
 	endDate   : {type: Date},
-	// worker    : {type : Schema.Types.Mixed},
-	// approver  : {type : Schema.Types.Mixed},
 	worker    : [{type: Schema.ObjectId, ref: 'User'}],
-	approver  : [{type: Schema.ObjectId, ref: 'User'}]
-	// test : [ {type: Schema.ObjectId, ref: 'User'}]
+	approver  : [{type: Schema.ObjectId, ref: 'User'}],
+	leaf : {type: Boolean}
 });
 schema.virtual('text').get(function () {
 	return this.name
 });
 schema.virtual('start_date').get(function () {
-	if(!this.startDate) return;
+	if(!this.startDate || !this.leaf) return "";
 
-	return this.startDate.getDate() + '-' + this.startDate.getMonth() + '-' + this.startDate.getFullYear();
+	return this.startDate.getFullYear() + '-' + this.startDate.getMonth() + '-' + this.startDate.getDate() ;
 });
 schema.virtual('progress').get(function () {
 	return this.act / 100.0
 });
 schema.virtual('duration').get(function () {
 	var msecPerDay = 1000 * 60 * 60 * 24;
-	return (this.endDate  === undefined || this.startDate === undefined) ? undefined : (this.endDate.getTime() - this.startDate.getTime()) / msecPerDay;
+	return (!this.leaf || this.endDate  === undefined || this.startDate === undefined) ? "" : ((this.endDate.getTime() - this.startDate.getTime()) / msecPerDay) + "";
 });
 schema.set('toJSON', {
 	virtuals: true
@@ -77,10 +75,38 @@ schema.statics.initialize = function (callback) {
 
 			if(tasks.length > 0)
 				saveAll();
-			else
+			else {
 				// 등록된 데이터의 parent 정보를 조회한다.
 				findParent();
+			}
 		});
+	}
+	function findLeaf() {
+		Task.find()
+			.select('_id parent wbs')
+			// .limit(10)
+			.exec(function(err, data) {
+				if(err) throw err;
+				checkLeaf(data);
+			})
+	}
+	function checkLeaf(data) {
+		var current = data.shift();
+
+		Task.find({parent: current._id})
+			.select('_id parent wbs')
+			.exec( function(err, child) {
+				if(err) throw err;
+				if(child.length === 0 ) {
+					current.leaf = true;
+					current.save();
+				}
+
+				if(data.length > 0)
+					checkLeaf(data);
+				else
+					callback();
+			});
 	}
 	function findParent() {
 		Task.find({parentWbs: {$exists: true}}, function(err, data) {
@@ -98,7 +124,8 @@ schema.statics.initialize = function (callback) {
 				if(data.length > 0)
 					updateParent(data);
 				else
-					callback();
+					findLeaf(); // 최하위 항목을 체크한다.
+					// callback();
 			});
 		});
 	}
@@ -126,7 +153,7 @@ schema.statics.getGantt = function (wbs, callback) {
 	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
 
 	this.find({wbs : regWbs})
-		.select('_id parent wbs name act startDate endDate text start_date progress duration')
+		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf')
 		.sort({wbs : 1})
 		.exec(callback);
 };
