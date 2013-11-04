@@ -2,8 +2,12 @@
 	<div class="page-header">
 		<h1>Dynamic scale gantt chart</h1>
 	</div>
+	<ol class="breadcrumb" ng-hide="isRoot">
+		<li><a href="/tasks/gantt/1#{{currentScale}}">Root</a></li>
+		<li class="active">{{currentWbs}} - {{currentTaskName}}</li>
+	</ol>
 	<div class="panel panel-info">
-		<div class="panel-heading">
+		<div class="panel-heading" ng-show="isRoot">
 			<h3 class="panel-title">{{currentWbs}} - {{currentTaskName}}</h3>
 		</div>
 		<div class="panel-body">
@@ -12,7 +16,7 @@
 				<li ng-class="{active : currentScale == 'month'}"><a href="#month">Month</a></li>
 				<li ng-class="{active : currentScale == 'year'}"><a href="#year">Year</a></li>
 			</ul>
-			<div dhtmlx-gantt="ganttOption" ng-model="subTaskList" style="height:600px; margin-top:10px;" ></div>
+			<div dhtmlx-gantt ng-model="subTaskList" style="height:600px; margin-top:10px;" ></div>
 		</div>
 	</div>
 </div>

@@ -1,0 +1,37 @@
+<form name="form" novalidate>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelForm()">&times;</button>
+		<h4 class="modal-title">{{task.name}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-warning" ng-show="authReason">
+			{{authReason}}
+		</div>
+		<div class="alert alert-danger" ng-show="authError">
+			{{authError}}
+		</div>
+		<div class="alert alert-info" ng-hide="authReason || authError">Please enter task details</div>
+		<div class="form-group">
+			<label for="wbs">WBS</label>
+			<input class="form-control" id="wbs" name="wbs" type="text" ng-model="task.wbs" placeholder="wbs is required." required autofocus>
+		</div>
+		<div class="form-group">
+			<label for="wbs">Task</label>
+			<input class="form-control" id="name" name="name" type="text" ng-model="task.name" placeholder="task name is required." required>
+		</div>
+		<div class="form-group">
+			<label for="wbs">시작일자</label>
+			<input class="form-control" id="start_date" name="start_date" type="text" ng-model="task.start_date" required>
+		</div>
+		<div class="form-group">
+			<label for="wbs">기간</label>
+			<input class="form-control" id="duration" name="duration" type="text" ng-model="task.duration" required>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button type="reset" class="btn btn-large btn-default">Clear</button>
+		<button type="button" class="btn btn-large btn-default" data-dismiss="modal" ng-click="cancelForm()">Close</button>
+		<button type="submit" class="btn btn-large btn-primary" ng-click="login()" ng-disabled="form.$invalid">Save</button>
+	</div>
+</form>
