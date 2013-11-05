@@ -1,6 +1,5 @@
 angular.module('tasks.gantt', [
-	'tasks.form',
-	'ui.bootstrap'
+	'tasks.form'
 ])
 .config(['$routeProvider', function ($routeProvider) {
 	$routeProvider.when('/tasks/gantt/:wbs', {
@@ -47,21 +46,22 @@ angular.module('tasks.gantt', [
 	}
 })
 .factory('ganttOptions', function() {
-	var scaleType;
+	var scaleType, users;
 	var common = {
 		order_branch : true,
 		// grid column customization
-		grid_width : 520,
+		grid_width : 360,
 		xml_date : "%Y-%m-%d",
 		show_progress : true, // loading spinner
-		// drag_links : false,
-		// drag_progress : false,
+		drag_links : false,
+		drag_progress : false,
 		task_date :  "%Y.%m.%d", // lightbox header date format
 		columns : [
-			{name:"wbs", label:"WBS", tree:true, width:150 },
-			{name:"text", label:"Task", align: "left", width:100},
-			{name:"start_date", label:"시작일자", align: "center", width:90 },
+			{name:"wbs", label:"WBS", tree:true, width:150, template: wbsColumnTemplate },
+			{name:"text", label:"Task", align: "left", width:100, template: textColumnTemplate},
+			/*{name:"start_date", label:"시작일자", align: "center", width:90 },
 			{name:"duration",   label:"기간",   align: "center", width:70 },
+			{name:"holder",   label:"담당자",   align: "center", width:150, template: holderColumnTemplate},*/
 			{name:"button",   label:"View",   align: "center", width:70 , template: subTaskColumnTemplate},
 			{name:"add", label:"", width:40 }
 		]
@@ -95,10 +95,33 @@ angular.module('tasks.gantt', [
 		task_class : task_class
 	}
 	// column template 함수
-	function subTaskColumnTemplate(obj) {
+	function wbsColumnTemplate(task) {
+		var className = parseInt(task.duration, 10) === 0 ? "text-success" : task.leaf ? "text-primary" : "";
+		return '<p class="' + className + '" title="' + task.wbs + '">' + task.wbs + '</p>'
+	}
+	function textColumnTemplate(task) {
+		var className = parseInt(task.duration, 10) === 0 ? "text-success" : task.leaf ? "text-primary" : "";
+		return '<p class="' + className + '" title="' + task.name + '">' + task.name + '</p>'
+	}
+
+	function holderColumnTemplate(task) {
+		var result = '', splliter = '';
+
+		for(var inx = 0, ilength = task.worker.length ; inx < ilength ; inx ++) {
+			for(var jnx = 0, jlength = users.length ; jnx < jlength ; jnx++) {
+				if(task.worker[inx] === users[jnx].id) {
+					result += splliter + users[jnx].name.full;
+					splliter = ', ';
+					continue;
+				}
+			}
+		}
+		return result;
+	}
+	function subTaskColumnTemplate(task) {
 		var result = '';
-		if(obj.parent && (obj.wbs === '1.1' || obj.wbs === '1.4'))
-			result = '<a href="/tasks/gantt/' + obj.wbs +'#' + scaleType + '" class="btn btn-info btn-xs" role="button">View</a>';
+		if(task.parent && (task.wbs === '1.1' || task.wbs === '1.4'))
+			result = '<a href="/tasks/gantt/' + task.wbs +'#' + scaleType + '" class="btn btn-info btn-xs" role="button">View</a>';
 
 		return result;
 	}
@@ -125,7 +148,7 @@ angular.module('tasks.gantt', [
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
 	}
-	/* gantt 전체 영역 template 정의 */
+	 // gantt 전체 영역 template 정의
 	function task_cell_class(item, date) {
 		if(gantt.config.scale_unit ==="month" && (date.getDay() === 0 || date.getDay() === 6)){
 			return "gantt_weekend";
@@ -155,11 +178,16 @@ angular.module('tasks.gantt', [
 			gantt.templates[key] = value;
 		});
 	}
+	function setUsers(data) {
+		users = data.users;
+	}
 	return {
-		set : set
+		set      : set,
+		setUsers : setUsers
 	};
 })
-.factory('ganttHadler', ['ganttOptions', 'ganttSortable', '$modal', function(ganttOptions, ganttSortable, $modal) {
+.factory('ganttHandler', ['ganttOptions', 'ganttSortable', 'taskModalHandler', function(ganttOptions, ganttSortable, taskModalHandler) {
+	// TO-DO : ganttHandler와 modal handler 분리 필요함 TaskController 에서 사용 대비
 	var taskModal = null;
 	function init(element, type) {
 		ganttOptions.set(type);
@@ -169,6 +197,7 @@ angular.module('tasks.gantt', [
 		element.dhx_gantt({});
 	}
 	function parse(data) {
+		ganttOptions.setUsers(data);
 		gantt.clearAll();
 		gantt.parse(data);
 	}
@@ -182,22 +211,26 @@ angular.module('tasks.gantt', [
 	function attachEvents() {
 		gantt.attachEvent('onLoadEnd', onLoadEnd);
 		gantt.attachEvent('onTaskDblClick', onTaskDblClick);
+		gantt.attachEvent('onAfterTaskUpdate', onAfterTaskUpdate);
+		gantt.attachEvent('onAfterTaskDrag', onAfterTaskDrag);
 	}
 	function onLoadEnd() {
 		ganttSortable.sort();
 	}
-	function onTaskDblClick(id, e) {
-		taskModal = $modal.open( {
-			templateUrl : 'tasks/taskForm.tpl.html',
-			controller  :  'TaskFormController',
-			resolve : {
-				task : function() {
-					return gantt.getTask(id)
-				}
-			}
-			/*backdrop    : false,
-			keyboard    : false*/
-		});
+	function onTaskDblClick(id, event) {
+		taskModalHandler.openModal(gantt.getTask(id));
+	}
+	function onAfterTaskUpdate(id, task) {
+		var tasks = [];
+		tasks.push(task);
+		while(gantt.isTaskExists(task.parent)) {
+			task = gantt.getTask(task.parent);
+			tasks.push(task);
+		}
+		console.log('onAfterTaskUpdate : ' + tasks);
+	}
+	function onAfterTaskDrag(id, mode, event) {
+		// console.log('onAfterTaskDrag : ' + mode);
 	}
 	return {
 		init : init,
@@ -205,7 +238,7 @@ angular.module('tasks.gantt', [
 		render : render
 	};
 }])
-.directive('dhtmlxGantt', ['ganttHadler', function(ganttHadler) {
+.directive('dhtmlxGantt', ['ganttHandler', function(ganttHandler) {
 	return {
 		require: '?ngModel',
 		restrict : 'A',
@@ -218,14 +251,14 @@ angular.module('tasks.gantt', [
 				}
 			};
 
-			ganttHadler.init(element, scope.currentScale);
+			ganttHandler.init(element, scope.currentScale);
 		}
 	}
 }])
-.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttHadler'
-	, function ($scope, $location, $route, $routeParams, Gantt, ganttHadler) {
+.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttHandler'
+	, function ($scope, $location, $route, $routeParams, Gantt, ganttHandler) {
 	var firstRoute = $route.current
-		defaultScale = 'day';
+		defaultScale = 'month';
 
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
@@ -247,7 +280,7 @@ angular.module('tasks.gantt', [
 		$scope.getTask();
 	}); // initialize the watch
 	$scope.$watch('currentScale', function() {
-		ganttHadler.render($scope.currentScale);
+		ganttHandler.render($scope.currentScale);
 	}); // initialize the watch
 
 	$scope.getTask = function () {
@@ -255,7 +288,7 @@ angular.module('tasks.gantt', [
 			$scope.currentTaskName = result.task.name;
 			$scope.currentWbs = result.task.wbs;
 
-			ganttHadler.parse({data : result.data})
+			ganttHandler.parse(result)
 		});
 	}
 }]);

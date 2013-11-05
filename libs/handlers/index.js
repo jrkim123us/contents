@@ -90,6 +90,11 @@ module.exports = function (config, db) {
 						result[0].parent = undefined;
 						return callback(err, result);
 					});
+				},
+				users: function(callback) {
+					db.User.getAll(function(err, result) {
+						return callback(err, result);
+					});
 				}
 			}, function(err, data) {
 				return res.send(data);

@@ -153,7 +153,8 @@ schema.statics.getGantt = function (wbs, callback) {
 	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
 
 	this.find({wbs : regWbs})
-		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf')
+		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf worker approver')
+		// .populate('worker approver', 'name email')
 		.sort({wbs : 1})
 		.exec(callback);
 };
