@@ -20,17 +20,37 @@
 			<label for="wbs" class="col-sm-2 control-label">시작일자</label>
 			<div class="col-sm-10">
 				<div class="input-group" ng-model="task.start_date">
-					<input class="form-control" type="text" datepicker-popup="yyyy.MM.dd" ng-model="task.start_date" datepicker-options="dateOptions" is-open="opened" min="'2010-11-01'" max="'2010-11-30'"  required>
+					<input class="form-control" type="text" id="start_date" name="start_date"
+						datepicker-popup="yyyy.MM.dd" ng-model="task.start_date" datepicker-options="dateOptions"
+						is-open="opened" focus="focusStart" required>
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="open()"><span class="glyphicon glyphicon-calendar"></span></button>
+						<button type="button" class="btn btn-default" ng-click="focusStart=true"><span class="glyphicon glyphicon-calendar"></span></button>
 					</span>
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">종료일자</label>
+			<div class="col-sm-10">
+				<p class="form-control-static">{{task.end_date  | date : 'yyyy.MM.dd'}}</p>
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="wbs" class="col-sm-2 control-label">기간</label>
 			<div class="col-sm-10">
-				<input class="form-control" id="duration" name="duration" type="text" ng-model="task.duration" required focus-me="focusStartDate">
+				<input class="form-control" id="duration" name="duration" type="text" ng-model="task.duration" required >
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="worker" class="col-sm-2 control-label">담당자</label>
+			<div class="col-sm-10">
+				<select id="worker" name="worker" multiple  class="form-control" ui-select2="{ allowClear: true}" ng-model="select2">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -47,7 +67,7 @@
 		<button type="button" class="btn btn-danger "><span class="glyphicon glyphicon-trash"></span> Delete</button>
 		<button type="submit" class="btn btn-success" ng-click="saveForm()" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
 	</div>
-	<!-- <div class="well">
+	<div class="well">
 		<pre>{{task | json}}</pre>
-	</div> -->
+	</div>
 </form>

@@ -1,3 +1,3 @@
 angular.module('directives', [
-	'directives.focusMe'
+	'directives.focus'
 ]);

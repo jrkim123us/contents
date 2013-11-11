@@ -1,5 +1,6 @@
-angular.module('tasks.form', [])
-.controller('TaskFormController', ['$scope', '$location', '$timeout', 'task', 'taskModalHandler', function ($scope, $location, $timeout, task, taskModalHandler) {
+angular.module('tasks.form', ['ui.select2'])
+.controller('TaskFormController', ['$scope', '$location', '$timeout', 'task', 'taskModalHandler',
+	function ($scope, $location, $timeout, task, taskModalHandler) {
 	$scope.originalTask = task;
 	$scope.task = angular.copy(task);
 	$scope.dt = new Date();
@@ -16,9 +17,4 @@ angular.module('tasks.form', [])
 	$scope.cancelForm = function() {
 		taskModalHandler.closeModal();
 	}
-	$scope.open = function() {
-		$timeout(function() {
-			$scope.opened = true;
-		});
-	};
 }]);

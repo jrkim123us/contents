@@ -59,6 +59,12 @@ module.exports = function (grunt) {
 			},
 			bootstrapFont: {
 				files: [{ dest: '<%= distdir %>/fonts', src : '**', expand: true, cwd: '<%= vendorDir %>/bootstrap/fonts' }]
+			},
+			select2 : {
+				files: [
+					{dest: '<%= distdir %>/img/select2/select2.png', src : '<%= vendorDir %>/select2/select2.png'},
+					{dest: '<%= distdir %>/img/select2/select2-spinner.gif', src : '<%= vendorDir %>/select2/select2-spinner.gif'}
+				]
 			}
 		},
 		karma: {
@@ -125,7 +131,8 @@ module.exports = function (grunt) {
 			bootstrap: {
 				src:[
 					'<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js',
-					'<%= vendorDir %>/angular-ui-sortable/src/sortable.js'
+					'<%= vendorDir %>/angular-ui-sortable/src/sortable.js',
+					'<%= vendorDir %>/angular-ui-select2/src/select2.js'
 				],
 				dest: '<%= distdir %>/bootstrap.js'
 			},
@@ -135,7 +142,8 @@ module.exports = function (grunt) {
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.core.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.widget.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.mouse.js',
-					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js'
+					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js',
+					'<%= vendorDir %>/select2/select2.js'
 				],
 				dest: '<%= distdir %>/jquery.js'
 			},
