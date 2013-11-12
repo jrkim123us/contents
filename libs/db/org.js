@@ -7,6 +7,9 @@ var schema = new Schema({
 	leader : {type: Schema.ObjectId, ref: 'User'},
 	member : [{type: Schema.ObjectId, ref: 'User'}]
 });
+schema.set('toJSON', {
+	virtuals: true
+});
 
 var handleError = function(err) {
 	// for(var error in err.errors) {

@@ -37,7 +37,6 @@ angular.module('tasks.gantt', [
 			case 'wbs' : fn = sortByWbs; break;
 			default: fn = sortByWbs; break;
 		}
-
 		gantt.sort(fn);
 	}
 
@@ -50,12 +49,14 @@ angular.module('tasks.gantt', [
 	var common = {
 		order_branch : true,
 		// grid column customization
-		grid_width : 360,
-		xml_date : "%Y-%m-%d",
-		show_progress : true, // loading spinner
-		drag_links : false,
-		drag_progress : false,
-		task_date :  "%Y.%m.%d", // lightbox header date format
+		grid_width        : 360,
+		xml_date          : "%Y-%m-%d",
+		task_date         :  "%Y.%m.%d", // lightbox header date format
+		drag_links        : false,
+		show_progress     : true, // loading spinner
+		drag_progress     : false,
+		round_dnd_dates   : false, // month, year scale에서 drag&drop 작업시 일정 정보가 scale 기준으로 rounding 되지 않게 함
+		details_on_create : false, // '+' button으로 task를 생성하고 lightbox를 호출하지 않음
 		columns : [
 			{name:"wbs", label:"WBS", tree:true, width:150, template: wbsColumnTemplate },
 			{name:"text", label:"Task", align: "left", width:100, template: textColumnTemplate},
@@ -75,6 +76,12 @@ angular.module('tasks.gantt', [
 				{unit:"day", step:1, date:"%D" }
 			]
 		},
+		week : {
+			scale_unit : "month", step : 1, date_scale : "%F, %Y",  min_column_width : 100, scale_height : 90,
+			subscales : [
+				{unit:"week", step:1, template : weekScaleTemplate},
+			]
+		},
 		month : {
 			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 50, scale_height : 90,
 			subscales : [
@@ -90,9 +97,11 @@ angular.module('tasks.gantt', [
 		}
 	}
 	var templates = {
-		task_cell_class : task_cell_class,  // 주말 표시
-		progress_text : progress_text,
-		task_class : task_class
+		progress_text     : progress_text,
+		task_class        : task_class,
+		task_cell_class   : task_cell_class,  // 주말 표시
+		quick_info_header : quick_info_header,
+		quick_info_body   : quick_info_body
 	}
 	// column template 함수
 	function wbsColumnTemplate(task) {
@@ -105,18 +114,7 @@ angular.module('tasks.gantt', [
 	}
 
 	function holderColumnTemplate(task) {
-		var result = '', splliter = '';
-
-		for(var inx = 0, ilength = task.worker.length ; inx < ilength ; inx ++) {
-			for(var jnx = 0, jlength = users.length ; jnx < jlength ; jnx++) {
-				if(task.worker[inx] === users[jnx].id) {
-					result += splliter + users[jnx].name.full;
-					splliter = ', ';
-					continue;
-				}
-			}
-		}
-		return result;
+		return getUsersName(task.worker.length);
 	}
 	function subTaskColumnTemplate(task) {
 		var result = '';
@@ -144,7 +142,7 @@ angular.module('tasks.gantt', [
 	};
 
 	function weekScaleTemplate(date) {
-		var dateToStr = gantt.date.date_to_str("%M %d ");
+		var dateToStr = gantt.date.date_to_str("%m.%d ");
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
 	}
@@ -155,7 +153,7 @@ angular.module('tasks.gantt', [
 		}
 	}
 	function progress_text(start, end, task) {
-		return "<span style='text-align:left;'>"+Math.round(task.progress*100)+ "% </span>";
+		return "<span style='text-align:left;'>" + parseFloat(task.progress * 100).toFixed(1) + "% </span>";
 	}
 	function task_class(start,end,task) {
 		var result = "";
@@ -163,12 +161,49 @@ angular.module('tasks.gantt', [
 			result = "milestone";
 		return result;
 	}
+	function quick_info_header(start, end, task) {
+		return '<h4 class="modal-title text-info" title="' + task.text +'">' + task.text + '</h4>';
+	}
+	function quick_info_body(start, end, task){
+		var date = gantt.templates.task_time(start, end, task),
+			result = '' +
+				'<div class="well">' +
+					'<dl class="dl-horizontal">' +
+						'<dt>wbs</dt>' +
+						'<dd><p class="text-muted">' + task.wbs + '</p></dd>' +
+						'<dt>date</dt>' +
+						'<dd><p class="text-muted">' + date + '</p></dd>' +
+						'<dt>progress</dt>' +
+						'<dd><p class="text-danger">' + parseFloat(task.progress * 100).toFixed(1) + '%</p></dd>'+
+						'<dt>worker</dt>' +
+						'<dd><p class="text-info">' + getUsersName(task.worker) + '</p></dd>' +
+						'<dt>approver</dt>' +
+						'<dd><p class="text-info">' + getUsersName(task.approver) + '</p></dd>' +
+					'</dl>'+
+				'</div>';
+		return result;
+	}
 
-	function set(type) {
+	function getUsersName(ids) {
+		var result = '', splliter = '';
+		for(var inx = 0, ilen = ids.length ; inx < ilen ; inx ++) {
+			for(var jnx = 0, jlen = users.length ; jnx < jlen ; jnx++) {
+				if(ids[inx] === users[jnx].id) {
+					result += splliter + users[jnx].name.full;
+					splliter = ', ';
+					continue;
+				}
+			}
+		}
+		return result;
+	}
+
+	function initialize(type) {
 		var options = {};
 		scaleType = type;
 
 		angular.extend(angular.copy(common, options), optionsPerType[type]);
+		// angular.extend(angular.copy(common, options), {});
 
 		angular.forEach(options, function(value, key){
 			gantt.config[key] = value;
@@ -178,47 +213,129 @@ angular.module('tasks.gantt', [
 			gantt.templates[key] = value;
 		});
 	}
-	function setUsers(data) {
+	function setUserData(data) {
 		users = data.users;
 	}
 	return {
-		set      : set,
-		setUsers : setUsers
+		initialize  : initialize,
+		setUserData : setUserData
 	};
 })
-.factory('ganttHandler', ['ganttOptions', 'ganttSortable', 'taskModalHandler', function(ganttOptions, ganttSortable, taskModalHandler) {
-	// TO-DO : ganttHandler와 modal handler 분리 필요함 TaskController 에서 사용 대비
-	var taskModal = null;
-	function init(element, type) {
-		ganttOptions.set(type);
+.factory('ganttOverWriteHandler', [function() {
+	function initialize() {
+		// gantt 의 '+' 이벤트 처리 함수 overwrite
+		gantt._click.gantt_add = dhtmlx.bind(function (event, id) {
+			var task = id ? this.getTask(id) : !1, start_date = "";
+			if(task) start_date = task.start_date;
+			else {
+				var order  = this._order[0];
+				start_date = orders ? this.getTask(order).start_date : this.getState().min_date
+			}
+			task && (task.$open = !0);
+			var newTask = {
+				wbs        : task.wbs + '.' + (this.getChildren(task.id).length + 1),
+				name       : this.locale.labels.new_task,
+				start_date : this.templates.xml_format(start_date),
+				end_date   : this.templates.xml_format(start_date),
+				duration : 0,
+				progress : 0,
+				leaf     : true,
+				create   : true,
+				parent   : task
+			}
+			// onBeforeTaskCreated event를 추가하여 custom form 화면을 호출하도록 한다.
+			this.open(task.id);
+			this.callEvent("onBeforeTaskCreated", [newTask]);
+		}, gantt);
+		// gantt quick info box overwrite
+		gantt._init_quick_info = function () {
+			if (!this._quick_info_box) {
+				var element = this._quick_info_box = document.createElement("div");
+				element.className = "dhx_cal_quick_info";
 
-		attachEvents();
+				var inner = '' +
+				'<div class="modal-modal">' +
+					'<div class="modal-content">' +
+						'<div class="modal-header"></div>' +
+						'<div class="modal-body"></div>' +
+						'<div class="modal-footer">' +
+							'<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>' +
+							'<button type="submit" class="edit btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Edit</button>' +
+						'</div>' +
+					'</div>' +
+				'</div>';
+				element.innerHTML = inner;
 
-		element.dhx_gantt({});
+				dhtmlxEvent(element, "click", function (ev) {
+					ev = ev || event, gantt._qi_button_click(ev.target || ev.srcElement)
+				});
+				gantt.config.quick_info_detached && dhtmlxEvent(gantt.$task_data, "scroll", function () {
+					gantt.hideQuickInfo()
+				});
+			}
+			return this._quick_info_box
+		}
+		gantt._qi_button_click = function (ev) {
+			var element = gantt._quick_info_box;
+			if (ev && ev != element) {
+				var className = ev.className;
+				if (-1 != className.indexOf("btn")) {
+					var boxId = gantt._quick_info_box_id;
+					gantt.$click.buttons[className.split(" ")[0]](boxId)
+				} else gantt._qi_button_click(ev.parentNode)
+			}
+		}
+		gantt._fill_quick_data = function (taskId) {
+			var task = gantt.getTask(taskId),
+				element = gantt._quick_info_box;
+			gantt._quick_info_box_id = taskId;
+			var children = element.firstChild.firstChild.firstChild;
+			children.innerHTML = gantt.templates.quick_info_header(task.start_date, task.end_date, task);
+			children = children.nextSibling;
+			children.innerHTML = gantt.templates.quick_info_body(task.start_date, task.end_date, task);
+		}
+		// quick info 에 사용하는 edit 함수 overwrite
+		gantt.$click.buttons.edit = function (id) {
+			taskModalHandler.openModal(gantt.getTask(id));
+		}
 	}
-	function parse(data) {
-		ganttOptions.setUsers(data);
-		gantt.clearAll();
-		gantt.parse(data);
+	return {
+		initialize  : initialize
+	}
+}])
+.factory('ganttEventsHandler', ['ganttSortable', 'ganttOverWriteHandler', function(ganttSortable, ganttOverWriteHandler) {
+	var ganttEvents = {
+		'onGanttReady' : onGanttReady,
+		'onLoadEnd'         : onLoadEnd,
+		'onTaskDblClick'    : onTaskDblClick,
+		'onBeforeTaskCreated' : onBeforeTaskCreated,
+		'onBeforeTaskChanged' : onBeforeTaskChanged,
+		'onAfterTaskUpdate' : onAfterTaskUpdate,
+		'onAfterTaskDrag'   : onAfterTaskDrag
 	}
 
-	function render(type) {
-		ganttOptions.set(type);
-
-		gantt.render(type);
+	function initialize() {
+		angular.forEach(ganttEvents, function(evFn, evName){
+			gantt.attachEvent(evName, evFn);
+		});
 	}
 
-	function attachEvents() {
-		gantt.attachEvent('onLoadEnd', onLoadEnd);
-		gantt.attachEvent('onTaskDblClick', onTaskDblClick);
-		gantt.attachEvent('onAfterTaskUpdate', onAfterTaskUpdate);
-		gantt.attachEvent('onAfterTaskDrag', onAfterTaskDrag);
+	function onGanttReady() {
+		ganttOverWriteHandler.initialize();
 	}
 	function onLoadEnd() {
 		ganttSortable.sort();
 	}
 	function onTaskDblClick(id, event) {
 		taskModalHandler.openModal(gantt.getTask(id));
+	}
+	function onBeforeTaskCreated(task) {
+		taskModalHandler.openModal(task);
+		console.log('onBeforeTaskCreated : ' + task);
+	}
+	function onBeforeTaskChanged(id, mode, task) {
+		console.log('onBeforeTaskChanged : ' + id + '/' + mode);
+		return true;
 	}
 	function onAfterTaskUpdate(id, task) {
 		var tasks = [];
@@ -232,10 +349,41 @@ angular.module('tasks.gantt', [
 	function onAfterTaskDrag(id, mode, event) {
 		// console.log('onAfterTaskDrag : ' + mode);
 	}
+
 	return {
-		init : init,
-		parse : parse,
-		render : render
+		initialize  : initialize
+	}
+}])
+.factory('ganttHandler', ['ganttOptions', 'taskModalHandler', 'ganttEventsHandler',
+	function(ganttOptions, taskModalHandler, ganttEventsHandler) {
+
+	// TO-DO : ganttHandler와 modal handler 분리 필요함 TaskController 에서 사용 대비
+	var taskModal = null;
+	function initialize(element, type) {
+		ganttOptions.initialize(type);
+
+		attachEvents();
+
+		element.dhx_gantt({});
+	}
+	function parse(data) {
+		ganttOptions.setUserData(data);
+		gantt.clearAll();
+		gantt.parse(data);
+	}
+
+	function render(type) {
+		ganttOptions.initialize(type);
+
+		gantt.render(type);
+	}
+	function attachEvents() {
+		ganttEventsHandler.initialize();
+	}
+	return {
+		initialize : initialize,
+		parse      : parse,
+		render     : render
 	};
 }])
 .directive('dhtmlxGantt', ['ganttHandler', function(ganttHandler) {
@@ -244,14 +392,10 @@ angular.module('tasks.gantt', [
 		restrict : 'A',
 		refresh: false,
 		link: function(scope, element, attrs, ngModel) {
+			//To-Do: refresh
+			if (ngModel) {ngModel.$render = function() { } };
 
-			if (ngModel) {
-				ngModel.$render = function() {
-					//To-Do: refresh
-				}
-			};
-
-			ganttHandler.init(element, scope.currentScale);
+			ganttHandler.initialize(element, scope.currentScale);
 		}
 	}
 }])

@@ -36,6 +36,7 @@ module.exports = function (config, handler) {
 	app.get('/menus', handler.ensureAuthenticated, handler.getMenus);
 	app.get('/gantt/:wbs', handler.ensureAuthenticated, handler.getGantt);
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
+	app.get('/orgs', handler.ensureAuthenticated, handler.getOrgs);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
