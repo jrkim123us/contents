@@ -1,7 +1,7 @@
 <div class="container">
-	<div class="page-header">
+	<!-- <div class="page-header">
 		<h1>Dynamic scale gantt chart</h1>
-	</div>
+	</div> -->
 	<ol class="breadcrumb" ng-hide="isRoot">
 		<li><a href="/tasks/gantt/1#{{currentScale}}">Root</a></li>
 		<li class="active">{{currentWbs}} - {{currentTaskName}}</li>
@@ -11,13 +11,25 @@
 			<h3 class="panel-title">{{currentWbs}} - {{currentTaskName}}</h3>
 		</div>
 		<div class="panel-body">
-			<ul class="nav nav-pills">
-				<li ng-class="{active : currentScale == 'day'}"><a href="#day">Day</a></li>
-				<li ng-class="{active : currentScale == 'week'}"><a href="#week">Week</a></li>
-				<li ng-class="{active : currentScale == 'month'}"><a href="#month">Month</a></li>
-				<li ng-class="{active : currentScale == 'year'}"><a href="#year">Year</a></li>
-			</ul>
-			<div dhtmlx-gantt ng-model="subTaskList" style="height:600px; margin-top:10px;" ></div>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-8 col-lg-8">
+					<ul class="nav nav-pills">
+						<li ng-class="{active : currentScale == 'day'}"><a href="#day">Day</a></li>
+						<li ng-class="{active : currentScale == 'week'}"><a href="#week">Week</a></li>
+						<li ng-class="{active : currentScale == 'month'}"><a href="#month">Month</a></li>
+						<li ng-class="{active : currentScale == 'year'}"><a href="#year">Year</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-2 col-xs-6 col-sm-4 col-md-2 col-lg-2">
+					<div class="pull-right">
+						<input bs-switch ng-model="quickInfoEnable"
+							switch-size="{{switchOption.size}}"
+							switch-on="{{switchOption.class.on}}" switch-off="{{switchOption.class.off}}"
+							switch-on-label="{{switchOption.label.on}}" switch-off-label="{{switchOption.label.off}}">
+					</div>
+				</div>
+			</div>
+			<div dhtmlx-gantt ng-model="subTaskList" style="height:720px; margin-top:10px;" ></div>
 		</div>
 	</div>
 </div>

@@ -132,7 +132,8 @@ module.exports = function (grunt) {
 				src:[
 					'<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js',
 					'<%= vendorDir %>/angular-ui-sortable/src/sortable.js',
-					'<%= vendorDir %>/angular-ui-select2/src/select2.js'
+					'<%= vendorDir %>/angular-ui-select2/src/select2.js',
+					'<%= vendorDir %>/angular-bootstrap-switch/dist/angular-bootstrap-switch.js'
 				],
 				dest: '<%= distdir %>/bootstrap.js'
 			},
@@ -143,7 +144,8 @@ module.exports = function (grunt) {
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.widget.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.mouse.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js',
-					'<%= vendorDir %>/select2/select2.js'
+					'<%= vendorDir %>/select2/select2.js',
+					'<%= vendorDir %>/bootstrap-switch/static/js/bootstrap-switch.js'
 				],
 				dest: '<%= distdir %>/jquery.js'
 			},

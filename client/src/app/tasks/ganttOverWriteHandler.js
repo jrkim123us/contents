@@ -1,5 +1,5 @@
 angular.module('tasks.ganttOverWriteHandler', [])
-.factory('ganttOverWriteHandler', [function() {
+.factory('ganttOverWriteHandler', ['taskModalHandler', function(taskModalHandler) {
 	function initialize() {
 		// gantt 의 '+' 이벤트 처리 함수 overwrite
 		gantt._click.gantt_add = dhtmlx.bind(function (event, id) {
@@ -26,6 +26,13 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			this.callEvent("onBeforeTaskCreated", [newTask]);
 		}, gantt);
 		// gantt quick info box overwrite
+		gantt.showQuickInfo = function (taskId) {
+			if (gantt.config.quick_info_enable && taskId != this._quick_info_box_id) {
+				this.hideQuickInfo(!0);
+				var element = this._get_event_counter_part(taskId);
+				element && (this._quick_info_box = this._init_quick_info(element), this._fill_quick_data(taskId), this._show_quick_info(element))
+			}
+		}
 		gantt._init_quick_info = function () {
 			if (!this._quick_info_box) {
 				var element = this._quick_info_box = document.createElement("div");
@@ -36,10 +43,7 @@ angular.module('tasks.ganttOverWriteHandler', [])
 					'<div class="modal-content">' +
 						'<div class="modal-header"></div>' +
 						'<div class="modal-body"></div>' +
-						'<div class="modal-footer">' +
-							'<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>' +
-							'<button type="submit" class="edit btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Edit</button>' +
-						'</div>' +
+						'<div class="modal-footer"></div>' +
 					'</div>' +
 				'</div>';
 				element.innerHTML = inner;
@@ -65,17 +69,34 @@ angular.module('tasks.ganttOverWriteHandler', [])
 		}
 		gantt._fill_quick_data = function (taskId) {
 			var task = gantt.getTask(taskId),
-				element = gantt._quick_info_box;
+				element = gantt._quick_info_box,
+				children = element.firstChild.firstChild.firstChild;
+
 			gantt._quick_info_box_id = taskId;
-			var children = element.firstChild.firstChild.firstChild;
 			children.innerHTML = gantt.templates.quick_info_header(task.start_date, task.end_date, task);
 			children = children.nextSibling;
 			children.innerHTML = gantt.templates.quick_info_body(task.start_date, task.end_date, task);
+			children = children.nextSibling;
+			children.innerHTML = gantt.templates.quick_info_footer(task.start_date, task.end_date, task);
 		}
 		// quick info 에 사용하는 edit 함수 overwrite
-		gantt.$click.buttons.edit = function (id) {
-			taskModalHandler.openModal(gantt.getTask(id));
-		}
+		gantt.$click.buttons = {
+			edit : function (id) {
+				taskModalHandler.openModal(gantt.getTask(id));
+			},
+			view : function (id) {}
+		};
+
+		addEventsQuickInfoBoxHide();
+	}
+	// quick info box 를 숨겨야 할 이벤트를 추가 등록한다.
+	function addEventsQuickInfoBoxHide() {
+		var eventsNm = ["onTaskDblClick", "onBeforeTaskCreated"],
+			hideFn = function() {
+				return gantt._hideQuickInfo(), !0
+			}
+		for (var inx =0 , ilen = eventsNm.length; inx < ilen ; inx++)
+			gantt.attachEvent(eventsNm[inx], hideFn);
 	}
 	return {
 		initialize  : initialize

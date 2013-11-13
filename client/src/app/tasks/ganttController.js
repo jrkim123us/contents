@@ -4,7 +4,8 @@ angular.module('tasks.gantt', [
 	'tasks.ganttOverWriteHandler',
 	'tasks.ganttEventsHandler',
 	'tasks.ganttHandler',
-	'tasks.form'
+	'tasks.form',
+	'frapontillo.bootstrap-switch'
 ])
 .config(['$routeProvider', function ($routeProvider) {
 	$routeProvider.when('/tasks/gantt/:wbs', {
@@ -32,6 +33,12 @@ angular.module('tasks.gantt', [
 
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
+	$scope.quickInfoEnable = true;
+	$scope.switchOption = {
+		size  : 'large',
+		label : {on : 'On', off : 'Off'},
+		class : {on : 'success', off: 'warning'}
+	}
 
 	// wbsId 또는 scale 값이 변경 되었을 때 page reload 없이 처리하기 위함
 	$scope.$on('$locationChangeSuccess', function(event, newPath, prevPath) {
@@ -52,6 +59,9 @@ angular.module('tasks.gantt', [
 	$scope.$watch('currentScale', function() {
 		ganttHandler.render($scope.currentScale);
 	}); // initialize the watch
+	$scope.$watch('quickInfoEnable', function(enable) {
+		ganttHandler.setQuickInfoEnable(enable);
+	});
 
 	$scope.getTask = function () {
 		Gantt.get({wbsId: $scope.currentWbs}, function(result) {

@@ -4,21 +4,23 @@ angular.module('tasks.ganttOptions', [])
 	var common = {
 		order_branch : true,
 		// grid column customization
-		grid_width        : 360,
-		xml_date          : "%Y-%m-%d",
-		task_date         :  "%Y.%m.%d", // lightbox header date format
-		drag_links        : false,
-		show_progress     : true, // loading spinner
-		drag_progress     : false,
-		round_dnd_dates   : false, // month, year scale에서 drag&drop 작업시 일정 정보가 scale 기준으로 rounding 되지 않게 함
-		details_on_create : false, // '+' button으로 task를 생성하고 lightbox를 호출하지 않음
+		xml_date   : "%Y-%m-%d",
+		task_date  : "%Y.%m.%d", // lightbox header date format
+		grid_width : 290,
+		drag_links : false,
+		show_progress       : true, // loading spinner
+		drag_progress       : false,
+		round_dnd_dates     : false, // month, year scale에서 drag&drop 작업시 일정 정보가 scale 기준으로 rounding 되지 않게 함
+		details_on_create   : false, // '+' button으로 task를 생성하고 lightbox를 호출하지 않음
+		quick_info_enable   : true,
+		quick_info_detached : true,
 		columns : [
 			{name:"wbs", label:"WBS", tree:true, width:150, template: wbsColumnTemplate },
 			{name:"text", label:"Task", align: "left", width:100, template: textColumnTemplate},
 			/*{name:"start_date", label:"시작일자", align: "center", width:90 },
 			{name:"duration",   label:"기간",   align: "center", width:70 },
-			{name:"holder",   label:"담당자",   align: "center", width:150, template: holderColumnTemplate},*/
-			{name:"button",   label:"View",   align: "center", width:70 , template: subTaskColumnTemplate},
+			{name:"holder",   label:"담당자",   align: "center", width:150, template: holderColumnTemplate},
+			{name:"button",   label:"View",   align: "center", width:70 , template: subTaskColumnTemplate},*/
 			{name:"add", label:"", width:40 }
 		]
 	}
@@ -56,7 +58,8 @@ angular.module('tasks.ganttOptions', [])
 		task_class        : task_class,
 		task_cell_class   : task_cell_class,  // 주말 표시
 		quick_info_header : quick_info_header,
-		quick_info_body   : quick_info_body
+		quick_info_body   : quick_info_body,
+		quick_info_footer : quick_info_footer
 	}
 	// column template 함수
 	function wbsColumnTemplate(task) {
@@ -138,6 +141,16 @@ angular.module('tasks.ganttOptions', [])
 				'</div>';
 		return result;
 	}
+	function quick_info_footer(start, end, task) {
+		var viewBtn = !task.leaf ? '' +
+			'<a href="/tasks/gantt/' + task.wbs +'#' + scaleType + '"class="btn btn-info" role="button">' +
+				'<span class="glyphicon glyphicon-zoom-in"></span> View' +
+			'</a>' : '',
+			result = '' + viewBtn +
+			'<button type="button" class="delete btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>' +
+			'<button type="submit" class="edit btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Edit</button>';
+		return result;
+	}
 
 	function getUsersName(ids) {
 		var result = '', splliter = '';
@@ -171,8 +184,15 @@ angular.module('tasks.ganttOptions', [])
 	function setUserData(data) {
 		users = data.users;
 	}
+	function setQuickInfoEnable(enable) {
+		gantt.config.quick_info_enable = enable;
+		// 현재 Quick info 떠 있는 경우 Hide
+		if(!enable)
+			gantt.callEvent('onEmptyClick');
+	}
 	return {
 		initialize  : initialize,
-		setUserData : setUserData
+		setUserData : setUserData,
+		setQuickInfoEnable : setQuickInfoEnable
 	};
 })

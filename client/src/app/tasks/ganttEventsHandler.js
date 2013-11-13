@@ -1,15 +1,16 @@
 angular.module('tasks.ganttEventsHandler', [])
-.factory('ganttEventsHandler', ['ganttSortable', 'ganttOverWriteHandler', function(ganttSortable, ganttOverWriteHandler) {
+.factory('ganttEventsHandler', ['ganttSortable', 'ganttOverWriteHandler', 'taskModalHandler',
+	function(ganttSortable, ganttOverWriteHandler, taskModalHandler) {
 	var ganttEvents = {
-		'onGanttReady' : onGanttReady,
-		'onLoadEnd'         : onLoadEnd,
-		'onTaskDblClick'    : onTaskDblClick,
+		'onGanttReady'        : onGanttReady,
+		'onLoadEnd'           : onLoadEnd,
+		'onTaskClick'         : onTaskClick,
+		'onTaskDblClick'      : onTaskDblClick,
 		'onBeforeTaskCreated' : onBeforeTaskCreated,
 		'onBeforeTaskChanged' : onBeforeTaskChanged,
-		'onAfterTaskUpdate' : onAfterTaskUpdate,
-		'onAfterTaskDrag'   : onAfterTaskDrag
+		'onAfterTaskUpdate'   : onAfterTaskUpdate,
+		'onAfterTaskDrag'     : onAfterTaskDrag
 	}
-
 	function initialize() {
 		angular.forEach(ganttEvents, function(evFn, evName){
 			gantt.attachEvent(evName, evFn);
@@ -21,6 +22,13 @@ angular.module('tasks.ganttEventsHandler', [])
 	}
 	function onLoadEnd() {
 		ganttSortable.sort();
+	}
+	function onTaskClick(id, event) {
+		// gantt add 버튼 클릭한 경우
+		if(event.target.className === 'gantt_add') {
+			// quick info box를 지운다.
+			gantt.callEvent('onEmptyClick');
+		}
 	}
 	function onTaskDblClick(id, event) {
 		taskModalHandler.openModal(gantt.getTask(id));
