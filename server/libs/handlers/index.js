@@ -120,14 +120,15 @@ module.exports = function (config, db) {
 			});
 		},
 		setTask: function(req, res) {
-			db.Task.setTask(req.body, function(err, data) {
-				if(err) throw err;
+			console.log('setTask : ' + req.body);
+			// db.Task.setTask(req.body, function(err, data) {
+			// 	if(err) throw err;
 
 				/*if(!data) data = {};
 				res.send({saved : data});
 				debug('setTast : ' + data);*/
-				res.end('{}');
-			});
+				// res.end('{}');
+			// });
 		},
 // Task End
 

@@ -139,6 +139,7 @@ module.exports = function (grunt) {
 			},
 			jquery: {
 				src:[
+					'<%= vendorDir %>/underscore/underscore.js',
 					'<%= vendorDir %>/jquery/jquery.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.core.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.widget.js',

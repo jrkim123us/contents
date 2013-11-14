@@ -1,4 +1,4 @@
-<form name="form" novalidate>
+<form name="form" id="form" novalidate>
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelForm()">&times;</button>
 		<h4 class="modal-title">{{task.name || 'Task 는 필수입력 항목입니다.'}}</h4>
@@ -14,7 +14,7 @@
 				<p class="form-control-static">{{task.wbs}}</p>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" ng-class="{'has-error' : form.name.$invalid &amp;&amp;  form.name.$dirty}">
 			<label for="wbs" class="col-sm-2 control-label">Task</label>
 			<div class="col-sm-10">
 				<input class="form-control" id="name" name="name" type="text" ng-model="task.name" placeholder="Task 는 필수입력 항목입니다." required autofocus>
@@ -46,10 +46,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" ng-class="{'has-error' : form.duration.$invalid &amp;&amp;  form.duration.$dirty}">
 			<label for="wbs" class="col-sm-2 control-label">기간</label>
 			<div class="col-sm-10">
-				<input class="form-control" id="duration" name="duration" type="number" min="0" ng-model="task.duration" ng-show="task.leaf" required >
+				<input class="form-control" id="duration" name="duration" type="number" min="0" ng-model="task.duration" ng-show="task.leaf" placeholder="기간은 필수입력 항목입니다." required >
 				<p class="form-control-static" ng-hide="task.leaf">{{task.duration}}</p>
 			</div>
 		</div>
@@ -76,16 +76,16 @@
 		<div class="form-group">
 			<label for="wbs" class="col-sm-2 control-label">상세</label>
 			<div class="col-sm-10">
-				<textarea class="form-control" rows="5" id="desc" name="desc" ng-model="task.desc"></textarea>
+				<textarea class="form-control" rows="5" id="desc" name="desc" ng-model="task.desc" placeholder="상세 정보를 입력하세요."></textarea>
 			</div>
 		</div>
 
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-default" ng-click="resetForm()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+		<button type="button" class="btn btn-default" ng-click="form.$setPristine(); resetForm()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
 		<button type="button" class="btn btn-default" ng-click="cancelForm()"><span class="glyphicon glyphicon-remove"></span> Close</button>
 		<button type="button" class="btn btn-danger" ng-hide="task.create"><span class="glyphicon glyphicon-trash"></span> Delete</button>
-		<button type="submit" class="btn btn-success" ng-click="saveForm()" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
+		<button type="submit" class="btn btn-success" ng-click="saveForm()" ng-disabled="form.$pristine || isUnchanged() || form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
 	</div>
 	<!-- <div class="well">
 		<pre>{{task.worker | json}}</pre>

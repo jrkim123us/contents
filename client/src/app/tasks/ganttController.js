@@ -64,7 +64,7 @@ angular.module('tasks.gantt', [
 	});
 
 	$scope.getTask = function () {
-		Gantt.get({wbsId: $scope.currentWbs}, function(result) {
+		Gantt.get({wbs: $scope.currentWbs}, function(result) {
 			$scope.currentTaskName = result.task.name;
 			$scope.currentWbs = result.task.wbs;
 

@@ -34,9 +34,14 @@ module.exports = function (config, handler) {
 	app.post('/login', handler.getLogin);
 	app.post('/logout', handler.getLogout);
 	app.get('/menus', handler.ensureAuthenticated, handler.getMenus);
+
+	/* 조직 */
+	app.get('/orgs', handler.ensureAuthenticated, handler.getOrgs);
+
+	/* TASK 및 Gantt 영역*/
 	app.get('/gantt/:wbs', handler.ensureAuthenticated, handler.getGantt);
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
-	app.get('/orgs', handler.ensureAuthenticated, handler.getOrgs);
+	app.post('/tasks/:wbs', handler.ensureAuthenticated, handler.setTask);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
