@@ -1,3 +1,4 @@
+/* not used */
 angular.module('directives.modal', []).directive('modal', ['$parse',function($parse) {
 	var backdropEl;
 	var body = angular.element(document.getElementsByTagName('body')[0]);

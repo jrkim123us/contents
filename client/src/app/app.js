@@ -10,7 +10,7 @@ angular.module('app', [
 	'services.i18nNotifications',
 	'services.httpRequestTracker',
 	'security',
-	/*'directives.crud',*/
+	'directives',
 	'templates.app',
 	'templates.common',
 	'resources'

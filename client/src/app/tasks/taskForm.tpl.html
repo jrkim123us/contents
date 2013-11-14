@@ -1,0 +1,94 @@
+<form name="form" novalidate>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelForm()">&times;</button>
+		<h4 class="modal-title">{{task.name || 'Task 는 필수입력 항목입니다.'}}</h4>
+	</div>
+	<div class="modal-body form-horizontal">
+		<div class="alert alert-warning alert-dismissable" ng-hide="task.leaf">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>주의!</strong> 일정 수정은 최하위 항목만 가능합니다.
+		</div>
+		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">WBS</label>
+			<div class="col-sm-10">
+				<p class="form-control-static">{{task.wbs}}</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">Task</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="name" name="name" type="text" ng-model="task.name" placeholder="Task 는 필수입력 항목입니다." required autofocus>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">일자</label>
+			<div class="col-sm-10">
+				<div class="row">
+					<div class="col-sm-7" ng-show="task.leaf">
+						<div class="input-group" ng-model="task.start_date">
+							<input class="form-control" type="text" id="start_date" name="start_date"
+								datepicker-popup="yyyy.MM.dd" ng-model="task.start_date" datepicker-options="dateOptions"
+								is-open="opened" focus="focusStart" required>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="focusStart=true"><span class="glyphicon glyphicon-calendar"></span></button>
+							</span>
+						</div>
+					</div>
+					<div class="col-sm-3" ng-hide="task.leaf">
+						<p class="form-control-static">{{task.start_date  | date : 'yyyy.MM.dd'}}</p>
+					</div>
+					<div class="col-sm-1">
+						<p class="form-control-static"> ~ </p>
+					</div>
+					<div class="col-sm-3">
+						<p class="form-control-static">{{task.end_date  | date : 'yyyy.MM.dd'}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">기간</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="duration" name="duration" type="number" min="0" ng-model="task.duration" ng-show="task.leaf" required >
+				<p class="form-control-static" ng-hide="task.leaf">{{task.duration}}</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="worker" class="col-sm-2 control-label">담당자</label>
+			<div class="col-sm-10">
+				<select id="worker" name="worker" multiple  class="form-control" ui-select2="select2Options" ng-model="task.worker">
+					<optgroup ng-repeat="org in orgs" label="{{org.name}}">
+						<option ng-repeat="worker in org.member" value="{{worker.id}}">{{worker.name.full}}</option>
+					</optgroup>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="worker" class="col-sm-2 control-label">승인자</label>
+			<div class="col-sm-10">
+				<select id="approver" name="approver" multiple  class="form-control" ui-select2="select2Options" ng-model="task.approver">
+					<optgroup ng-repeat="org in orgs" label="{{org.name}}">
+						<option ng-repeat="approver in org.member" value="{{approver.id}}">{{approver.name.full}}</option>
+					</optgroup>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="wbs" class="col-sm-2 control-label">상세</label>
+			<div class="col-sm-10">
+				<textarea class="form-control" rows="5" id="desc" name="desc" ng-model="task.desc"></textarea>
+			</div>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="resetForm()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+		<button type="button" class="btn btn-default" ng-click="cancelForm()"><span class="glyphicon glyphicon-remove"></span> Close</button>
+		<button type="button" class="btn btn-danger" ng-hide="task.create"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+		<button type="submit" class="btn btn-success" ng-click="saveForm()" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
+	</div>
+	<!-- <div class="well">
+		<pre>{{task.worker | json}}</pre>
+		<pre>{{task.approver | json}}</pre>
+	</div> -->
+</form>

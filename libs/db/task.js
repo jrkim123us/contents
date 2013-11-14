@@ -23,7 +23,7 @@ schema.virtual('text').get(function () {
 	return this.name
 });
 schema.virtual('start_date').get(function () {
-	if(!this.startDate || !this.leaf) return "";
+	if(!this.startDate || !this.leaf) return undefined;
 
 	return this.startDate.getFullYear() + '-' + this.startDate.getMonth() + '-' + this.startDate.getDate() ;
 });
@@ -32,7 +32,7 @@ schema.virtual('progress').get(function () {
 });
 schema.virtual('duration').get(function () {
 	var msecPerDay = 1000 * 60 * 60 * 24;
-	return (!this.leaf || this.endDate  === undefined || this.startDate === undefined) ? "" : ((this.endDate.getTime() - this.startDate.getTime()) / msecPerDay) + "";
+	return (!this.leaf || this.endDate  === undefined || this.startDate === undefined) ? undefined : ((this.endDate.getTime() - this.startDate.getTime()) / msecPerDay) + "";
 });
 schema.set('toJSON', {
 	virtuals: true
@@ -153,7 +153,8 @@ schema.statics.getGantt = function (wbs, callback) {
 	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
 
 	this.find({wbs : regWbs})
-		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf')
+		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf worker approver')
+		// .populate('worker approver', 'name email')
 		.sort({wbs : 1})
 		.exec(callback);
 };

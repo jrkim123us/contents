@@ -17,6 +17,9 @@ var schema = new Schema({
 schema.virtual('name.full').get(function () {
 	return [this.name.first, this.name.last].join(' ');
 })
+schema.set('toJSON', {
+	virtuals: true
+});
 
 var handleError = function(err) {
 	for(var error in err.errors) {
@@ -53,7 +56,7 @@ schema.statics.getAll = function (callback) {
 	this
 		.find({})
 		.limit(100)
-		.select('-_id name email')
+		.select('_id name email')
 		.exec(callback);
 };
 schema.statics.getAllId = function(callback) {
