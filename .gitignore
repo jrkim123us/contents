@@ -1,9 +1,7 @@
 /**/*.orig
-/node_modules
-/public/libs
+server/node_modules
 /*.log
 /.sass-cache
-/bower_components
 /client/bower_components
 /client/node_modules
 /client/dist

@@ -24,8 +24,8 @@ schema.virtual('text').get(function () {
 });
 schema.virtual('start_date').get(function () {
 	if(!this.startDate || !this.leaf) return undefined;
-
-	return this.startDate.getFullYear() + '-' + this.startDate.getMonth() + '-' + this.startDate.getDate() ;
+	// 중요 node.js의 getMonth는 1월이 0임
+	return this.startDate.getFullYear() + '-' + (this.startDate.getMonth() + 1) + '-' + this.startDate.getDate() ;
 });
 schema.virtual('progress').get(function () {
 	return this.act / 100.0

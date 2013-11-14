@@ -17,7 +17,7 @@ var options = {
 
 app.configure(function() {
 	var rootDir = path.resolve(__dirname, '..');
-	var distFolder = path.resolve(__dirname, '../client/dist'),staticUrl = '/static';
+	var distFolder = path.resolve(__dirname, '../../client/dist'),staticUrl = '/static';
 
 	// all environments
 	app.set('port', process.env.PORT || 80);
