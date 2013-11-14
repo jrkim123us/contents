@@ -3,7 +3,6 @@ angular.module('tasks.ganttHandler', [])
 	function(ganttOptions, ganttEventsHandler) {
 
 	// TO-DO : ganttHandler와 modal handler 분리 필요함 TaskController 에서 사용 대비
-	var taskModal = null;
 	function initialize(element, type) {
 		ganttOptions.initialize(type);
 
@@ -20,7 +19,7 @@ angular.module('tasks.ganttHandler', [])
 	function render(type) {
 		ganttOptions.initialize(type);
 
-		gantt.render(type);
+		gantt.render();
 	}
 
 	function setQuickInfoEnable(enable) {
