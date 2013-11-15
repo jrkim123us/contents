@@ -17,10 +17,11 @@ var schema = new Schema({
 	endDate   : {type: Date},
 	worker    : [{type: Schema.ObjectId, ref: 'User'}],
 	approver  : [{type: Schema.ObjectId, ref: 'User'}],
+	desc       : {type:String},
 	leaf : {type: Boolean}
 });
 schema.virtual('text').get(function () {
-	return this.name
+	return this.name;
 });
 schema.virtual('start_date').get(function () {
 	if(!this.startDate || !this.leaf) return undefined;
@@ -28,7 +29,7 @@ schema.virtual('start_date').get(function () {
 	return this.startDate.getFullYear() + '-' + (this.startDate.getMonth() + 1) + '-' + this.startDate.getDate() ;
 });
 schema.virtual('progress').get(function () {
-	return this.act / 100.0
+	return this.act ? this.act / 100.0 : 0.0;
 });
 schema.virtual('duration').get(function () {
 	var msecPerDay = 1000 * 60 * 60 * 24;
@@ -88,7 +89,7 @@ schema.statics.initialize = function (callback) {
 			.exec(function(err, data) {
 				if(err) throw err;
 				checkLeaf(data);
-			})
+			});
 	}
 	function checkLeaf(data) {
 		var current = data.shift();
@@ -153,7 +154,7 @@ schema.statics.getGantt = function (wbs, callback) {
 	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
 
 	this.find({wbs : regWbs})
-		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf worker approver')
+		.select('_id parent wbs name act startDate endDate text start_date progress duration leaf worker approver desc')
 		// .populate('worker approver', 'name email')
 		.sort({wbs : 1})
 		.exec(callback);
@@ -177,6 +178,9 @@ schema.statics.getTasksByParent = function (parentWbs, callback) {
 schema.statics.setTask = function (task, callback) {
 	delete task._id;
 	Task.update({wbs: task.wbs}, task, callback);
+};
+schema.statics.addTask = function (task, callback) {
+	new Task(task).save(callback);
 };
 
 var Task = mongoose.model('Task', schema);

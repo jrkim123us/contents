@@ -7,20 +7,21 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			if(task) start_date = task.start_date;
 			else {
 				var order  = this._order[0];
-				start_date = orders ? this.getTask(order).start_date : this.getState().min_date
+				start_date = orders ? this.getTask(order).start_date : this.getState().min_date;
 			}
 			task && (task.$open = !0);
 			var newTask = {
 				wbs        : task.wbs + '.' + (this.getChildren(task.id).length + 1),
 				name       : this.locale.labels.new_task,
-				start_date : this.templates.xml_format(start_date),
-				end_date   : this.templates.xml_format(start_date),
-				duration : 0,
-				progress : 0,
-				leaf     : true,
-				create   : true,
-				parent   : task
-			}
+				text       : this.locale.labels.new_task,
+				start_date : start_date,
+				end_date   : start_date,
+				duration   : 0,
+				progress   : 0,
+				leaf       : true,
+				create     : true,
+				parent     : task.id
+			};
 			// onBeforeTaskCreated event를 추가하여 custom form 화면을 호출하도록 한다.
 			this.open(task.id);
 			this.callEvent("onBeforeTaskCreated", [newTask]);
@@ -30,9 +31,9 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			if (gantt.config.quick_info_enable && taskId != this._quick_info_box_id) {
 				this.hideQuickInfo(!0);
 				var element = this._get_event_counter_part(taskId);
-				element && (this._quick_info_box = this._init_quick_info(element), this._fill_quick_data(taskId), this._show_quick_info(element))
+				element && (this._quick_info_box = this._init_quick_info(element), this._fill_quick_data(taskId), this._show_quick_info(element));
 			}
-		}
+		};
 		gantt._init_quick_info = function () {
 			if (!this._quick_info_box) {
 				var element = this._quick_info_box = document.createElement("div");

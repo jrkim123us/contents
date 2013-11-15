@@ -11,25 +11,37 @@ angular.module('tasks.ganttEventsHandler', [])
 		'onBeforeTaskChanged' : onBeforeTaskChanged,
 		'onAfterTaskUpdate'   : onAfterTaskUpdate,
 		'onAfterTaskDrag'     : onAfterTaskDrag
-	}
+	};
 	function initialize() {
 		angular.forEach(ganttEvents, function(evFn, evName){
 			gantt.attachEvent(evName, evFn);
 		});
 	}
 	function openModal(task) {
+		var originalTask = angular.copy(task);
 		taskModal = taskModalHandler.openModal(task);
 
 		taskModal.result
-			.then(function() { // save 버튼으로 닫힌 경우
+			.then(function(args) { // save 버튼으로 닫힌 경우
+				if(args.length > 1 && args[0] === 'create') {
+					addTaskOnGantt(args[1]);
+				}
 			})
 			.catch(function(reason) { // cancel 버튼 등 reject 경우
-				if(reason === "backdrop click")
-					console.log('here?');
+				// console.log('closed unexpected');
+				if(reason === "backdrop click") {
+					console.log('To-Do: closed unexpected');
+					// task 변경 전으로 수정해야 함
+				}
 			})
 			.finally(function() { // 무조건 실행
 				gantt.render();
 			});
+	}
+
+	function addTaskOnGantt(task) {
+		gantt.addTask(task);
+		gantt.showTask(task.id);
 	}
 
 	function onGanttReady() {
@@ -70,5 +82,5 @@ angular.module('tasks.ganttEventsHandler', [])
 
 	return {
 		initialize  : initialize
-	}
-}])
+	};
+}]);

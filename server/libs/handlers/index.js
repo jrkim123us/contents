@@ -98,7 +98,7 @@ module.exports = function (config, db) {
 				}
 			}, function(err, data) {
 				return res.send(data);
-			})
+			});
 		},
 		getTask: function(req, res) {
 			var wbs = req.params.wbs || '1';
@@ -121,14 +121,18 @@ module.exports = function (config, db) {
 		},
 		setTask: function(req, res) {
 			console.log('setTask : ' + req.body);
-			// db.Task.setTask(req.body, function(err, data) {
-			// 	if(err) throw err;
-
-				/*if(!data) data = {};
-				res.send({saved : data});
-				debug('setTast : ' + data);*/
-				// res.end('{}');
-			// });
+			db.Task.setTask(req.body, function(err, data) {
+				var statusCode = 200;
+				if(err) throw err;
+				if(parseInt(data, 10) === 0) statusCode = 204;
+				res.send(statusCode);
+			});
+		},
+		addTask: function(req, res) {
+			db.Task.addTask(req.body, function(err, saved) {
+				if(err) throw err;
+				res.json(200, saved);
+			});
 		},
 // Task End
 

@@ -42,6 +42,7 @@ module.exports = function (config, handler) {
 	app.get('/gantt/:wbs', handler.ensureAuthenticated, handler.getGantt);
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.post('/tasks/:wbs', handler.ensureAuthenticated, handler.setTask);
+	app.put('/tasks/:wbs', handler.ensureAuthenticated, handler.addTask);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);
