@@ -44,7 +44,7 @@ angular.module('tasks.task', [
 	}); // initialize the watch
 
 	$scope.getTask = function () {
-		Tasks.get({wbsId: $scope.currentWbs}, function(result) {
+		Tasks.get({wbs: $scope.currentWbs}, function(result) {
 			$scope.currentTaskName = result.task.name;
 			$scope.subTaskList = result.childs;
 			$scope.breadcrumbList = getParentsWbs(result.task.wbs);

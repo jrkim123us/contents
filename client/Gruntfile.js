@@ -139,6 +139,7 @@ module.exports = function (grunt) {
 			},
 			jquery: {
 				src:[
+					'<%= vendorDir %>/underscore/underscore.js',
 					'<%= vendorDir %>/jquery/jquery.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.core.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.widget.js',
@@ -209,11 +210,17 @@ module.exports = function (grunt) {
 		watch:{
 			all: {
 				files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
-				tasks:['default','timestamp']
+				tasks:['default','timestamp'],
+				options: {
+					livereload: true,
+				}
 			},
 			build: {
 				files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
-				tasks:['build','timestamp']
+				tasks:['build','timestamp'],
+				options: {
+					livereload: true,
+				}
 			}
 		},
 		jshint:{

@@ -120,7 +120,7 @@ angular.module('tasks.ganttOptions', [])
 		return result;
 	}
 	function quick_info_header(start, end, task) {
-		return '<h4 class="modal-title text-info" title="' + task.text +'">' + task.text + '</h4>';
+		return '<h4 class="modal-title text-info" title="' + task.name +'">' + task.name + '</h4>';
 	}
 	function quick_info_body(start, end, task){
 		var date = gantt.templates.task_time(start, end, task),
