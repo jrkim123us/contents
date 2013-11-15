@@ -23,8 +23,8 @@ angular.module('tasks.ganttEventsHandler', [])
 
 		taskModal.result
 			.then(function(args) { // save 버튼으로 닫힌 경우
-				if(args.length > 1 && args[0] === 'create') {
-					addTaskOnGantt(args[1]);
+				if(args.length > 1 ) {
+					processTaskOnGantt(args[0], args[1]);
 				}
 			})
 			.catch(function(reason) { // cancel 버튼 등 reject 경우
@@ -39,9 +39,13 @@ angular.module('tasks.ganttEventsHandler', [])
 			});
 	}
 
-	function addTaskOnGantt(task) {
-		gantt.addTask(task);
-		gantt.showTask(task.id);
+	function processTaskOnGantt(type, task) {
+		if(type === 'create') {
+			gantt.addTask(task);
+			gantt.showTask(task.id);
+		} else if (type === 'delete') {
+			gantt.deleteTask(task.id);
+		}
 	}
 
 	function onGanttReady() {

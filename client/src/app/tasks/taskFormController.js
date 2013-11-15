@@ -62,7 +62,7 @@ angular.module('tasks.form', ['ui.select2'])
 
 		return isUnchanged;
 	};
-	$scope.saveForm = function() {
+	$scope.save = function() {
 		var keys = ['wbs', 'name', 'desc', 'parent', 'leaf'],
 			obj = _.pick($scope.task, keys);
 		// gantt 와 db의 schema 가 다름
@@ -83,12 +83,18 @@ angular.module('tasks.form', ['ui.select2'])
 				$modalInstance.close(['save']);
 			});
 	};
-	$scope.resetForm = function() {
+	$scope.delete = function() {
+		console.log('delete');
+		Tasks.delete({wbs : $scope.task.wbs}, function(result) {
+			$modalInstance.close(['delete', $scope.task]);
+		});
+	};
+	$scope.reset = function() {
 		angular.copy($scope.originalTask, $scope.task);
 		// form.$setPristine();
 	};
-	$scope.cancelForm = function() {
-		$scope.resetForm();
+	$scope.cancel = function() {
+		$scope.reset();
 		$modalInstance.dismiss('cancel');
 	};
 // Scope Member Functions END

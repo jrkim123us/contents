@@ -182,6 +182,11 @@ schema.statics.setTask = function (task, callback) {
 schema.statics.addTask = function (task, callback) {
 	new Task(task).save(callback);
 };
+schema.statics.removeTask = function (wbs, callback) {
+	this.findOne({wbs: wbs})
+		.remove()
+		.exec(callback);
+};
 
 var Task = mongoose.model('Task', schema);
 // Export the model

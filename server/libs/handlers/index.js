@@ -134,6 +134,11 @@ module.exports = function (config, db) {
 				res.json(200, saved);
 			});
 		},
+		removeTask: function(req, res) {
+			db.Task.removeTask(req.params.wbs, function(err, data) {
+				res.send(200);
+			});
+		},
 // Task End
 
 

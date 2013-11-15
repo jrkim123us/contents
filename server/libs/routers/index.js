@@ -43,6 +43,7 @@ module.exports = function (config, handler) {
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.post('/tasks/:wbs', handler.ensureAuthenticated, handler.setTask);
 	app.put('/tasks/:wbs', handler.ensureAuthenticated, handler.addTask);
+	app.delete('/tasks/:wbs', handler.ensureAuthenticated, handler.removeTask);
 
 	app.get('/project/ptask/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.get('/project/task/:parentWbs', handler.ensureAuthenticated, handler.getTasksByParent);

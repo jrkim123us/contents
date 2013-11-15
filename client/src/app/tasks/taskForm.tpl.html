@@ -82,10 +82,10 @@
 
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-default" ng-click="form.$setPristine(); resetForm()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
-		<button type="button" class="btn btn-default" ng-click="cancelForm()"><span class="glyphicon glyphicon-remove"></span> Close</button>
-		<button type="button" class="btn btn-danger" ng-hide="task.create"><span class="glyphicon glyphicon-trash"></span> Delete</button>
-		<button type="submit" class="btn btn-success" ng-click="saveForm()" ng-disabled="form.$pristine || isUnchanged() || form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
+		<button type="button" class="btn btn-default" ng-click="form.$setPristine(); reset()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+		<button type="button" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span> Close</button>
+		<button type="button" class="btn btn-danger"  ng-click="delete()" ng-hide="task.create"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+		<button type="submit" class="btn btn-success" ng-click="save()" ng-disabled="form.$pristine || isUnchanged() || form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
 	</div>
 	<!-- <div class="well">
 		<pre>{{task.worker | json}}</pre>
