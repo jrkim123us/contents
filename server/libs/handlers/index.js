@@ -1,6 +1,7 @@
 var debug = require('debug')('handler'),
 	https = require('https'),
-	async = require('async');
+	async = require('async'),
+	Q = require("q");
 
 
 // Usually expects "db" as an injected dependency to manipulate the models
@@ -13,9 +14,16 @@ module.exports = function (config, db) {
 			filteredUser.user = {
 				firstName : user.name.first,
 				lastName : user.name.last
-			}
+			};
 		return filteredUser;
 	}
+
+	function dbDeferred(query) {
+		var deferred = Q.defer();
+		query.exec(simpleCallback(deferred));
+		return deferred.promise;
+	}
+
 
 	return {
 		getLogin: function(req, res) {
@@ -120,7 +128,6 @@ module.exports = function (config, db) {
 			});
 		},
 		setTask: function(req, res) {
-			console.log('setTask : ' + req.body);
 			db.Task.setTask(req.body, function(err, data) {
 				var statusCode = 200;
 				if(err) throw err;
@@ -128,8 +135,74 @@ module.exports = function (config, db) {
 				res.send(statusCode);
 			});
 		},
+		dndTask: function(req, res) {
+			// task_id 영역
+			// wbs 영역
+			var statusCode = 200;
+			var wbs    = req.body.wbs;
+			var taskId = req.body.taskId;
+			var newPosTaskId = null;
+			// Task_id
+			// 1. 이동 시작/끝 Point Task
+			// 2. 시작 ~ 끝 Task Task_id 수정
+			// 3. 이동 대상 Task Task_id 수정
+			// Wbs
+			// 1. 전달 기준 하위 방향으로 wbs 수정
+			// 2. 이동 대상 부모 wbs 수정
+			// 시작 ~ 종료 일자
+			async.waterfall([
+				function(callback) {
+					db.Task.getStartToEndTasks(taskId)
+						.done(function(docs) {
+							callback(null, docs);
+						});
+				},
+				function(tasks, callback) {
+					debug('getStartToEndTasks results : ' + tasks.toString());
+					var inc = taskId.isDownward ? -1 : 1;
+					db.Task.shiftTasks(tasks, inc)
+						.done(function(dosc) {
+							callback(null, dosc);
+						});
+				}
+			], function(err, results) {
+				if(err) {
+					res.send(505);
+				}
+				res.json(results);
+			});
+
+			/*db.Task.getStartToEndTasks(taskId)
+				.then(function(tasks) {
+					debug('getStartToEndTasks results : ' + tasks.toString());
+					var inc = taskId.isDownward ? -1 : 1;
+					db.Task.shiftTasks(parseInt(tasks[0].taskId, 10), parseInt(tasks[1].taskId, 10));
+				})
+				.then(function(tasks) {
+					debug('shiftTasks results : ' + tasks.toString());
+					db.Task.resetWbs(wbs.dragEnd.parent.wbs, wbs.dragEnd.childrenIds);
+				})
+				.then(function (result) {
+					res.json(result);
+				})
+				.fail(function (error) {
+					res.send(500, error);
+				})
+				.done();*/
+			/*db.Task.resetWbs(wbs.dragEnd.parent.wbs, wbs.dragEnd.childrenIds, function(endErr, endResult) {
+				if(endErr) throw endErr;
+				if(wbs.isChangeParent)
+					db.Task.resetWbs(wbs.dragStart.parent.wbs, wbs.dragStart.childrenIds, function(startErr, startResult) {
+						if(startErr) throw startErr;
+						res.send(statusCode);
+					});
+				else
+					res.send(statusCode);
+			});*/
+			// resetWbs = function (parentId, childrenIds, callback) {
+		},
 		addTask: function(req, res) {
-			db.Task.addTask(req.body, function(err, saved) {
+			db.Task.addTask(req.body, function(startErr, saved) {
 				if(err) throw err;
 				res.json(200, saved);
 			});

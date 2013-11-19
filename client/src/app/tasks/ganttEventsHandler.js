@@ -1,16 +1,21 @@
 angular.module('tasks.ganttEventsHandler', [])
-.factory('ganttEventsHandler', ['ganttSortable', 'ganttOverWriteHandler', 'taskModalHandler',
-	function(ganttSortable, ganttOverWriteHandler, taskModalHandler) {
+.factory('ganttEventsHandler', ['ganttSortable', 'ganttOverWriteHandler', 'taskModalHandler', 'GanttDnD',
+	function(ganttSortable, ganttOverWriteHandler, taskModalHandler, GanttDnD) {
 	var taskModal;
+	var dragStart = null;
 	var ganttEvents = {
 		'onGanttReady'        : onGanttReady,
 		'onLoadEnd'           : onLoadEnd,
 		'onTaskClick'         : onTaskClick,
 		'onTaskDblClick'      : onTaskDblClick,
+		'onGridHeaderClick'   : onGridHeaderClick,
 		'onBeforeTaskCreated' : onBeforeTaskCreated,
 		'onBeforeTaskChanged' : onBeforeTaskChanged,
 		'onAfterTaskUpdate'   : onAfterTaskUpdate,
-		'onAfterTaskDrag'     : onAfterTaskDrag
+		'onAfterTaskDrag'     : onAfterTaskDrag,
+		// Dragging tasks only within the parent branch
+		'onRowAfterDragStart' : onRowAfterDragStart,
+		'onRowDragEnd'        : onRowDragEnd
 	};
 	function initialize() {
 		angular.forEach(ganttEvents, function(evFn, evName){
@@ -54,6 +59,9 @@ angular.module('tasks.ganttEventsHandler', [])
 	function onLoadEnd() {
 		ganttSortable.sort();
 	}
+	function onGridHeaderClick(name, event) {
+		if(name === 'add') return false;
+	}
 	function onTaskClick(id, event) {
 		// gantt add 버튼 클릭한 경우
 		if(event.target.className === 'gantt_add') {
@@ -81,7 +89,93 @@ angular.module('tasks.ganttEventsHandler', [])
 		console.log('onAfterTaskUpdate : ' + tasks);
 	}
 	function onAfterTaskDrag(id, mode, event) {
-		// console.log('onAfterTaskDrag : ' + mode);
+		console.log('onAfterTaskDrag : ' + mode);
+	}
+// Grid 영역 Drag & Drop 처리 이벤트
+	function onRowAfterDragStart(taskId, event) {
+		dragStart = {};
+		setDragInfo(dragStart, taskId);
+	}
+	function onRowDragEnd(movedId, nextId) {
+		var params = {};
+// back-end 영역 처리
+		beforeUpdateServer(params, movedId);
+
+		GanttDnD.save(params, function(result) {
+			onAfterUpdateServer(params.wbs);
+		});
+// front-end 영역 처리
+		// 일단 comment
+		// onAfterUpdateServer(params.wbs);
+	}
+	function beforeUpdateServer(params, movedId) {
+		var isDownward = true,
+			isChangeParent = false;
+
+		var dragEnd = {};
+		setDragInfo(dragEnd, movedId);
+
+		if(dragStart.index === dragEnd.index)
+			return;
+		if(dragStart.index > dragEnd.index)
+			isDownward = false;
+		if(dragStart.parent.id !== dragEnd.parent.id) {
+			isChangeParent = true;
+			// 주의 : dragStart의 children은 이동 후 변경된 항목을 가져와야 함
+			dragStart.childrenIds = gantt.getChildren(dragStart.parent.id);
+		}
+		dragEnd.childrenIds = gantt.getChildren(dragEnd.parent.id);
+		// task_id 용
+		params.taskId = {
+			isDownward : isDownward,
+			movedId    : movedId,
+			start      : isDownward ? dragStart.next : dragEnd.next,
+			end        : isDownward ? dragEnd.prev : dragStart.prev
+		};
+		// wbs 용
+		params.wbs = {
+			isChangeParent : isChangeParent,
+			dragStart : {
+				parent: {id : dragStart.parent.id, wbs : dragStart.parent.wbs },
+				childrenIds : dragStart.childrenIds
+			},
+			dragEnd : {
+				parent: {id : dragEnd.parent.id, wbs : dragEnd.parent.wbs },
+				childrenIds : dragEnd.childrenIds
+			}
+		};
+	}
+	function onAfterUpdateServer(params) {
+		// front-end 영역 처리
+		if(params.isChangeParent)
+			resetWbs(params.dragStart.parent, params.dragStart.childrenIds);
+
+		resetWbs(params.dragEnd.parent, params.dragEnd.childrenIds);
+
+		gantt.refreshData();
+
+		dragStart = null;
+	}
+	function setDragInfo(info, taskId) {
+		var task = gantt.getTask(taskId);
+
+		info.index  = task.$index;
+		info.parent = gantt.getTask(task.parent);
+		info.prev   = gantt.getPrev(task.id);
+		info.next   = gantt.getNext(task.id);
+	}
+	// Task Drag & Drop 또는 삭제로 인하여 순서가 변경되는 경우
+	// 그 기준에 맞춰 WBS 데이터 변경
+	function resetWbs(parent, childrenIds) {
+		var child = null, grandChildren = null;
+		for(var inx = 0, ilen = childrenIds.length ; inx < ilen ; inx++) {
+			child = gantt.getTask(childrenIds[inx]);
+			child.wbs = parent.wbs + '.' + (inx + 1);
+
+			grandChildren = gantt.getChildren(child.id);
+			if(gantt.getChildren.length > 0)
+				resetWbs(child, grandChildren);
+		}
 	}
 
 	return {

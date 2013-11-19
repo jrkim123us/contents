@@ -1,10 +1,12 @@
 var mongoose = require('mongoose'),
 	debug = require('debug')('db'),
 	tree = require('mongoose-tree2'),
+	Q = require("q"),
 	Schema = mongoose.Schema;
 
 var schema = new Schema({
 	parent    : {type: Schema.ObjectId, ref: 'Task'},
+	taskId    : {type: Number},
 	wbs       : {type: String},
 	parentWbs : {type: String},
 	name      : {type: String},
@@ -40,28 +42,19 @@ schema.set('toJSON', {
 });
 schema.plugin(tree);
 
-var handleError = function(err) {
-	for(var error in err.errors) {
-		console.log(error.message);
-	}
+var taskDeferer = function(queryFn) {
+	var deferred = Q.defer();
+	queryFn.exec(function(err, result) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(result);
+		}
+	});
+	return deferred.promise;
 };
 
 schema.statics.initialize = function (callback) {
-	/*var w1 = new Task({
-		wbs: '1', name: '과학화전투훈련단 중앙통제장비체계 체계개발사업', weight : 100, plan: 82.7, act: 0,
-		start : '2010.10.01', end: '20151212', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015')
-	}),
-	w1_1 = new Task({
-		parent: w1, parentWbs: '1', wbs: '1.1', name: 'Milestone', weight : 0, plan: 82.7, act: 0,
-		start: '2010.10.01', end: '2015.12.12', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015'),
-		worker: [{name: '김후정', id: '00001'}]
-	}),
-	w1_2 = new Task({
-		parent: w1, parentWbs: '1', wbs: '1.2', name: '사업관리(6종)', weight : 3.4, plan: 30.3, act: 0,
-		start: '2010.10.01', end: '2012.12.26', startDate: new Date('10.01.2010'), endDate: new Date('12.26.2012'),
-		worker: [{name: '김후정', id: '00001'}], approver: [{name: '김종록', id: '00002'}, {name:'김철수', id: '00004'}]
-	});*/
-
 	var tasks = require('./taskInit')(Task);
 
 	var result = [];
@@ -178,6 +171,26 @@ schema.statics.getTasksByParent = function (parentWbs, callback) {
 schema.statics.setTask = function (task, callback) {
 	delete task._id;
 	Task.update({wbs: task.wbs}, task, callback);
+};
+schema.statics.getStartToEndTasks = function (params) {
+	var query = this.find({ '_id' : {$in: [params.start, params.end]}})
+					.select('_id wbs taskId name')
+					.sort({taskId : 1});
+	return taskDeferer(query);
+};
+schema.statics.shiftTasks = function(tasks, inc) {
+	var condition, query;
+	if(tasks.length > 1)
+		condition = {taskId: {$gte: tasks[0].taskId, $lte : tasks[1].taskId}};
+	else
+		condition = {tasksId: tasks[0].tasksId};
+
+	query = this.find(condition);
+	return taskDeferer(query);
+};
+schema.statics.resetWbs = function (parentWbs, childrenIds) {
+	var query = this.find({wbs : parentWbs});
+	return taskDeferer(query);
 };
 schema.statics.addTask = function (task, callback) {
 	new Task(task).save(callback);

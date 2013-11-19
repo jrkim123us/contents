@@ -2,11 +2,11 @@ angular.module('tasks.ganttOptions', [])
 .factory('ganttOptions', function() {
 	var scaleType, users;
 	var common = {
-		order_branch : true,
+		order_branch : true, // dragging tasks only within the parent branch
 		// grid column customization
 		xml_date   : "%Y-%m-%d",
 		task_date  : "%Y.%m.%d", // lightbox header date format
-		grid_width : 290,
+		grid_width : 440,
 		drag_links : false,
 		show_progress       : true, // loading spinner
 		drag_progress       : false,
@@ -15,15 +15,15 @@ angular.module('tasks.ganttOptions', [])
 		quick_info_enable   : true,
 		quick_info_detached : true,
 		columns : [
-			{name:"wbs", label:"WBS", tree:true, width:150, template: wbsColumnTemplate },
-			{name:"text", label:"Task", align: "left", width:100, template: textColumnTemplate},
+			{name:"wbs", label:"WBS", tree:true, width:200, template: wbsColumnTemplate },
+			{name:"text", label:"Task", align: "left", width:200, template: textColumnTemplate},
 			/*{name:"start_date", label:"시작일자", align: "center", width:90 },
 			{name:"duration",   label:"기간",   align: "center", width:70 },
 			{name:"holder",   label:"담당자",   align: "center", width:150, template: holderColumnTemplate},
 			{name:"button",   label:"View",   align: "center", width:70 , template: subTaskColumnTemplate},*/
 			{name:"add", label:"", width:40 }
 		]
-	}
+	};
 	// scale 기준에 대한 설정값
 	var optionsPerType = {
 		day : {
@@ -52,7 +52,7 @@ angular.module('tasks.ganttOptions', [])
 				{unit:"month", step:3, template:monthScaleTemplate}
 			]
 		}
-	}
+	};
 	var templates = {
 		progress_text     : progress_text,
 		task_class        : task_class,
@@ -60,15 +60,15 @@ angular.module('tasks.ganttOptions', [])
 		quick_info_header : quick_info_header,
 		quick_info_body   : quick_info_body,
 		quick_info_footer : quick_info_footer
-	}
+	};
 	// column template 함수
 	function wbsColumnTemplate(task) {
 		var className = parseInt(task.duration, 10) === 0 ? "text-success" : task.leaf ? "text-primary" : "";
-		return '<p class="' + className + '" title="' + task.wbs + '">' + task.wbs + '</p>'
+		return '<p class="' + className + '" title="' + task.wbs + '">' + task.wbs + '</p>';
 	}
 	function textColumnTemplate(task) {
 		var className = parseInt(task.duration, 10) === 0 ? "text-success" : task.leaf ? "text-primary" : "";
-		return '<p class="' + className + '" title="' + task.name + '">' + task.name + '</p>'
+		return '<p class="' + className + '" title="' + task.name + '">' + task.name + '</p>';
 	}
 
 	function holderColumnTemplate(task) {
@@ -97,14 +97,14 @@ angular.module('tasks.ganttOptions', [])
 		var dateToStr = gantt.date.date_to_str("%M");
 		var endDate = gantt.date.add(date, 2, "month");
 		return dateToStr(date) + " - " + dateToStr(endDate);
-	};
+	}
 
 	function weekScaleTemplate(date) {
 		var dateToStr = gantt.date.date_to_str("%m.%d ");
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
 	}
-	 // gantt 전체 영역 template 정의
+	// gantt 전체 영역 template 정의
 	function task_cell_class(item, date) {
 		if(gantt.config.scale_unit ==="month" && (date.getDay() === 0 || date.getDay() === 6)){
 			return "gantt_weekend";
@@ -195,4 +195,4 @@ angular.module('tasks.ganttOptions', [])
 		setUserData : setUserData,
 		setQuickInfoEnable : setQuickInfoEnable
 	};
-})
+});
