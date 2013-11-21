@@ -5,22 +5,23 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 var schema = new Schema({
-	parent    : {type: Schema.ObjectId, ref: 'Task'},
-	taskId    : {type: Number},
-	wbs       : {type: String},
-	parentWbs : {type: String},
-	name      : {type: String},
-	weight    : {type: Number, min: 0, max: 100},
-	plan      : {type: Number, min: 0, max: 100},
-	act       : {type: Number, min: 0, max: 100},
-	start     : {type:String},
-	end       : {type:String},
-	startDate : {type: Date},
-	endDate   : {type: Date},
-	worker    : [{type: Schema.ObjectId, ref: 'User'}],
-	approver  : [{type: Schema.ObjectId, ref: 'User'}],
+	parent     : {type: Schema.ObjectId, ref: 'Task'},
+	taskId     : {type: Number},
+	localIndex : {type: Number},
+	wbs        : {type: String},
+	parentWbs  : {type: String},
+	name       : {type: String},
+	weight     : {type: Number, min: 0, max: 100},
+	plan       : {type: Number, min: 0, max: 100},
+	act        : {type: Number, min: 0, max: 100},
+	start      : {type:String},
+	end        : {type:String},
+	startDate  : {type: Date},
+	endDate    : {type: Date},
+	worker     : [{type: Schema.ObjectId, ref: 'User'}],
+	approver   : [{type: Schema.ObjectId, ref: 'User'}],
 	desc       : {type:String},
-	leaf : {type: Boolean}
+	leaf       : {type: Boolean}
 });
 schema.virtual('text').get(function () {
 	return this.name;
@@ -40,9 +41,9 @@ schema.virtual('duration').get(function () {
 schema.set('toJSON', {
 	virtuals: true
 });
-schema.plugin(tree);
+// schema.plugin(tree);
 
-var taskDeferer = function(queryFn) {
+var execDeferer = function(queryFn) {
 	var deferred = Q.defer();
 	queryFn.exec(function(err, result) {
 		if (err) {
@@ -54,6 +55,17 @@ var taskDeferer = function(queryFn) {
 	return deferred.promise;
 };
 
+var saveDeferer = function(model, query) {
+	var deferred = Q.defer();
+	model.save(qeury, function(err, result) {
+		if(err)
+			deferred.reject(err);
+		else
+			deferred.resolve(result);
+	});
+	return deferred.promise;
+}
+
 schema.statics.initialize = function (callback) {
 	var tasks = require('./taskInit')(Task);
 
@@ -61,7 +73,9 @@ schema.statics.initialize = function (callback) {
 
 	// taskInit에 정의된 데이터를 DB에 등록한다.
 	function saveAll() {
-		var task= tasks.shift();
+		var task = tasks.shift();
+		var splited = task.wbs.split('.');
+		task.localIndex = splited[splited.length - 1];
 
 		task.save(function(err, saved) {
 			if(err) throw err;
@@ -172,25 +186,68 @@ schema.statics.setTask = function (task, callback) {
 	delete task._id;
 	Task.update({wbs: task.wbs}, task, callback);
 };
+schema.statics.setTaskParent = function (params) {
+	// var query = this.find({_id: params.moved.id});
+	var query = this.update({_id: params.moved.id },{parent : params.parent.id});
+	return execDeferer(query);
+};
 schema.statics.getStartToEndTasks = function (params) {
 	var query = this.find({ '_id' : {$in: [params.start, params.end]}})
 					.select('_id wbs taskId name')
 					.sort({taskId : 1});
-	return taskDeferer(query);
+	return execDeferer(query);
 };
-schema.statics.shiftTasks = function(tasks, inc) {
+schema.statics.shiftTaskIds = function(tasks, inc) {
 	var condition, query;
 	if(tasks.length > 1)
 		condition = {taskId: {$gte: tasks[0].taskId, $lte : tasks[1].taskId}};
 	else
 		condition = {tasksId: tasks[0].tasksId};
 
-	query = this.find(condition);
-	return taskDeferer(query);
+	// query = this.find(condition);
+	query = this.update(condition, {$inc: {taskId: inc}});
+	return execDeferer(query);
+};
+schema.statics.setTaskIds = function(id, newTaskId) {
+	var query = Task.update({_id : id},{taskId : newTaskId});
+	return execDeferer(query);
+};
+schema.statics.getTasksByParentId = function(params) {
+	var query = Task.find({parent : params.parent.id})
+					.select('_id wbs taskId')
+					.sort({taskId : 1});
+	return execDeferer(query);
+};
+schema.statics.getSubTasksByWbs = function(task) {
+	var regWbs,	wbs = task.wbs.replace('.', '\.');
+
+	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
+	var query = Task.find({wbs : regWbs})
+					.select('_id wbs')
+					.sort({taskId : 1});
+
+	return execDeferer(query);
+};
+/*schema.statics.getSubTasksByWbs = function(task, parentWbs, callback) {
+	var regWbs,	wbs = task.wbs.replace('.', '\.');
+
+	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
+	Task.find({wbs : regWbs})
+		.select('_id wbs')
+		.sort({taskId : 1})
+		.exec(callback);
+};*/
+schema.statics.replaceWbs = function(task, oldWbs, newWbs) {
+
+	var query = task.update({_id: task.id}, {wbs : task.wbs.replace(oldWbs, newWbs)});
+
+	return execDeferer(query);
+};
+schema.statics.replaceWbsAll = function(params) {
 };
 schema.statics.resetWbs = function (parentWbs, childrenIds) {
 	var query = this.find({wbs : parentWbs});
-	return taskDeferer(query);
+	return execDeferer(query);
 };
 schema.statics.addTask = function (task, callback) {
 	new Task(task).save(callback);

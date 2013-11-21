@@ -40,7 +40,7 @@ module.exports = function (config, handler) {
 
 	/* TASK 및 Gantt 영역*/
 	app.get('/gantt/:wbs', handler.ensureAuthenticated, handler.getGantt);
-	app.post('/gantt/dnd/:start/:end', handler.ensureAuthenticated, handler.dndTask);
+	app.post('/gantt/dnd', handler.ensureAuthenticated, handler.dndTask);
 	app.get('/tasks/:wbs', handler.ensureAuthenticated, handler.getTask);
 	app.post('/tasks/:wbs', handler.ensureAuthenticated, handler.setTask);
 	app.put('/tasks/:wbs', handler.ensureAuthenticated, handler.addTask);

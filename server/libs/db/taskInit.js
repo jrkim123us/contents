@@ -1,9 +1,6 @@
 module.exports = function (Task) {
 
 	var tasks = [
-		/*new Task({wbs: '1', name: '과학화전투훈련단 중앙통제장비체계 체계개발사업', weight : 100, plan: 82.7, act: 0, start : '2010.10.01', end: '20151212', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015') }),
-		new Task({parentWbs: '1', wbs: '1.1', name: 'Milestone', weight : 0, plan: 82.7, act: 0, start: '2010.10.01', end: '2015.12.12', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015'), worker: [{name: '김후정', id: '00001'}] }),
-		new Task({parentWbs: '1', wbs: '1.2', name: '사업관리(6종)', weight : 3.4, plan: 30.3, act: 0, start: '2010.10.01', end: '2012.12.26', startDate: new Date('10.01.2010'), endDate: new Date('12.26.2012'), worker: [{name: '김후정', id: '00001'}], approver: [{name: '김종록', id: '00002'}, {name:'김철수', id: '00004'}] })*/
 		new Task({wbs: '1',                                                   name: '과학화전투훈련단 중앙통제장비체계 체계개발사업'                                                                                                                , weight: 100 , plan: 82.7, act: 0   , start: '2010.10.01', startDate: new Date('10.01.2010'), end: '2015.12.12', endDate: new Date('12.12.2015'), taskId :1   }),
 		new Task({wbs: '1.1',                parentWbs: '1',                  name: 'Milestone'                                                                                                                                                     , weight: 0   , plan: 80.7, act: 3.5 , start: '2010.11.30', startDate: new Date('11.30.2010'), end: '2015.12.12', endDate: new Date('12.12.2015'), taskId :2   }),
 		new Task({wbs: '1.1.1',              parentWbs: '1.1',                name: '계약관리'                                                                                                                                                      , weight: 0   , plan: 50  , act: 12.5, start: '2010.11.30', startDate: new Date('11.30.2010'), end: '2015.12.12', endDate: new Date('12.12.2015'), taskId :3   }),
@@ -5211,5 +5208,6 @@ module.exports = function (Task) {
 		new Task({wbs: '1.12.7.5',           parentWbs: '1.12.7',             name: '검토결과 반영 및 초안 제출'                                                                                                                                    , weight: 0   , plan: 100 , act: 0   , start: '2013.06.10', startDate: new Date('06.10.2013'), end: '2013.06.17', endDate: new Date('06.17.2013'), taskId :5205}),
 		new Task({wbs: '1.12.7.6',           parentWbs: '1.12.7',             name: '검토회의 실시/승인본 제출'                                                                                                                                     , weight: 0   , plan: 100 , act: 0   , start: '2013.07.01', startDate: new Date('07.01.2013'), end: '2013.07.12', endDate: new Date('07.12.2013'), taskId :5206})
 	];
+
 	return tasks;
 };

@@ -142,34 +142,121 @@ module.exports = function (config, db) {
 			var wbs    = req.body.wbs;
 			var taskId = req.body.taskId;
 			var newPosTaskId = null;
+			// 변경된 항목의 parent id 변경
 			// Task_id
 			// 1. 이동 시작/끝 Point Task
 			// 2. 시작 ~ 끝 Task Task_id 수정
 			// 3. 이동 대상 Task Task_id 수정
+			// 4. 변경된 Task_id 에 맞춰 wbs 최하단 항목 재정렬
 			// Wbs
-			// 1. 전달 기준 하위 방향으로 wbs 수정
-			// 2. 이동 대상 부모 wbs 수정
-			// 시작 ~ 종료 일자
+			// 1. dragEnd 의 parent 기준 task 조회
+			// 2. task_id 정렬 기준으로 wbs (하위 레벨 호함) 수정
+			//
+			// 시작 / duration
+
 			async.waterfall([
+				// 이동한 Task가 부모가 변경된 경우 parent 정보 수정
+				// parent wbs 기준으로 이동 Task의 wbs replace <- wbs 변경 영역에 통합
 				function(callback) {
+					if(wbs.isChangeParent)
+						db.Task.setTaskParent(wbs.dragEnd)
+							.done(function(docs) {
+								callback(null, docs);
+							});
+					else
+						callback(null, null);
+				},
+				function(results, callback) {
+					results = results || {};
+					// debug('setTaskParent results : ' + results.toString());
 					db.Task.getStartToEndTasks(taskId)
 						.done(function(docs) {
 							callback(null, docs);
 						});
 				},
 				function(tasks, callback) {
-					debug('getStartToEndTasks results : ' + tasks.toString());
+					debug('getStartToEndTasks results : ' + tasks[0].taskId  + '/' + tasks[1].taskId);
 					var inc = taskId.isDownward ? -1 : 1;
-					db.Task.shiftTasks(tasks, inc)
-						.done(function(dosc) {
-							callback(null, dosc);
+					newPosTaskId = taskId.isDownward ? tasks[0].taskId : tasks[1].taskId;
+
+					db.Task.shiftTaskIds(tasks, inc)
+						.done(function(docs) {
+							callback(null);
+						});
+				},
+				// 이동된 Task에 새로운 Task_id 수정
+				function(callback) {
+					db.Task.setTaskIds(taskId.movedId, newPosTaskId)
+						.done(function(docs) {
+							callback(null);
+						});
+				},
+				function(callback) {
+					db.Task.getTasksByParentId(wbs.dragEnd)
+						.done(function(docs){
+							callback(null, docs);
+						});
+				},
+				function(tasks, callback) {
+					debug('getTasksByParentId : ' + tasks.length);
+					var startTaskId = tasks[0].taskId;
+					/*var task;
+					for(var inx = 0, ilen = tasks.length ; inx < ilen ; inx++) {
+						task = tasks[inx];
+						task.newWbs = wbs.dragEnd.parent.wbs + '.' + (inx + 1);
+						if(task.wbs !== task.newWbs)
+							db.Task.getSubTasksByWbs(task, parentWbs, function(err, subTasks) {
+								for(var jnx = 0, jlen = subTasks.length ; jnx < jlen ; jnx++) {
+
+								}
+							})
+					}*/
+
+
+
+					for(var inx = 0, ilen = tasks.length ; inx < ilen ; inx++) {
+						tasks[inx].newWbs = wbs.dragEnd.parent.wbs + '.' + (inx + 1);
+					}
+					async.every(tasks,
+						function(task, everyCallback) {
+							var wbs = task.wbs, newWbs = task.newWbs;
+							if(task.wbs !== task.newWbs)
+								db.Task.getSubTasksByWbs(task)
+									.done(function(docs) {
+										debug('wbs : ' + wbs + '/' + newWbs);
+										async.every(subTasks, function(subTask, e2Callback) {
+											db.Task.replaceWbs(subTask, wbs, newWbs)
+												.done(function(docs) {
+													e2Callback(docs);
+												});
+										}, function(results) {
+											debug('\ngetSubTasksByWbs : ' + docs);
+											everyCallback(docs);
+										});
+									});
+							else
+								everyCallback(true);
+						},
+						function(results) {
+							callback(null, results);
 						});
 				}
+				/*,
+
+				function(callback) {
+					if(wbs.isChangeParent)
+						db.Task.replaceWbs(wbs)
+							.done(function(docs) {
+								callback(null, docs);
+							});
+					else
+						callback(null);
+				}*/
 			], function(err, results) {
 				if(err) {
 					res.send(505);
 				}
-				res.json(results);
+				return res.send(results);
 			});
 
 			/*db.Task.getStartToEndTasks(taskId)

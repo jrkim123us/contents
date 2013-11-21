@@ -101,12 +101,12 @@ angular.module('tasks.ganttEventsHandler', [])
 // back-end 영역 처리
 		beforeUpdateServer(params, movedId);
 
-		GanttDnD.save(params, function(result) {
-			onAfterUpdateServer(params.wbs);
-		});
-// front-end 영역 처리
-		// 일단 comment
-		// onAfterUpdateServer(params.wbs);
+		console.log(params);
+
+		/*GanttDnD.save(params, function(result) {
+			// front-end 영역 처리
+			// onAfterUpdateServer(params.wbs);
+		});*/
 	}
 	function beforeUpdateServer(params, movedId) {
 		var isDownward = true,
@@ -114,8 +114,54 @@ angular.module('tasks.ganttEventsHandler', [])
 
 		var dragEnd = {};
 		setDragInfo(dragEnd, movedId);
+		params.moved = {
+			id : movedId,
+			index : dragEnd.index
+		};
+		// 부모가 바뀌었는지
+		if(dragStart.parent.id !== dragEnd.parent.id) {
+			params.isChangeParent = true;
+			params.shift = [{
+				parent : {
+					id : dragStart.parent.id,
+					wbs : dragStart.parent.wbs
+				},
+				start : dragStart.index + 1,
+				inc : -1
+			}, {
+				parent : {
+					id : dragEnd.parent.id,
+					wbs : dragEnd.parent.wbs
+				},
+				start : dragEnd.index,
+				inc : 1
+			}];
+		}
+		else {
+			params.parent = {
+				id : dragStart.parent.id,
+				wbs : dragStart.parent.wbs
+			};
+			if(dragStart.index === dragEnd.index)
+				return;
+			else if(dragStart.index < dragEnd.index) {
+				params.isDownward = true;
+				params.shift = {
+					start : dragStart.index + 1,
+					end : dragEnd.index,
+					inc : -1
+				};
+			} else {
+				params.shift = {
+					start : dragEnd.index,
+					end : dragStart.index - 1,
+					inx : 1
+				};
+			}
+		}
 
-		if(dragStart.index === dragEnd.index)
+
+		/*if(dragStart.index === dragEnd.index)
 			return;
 		if(dragStart.index > dragEnd.index)
 			isDownward = false;
@@ -140,10 +186,11 @@ angular.module('tasks.ganttEventsHandler', [])
 				childrenIds : dragStart.childrenIds
 			},
 			dragEnd : {
+				moved : {id : movedId, wbs : dragEnd.wbs},
 				parent: {id : dragEnd.parent.id, wbs : dragEnd.parent.wbs },
 				childrenIds : dragEnd.childrenIds
 			}
-		};
+		};*/
 	}
 	function onAfterUpdateServer(params) {
 		// front-end 영역 처리
@@ -159,10 +206,11 @@ angular.module('tasks.ganttEventsHandler', [])
 	function setDragInfo(info, taskId) {
 		var task = gantt.getTask(taskId);
 
-		info.index  = task.$index;
+		// info.wbs = task.wbs;
+		info.index  = gantt.getTaskIndex(taskId) + 1;
 		info.parent = gantt.getTask(task.parent);
-		info.prev   = gantt.getPrev(task.id);
-		info.next   = gantt.getNext(task.id);
+		/*info.prev   = gantt.getPrev(task.id);
+		info.next   = gantt.getNext(task.id);*/
 	}
 	// Task Drag & Drop 또는 삭제로 인하여 순서가 변경되는 경우
 	// 그 기준에 맞춰 WBS 데이터 변경
