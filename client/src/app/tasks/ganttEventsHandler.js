@@ -103,10 +103,10 @@ angular.module('tasks.ganttEventsHandler', [])
 
 		console.log(params);
 
-		/*GanttDnD.save(params, function(result) {
+		GanttDnD.save(params, function(result) {
 			// front-end 영역 처리
 			// onAfterUpdateServer(params.wbs);
-		});*/
+		});
 	}
 	function beforeUpdateServer(params, movedId) {
 		var isDownward = true,
@@ -155,42 +155,10 @@ angular.module('tasks.ganttEventsHandler', [])
 				params.shift = {
 					start : dragEnd.index,
 					end : dragStart.index - 1,
-					inx : 1
+					inc : 1
 				};
 			}
 		}
-
-
-		/*if(dragStart.index === dragEnd.index)
-			return;
-		if(dragStart.index > dragEnd.index)
-			isDownward = false;
-		if(dragStart.parent.id !== dragEnd.parent.id) {
-			isChangeParent = true;
-			// 주의 : dragStart의 children은 이동 후 변경된 항목을 가져와야 함
-			dragStart.childrenIds = gantt.getChildren(dragStart.parent.id);
-		}
-		dragEnd.childrenIds = gantt.getChildren(dragEnd.parent.id);
-		// task_id 용
-		params.taskId = {
-			isDownward : isDownward,
-			movedId    : movedId,
-			start      : isDownward ? dragStart.next : dragEnd.next,
-			end        : isDownward ? dragEnd.prev : dragStart.prev
-		};
-		// wbs 용
-		params.wbs = {
-			isChangeParent : isChangeParent,
-			dragStart : {
-				parent: {id : dragStart.parent.id, wbs : dragStart.parent.wbs },
-				childrenIds : dragStart.childrenIds
-			},
-			dragEnd : {
-				moved : {id : movedId, wbs : dragEnd.wbs},
-				parent: {id : dragEnd.parent.id, wbs : dragEnd.parent.wbs },
-				childrenIds : dragEnd.childrenIds
-			}
-		};*/
 	}
 	function onAfterUpdateServer(params) {
 		// front-end 영역 처리
