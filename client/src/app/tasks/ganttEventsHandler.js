@@ -97,16 +97,17 @@ angular.module('tasks.ganttEventsHandler', [])
 		setDragInfo(dragStart, taskId);
 	}
 	function onRowDragEnd(movedId, nextId) {
-		var params = {};
+		var params = {}, isMoved = true;
 // back-end 영역 처리
-		beforeUpdateServer(params, movedId);
+		if(!dragStart.parent) // 최상위 항목의 이동은 지원하지 않는다.
+			return;
+		isMoved = beforeUpdateServer(params, movedId);
 
-		console.log(params);
-
-		GanttDnD.save(params, function(result) {
-			// front-end 영역 처리
-			// onAfterUpdateServer(params.wbs);
-		});
+		if(isMoved)
+			GanttDnD.save(params, function(result) {
+				// front-end 영역 처리
+				onAfterUpdateServer(params);
+			});
 	}
 	function beforeUpdateServer(params, movedId) {
 		var isDownward = true,
@@ -116,7 +117,11 @@ angular.module('tasks.ganttEventsHandler', [])
 		setDragInfo(dragEnd, movedId);
 		params.moved = {
 			id : movedId,
-			index : dragEnd.index
+			index : dragEnd.index,
+			parent : {
+				id : dragEnd.parent.id,
+				wbs : dragEnd.parent.wbs
+			}
 		};
 		// 부모가 바뀌었는지
 		if(dragStart.parent.id !== dragEnd.parent.id) {
@@ -138,36 +143,52 @@ angular.module('tasks.ganttEventsHandler', [])
 			}];
 		}
 		else {
-			params.parent = {
-				id : dragStart.parent.id,
-				wbs : dragStart.parent.wbs
-			};
+			var start, end, inc;
 			if(dragStart.index === dragEnd.index)
-				return;
+				return false;
 			else if(dragStart.index < dragEnd.index) {
+				// 동일 부모 안에서 아래로 이동
 				params.isDownward = true;
-				params.shift = {
-					start : dragStart.index + 1,
-					end : dragEnd.index,
-					inc : -1
-				};
+
+				start = dragStart.index + 1;
+				end = dragEnd.index;
+				inc = -1;
+
 			} else {
-				params.shift = {
-					start : dragEnd.index,
-					end : dragStart.index - 1,
-					inc : 1
-				};
+				// 동일 부모 안에서 위로 이동
+				start = dragEnd.index;
+				end = dragStart.index - 1;
+				inc = 1;
 			}
+
+			params.shift = [{
+				start : start,
+				end : end,
+				inc : inc,
+				parent : {
+					id : dragEnd.parent.id,
+					wbs : dragEnd.parent.wbs
+				}
+			}];
 		}
+
+		return true;
 	}
 	function onAfterUpdateServer(params) {
 		// front-end 영역 처리
-		if(params.isChangeParent)
-			resetWbs(params.dragStart.parent, params.dragStart.childrenIds);
-
-		resetWbs(params.dragEnd.parent, params.dragEnd.childrenIds);
+		var parent;
+		for(var inx = 0, ilen = params.shift.length ; inx < ilen ; inx++) {
+			parent = params.shift[inx].parent;
+			resetWbs(parent, gantt.getChildren(parent.id));
+		}
 
 		gantt.refreshData();
+
+		dhtmlx.message({
+			type: "modal",
+			text: 'saved successfully',
+			expire: -1
+		});
 
 		dragStart = null;
 	}

@@ -21,7 +21,7 @@ mongoose.connection.on('open', function () {
 		});
 	});
 
-	var bProcessTask = true;
+	var bProcessTask = false;
 	if(bProcessTask) {
 		// 사용자 데이터 초기화 (Full set)
 		User.remove({}, function(err) {
