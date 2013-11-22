@@ -123,7 +123,7 @@ angular.module('tasks.ganttEventsHandler', [])
 				wbs : dragEnd.parent.wbs
 			}
 		};
-		// 부모가 바뀌었는지
+		// 부모가 바뀐 경우
 		if(dragStart.parent.id !== dragEnd.parent.id) {
 			params.isChangeParent = true;
 			params.shift = [{
@@ -143,6 +143,7 @@ angular.module('tasks.ganttEventsHandler', [])
 			}];
 		}
 		else {
+		// 부모가 변경되지 않은 경우
 			var start, end, inc;
 			if(dragStart.index === dragEnd.index)
 				return false;
@@ -187,7 +188,7 @@ angular.module('tasks.ganttEventsHandler', [])
 		dhtmlx.message({
 			type: "modal",
 			text: 'saved successfully',
-			expire: -1
+			expire: 3000
 		});
 
 		dragStart = null;

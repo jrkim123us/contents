@@ -181,23 +181,6 @@ schema.statics.setTaskParent = function (params) {
 	var query = this.update({_id: params.moved.id },{parent : params.parent.id});
 	return execDeferer(query);
 };
-// schema.statics.shiftTasks = function (shifts) {
-	/*var deferer = Q.defer();
-	async.every(shifts, function(shift, callback) {
-		Task.getStartToEndTasks(shift.parent.id, shift.start, shift.end, shift.inc)
-			.then(function(docs) {
-				return Task.shiftTasksIndex(docs, shift.parent.wbs, shift.inc);
-			})
-			.done(function() {
-				callback(null);
-			});
-	}, function(err) {
-		if(err)
-			deferer.reject();
-		else
-			deferer.resolve();
-	});
-	return deferer.promise;*/
 schema.statics.shiftTasks = function (shift) {
 	var deferer = Q.defer();
 	return Task.getStartToEndTasks(shift.parent.id, shift.start, shift.end, shift.inc)

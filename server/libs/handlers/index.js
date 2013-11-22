@@ -138,6 +138,10 @@ module.exports = function (config, db) {
 		dndTask: function(req, res) {
 			var statusCode = 200, params = req.body;
 			if(params.isChangeParent)
+				// 부모가 변경 경우
+				// 1. landing point 의 아래로 밀리는 항목 Shift (하위 레벨 변경도 포함)
+				// 2. 이동하는 Task의 parent, id 변경 (하위 레벨 변경도 포함)
+				// 3, leaving point 의 위로 올라오는 항목 Shift (하위 레벨 변경도 포함)
 				db.Task.shiftTasks(params.shift[1])
 					.then(function(docs) {
 						// landing point
