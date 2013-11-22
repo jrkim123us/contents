@@ -1,0 +1,3 @@
+[submodule "client/bower_components/dhtmlx"]
+	path = client/bower_components/dhtmlx
+	url = D:\\nodeApps\\dhtmlxgantt

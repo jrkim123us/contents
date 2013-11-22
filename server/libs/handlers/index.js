@@ -1,6 +1,7 @@
 var debug = require('debug')('handler'),
 	https = require('https'),
-	async = require('async');
+	async = require('async'),
+	Q = require("q");
 
 
 // Usually expects "db" as an injected dependency to manipulate the models
@@ -13,9 +14,16 @@ module.exports = function (config, db) {
 			filteredUser.user = {
 				firstName : user.name.first,
 				lastName : user.name.last
-			}
+			};
 		return filteredUser;
 	}
+
+	function dbDeferred(query) {
+		var deferred = Q.defer();
+		query.exec(simpleCallback(deferred));
+		return deferred.promise;
+	}
+
 
 	return {
 		getLogin: function(req, res) {
@@ -120,7 +128,6 @@ module.exports = function (config, db) {
 			});
 		},
 		setTask: function(req, res) {
-			console.log('setTask : ' + req.body);
 			db.Task.setTask(req.body, function(err, data) {
 				var statusCode = 200;
 				if(err) throw err;
@@ -128,8 +135,54 @@ module.exports = function (config, db) {
 				res.send(statusCode);
 			});
 		},
+		dndTask: function(req, res) {
+			var statusCode = 200, params = req.body;
+			if(params.isChangeParent)
+				db.Task.shiftTasks(params.shift[1])
+					.then(function(docs) {
+						// landing point
+						return db.Task.setMovedTaskIndex(params.moved);
+					})
+					.then(function(docs) {
+						return db.Task.shiftTasks(params.shift[0]);
+					})
+					.fail(function() {
+						statusCode = 500;
+						res.send(statusCode);
+					})
+					.done(function(docs) {
+						res.send(statusCode);
+					});
+			else {
+				// 동일 부모 이동시, index가 늘어나는 것이 아니므로,
+				// 일단 이동되는 항목은 -1로 임시성으로 변환시킨 다음
+				// shift 처리
+				// 이후 -1 항목을 정상 처리한다.
+				tempMoved = {
+					id : params.moved.id,
+					index : -1,
+					parent : params.moved.parent
+				};
+
+				db.Task.setMovedTaskIndex(tempMoved)
+					.then(function(docs) {
+						return db.Task.shiftTasks(params.shift[0]);
+					})
+					.then(function(docs) {
+						return db.Task.setMovedTaskIndex(params.moved);
+					})
+					.fail(function() {
+						statusCode = 500;
+						res.send(statusCode);
+					})
+					.done(function(docs) {
+						res.send(statusCode);
+					});
+			}
+
+		},
 		addTask: function(req, res) {
-			db.Task.addTask(req.body, function(err, saved) {
+			db.Task.addTask(req.body, function(startErr, saved) {
 				if(err) throw err;
 				res.json(200, saved);
 			});

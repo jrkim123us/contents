@@ -8,6 +8,9 @@ angular.module('resources.tasks', ['ngResource'])
 		}
 	});
 }])
+.factory('GanttDnD', ['$resource', function ($resource) {
+	return  $resource('/gantt/dnd');
+}])
 .factory('Gantt', ['$resource', function ($resource) {
 	return  $resource('/gantt/:wbs', {});
 }]);

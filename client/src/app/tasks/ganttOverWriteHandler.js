@@ -53,21 +53,21 @@ angular.module('tasks.ganttOverWriteHandler', [])
 					ev = ev || event, gantt._qi_button_click(ev.target || ev.srcElement)
 				});
 				gantt.config.quick_info_detached && dhtmlxEvent(gantt.$task_data, "scroll", function () {
-					gantt.hideQuickInfo()
+					gantt.hideQuickInfo();
 				});
 			}
-			return this._quick_info_box
-		}
+			return this._quick_info_box;
+		};
 		gantt._qi_button_click = function (ev) {
 			var element = gantt._quick_info_box;
 			if (ev && ev != element) {
 				var className = ev.className;
 				if (-1 != className.indexOf("btn")) {
 					var boxId = gantt._quick_info_box_id;
-					gantt.$click.buttons[className.split(" ")[0]](boxId)
-				} else gantt._qi_button_click(ev.parentNode)
+					gantt.$click.buttons[className.split(" ")[0]](boxId);
+				} else gantt._qi_button_click(ev.parentNode);
 			}
-		}
+		};
 		gantt._fill_quick_data = function (taskId) {
 			var task = gantt.getTask(taskId),
 				element = gantt._quick_info_box,
@@ -79,7 +79,7 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			children.innerHTML = gantt.templates.quick_info_body(task.start_date, task.end_date, task);
 			children = children.nextSibling;
 			children.innerHTML = gantt.templates.quick_info_footer(task.start_date, task.end_date, task);
-		}
+		};
 		// quick info 에 사용하는 edit 함수 overwrite
 		gantt.$click.buttons = {
 			edit : function (id) {
@@ -94,12 +94,12 @@ angular.module('tasks.ganttOverWriteHandler', [])
 	function addEventsQuickInfoBoxHide() {
 		var eventsNm = ["onTaskDblClick", "onBeforeTaskCreated"],
 			hideFn = function() {
-				return gantt._hideQuickInfo(), !0
-			}
+				return gantt._hideQuickInfo(), !0;
+			};
 		for (var inx =0 , ilen = eventsNm.length; inx < ilen ; inx++)
 			gantt.attachEvent(eventsNm[inx], hideFn);
 	}
 	return {
 		initialize  : initialize
-	}
+	};
 }])

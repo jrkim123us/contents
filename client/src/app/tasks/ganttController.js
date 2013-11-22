@@ -24,11 +24,11 @@ angular.module('tasks.gantt', [
 
 			ganttHandler.initialize(element, scope.currentScale);
 		}
-	}
+	};
 }])
-.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttHandler'
-	, function ($scope, $location, $route, $routeParams, Gantt, ganttHandler) {
-	var firstRoute = $route.current
+.controller('GanttController', ['$scope', '$location', '$route', '$routeParams', 'Gantt', 'ganttHandler',
+	function ($scope, $location, $route, $routeParams, Gantt, ganttHandler) {
+	var firstRoute = $route.current,
 		defaultScale = 'month';
 
 	$scope.currentWbs = $routeParams.wbs;
@@ -38,7 +38,7 @@ angular.module('tasks.gantt', [
 		size  : 'large',
 		label : {on : 'On', off : 'Off'},
 		class : {on : 'success', off: 'warning'}
-	}
+	};
 
 	// wbsId 또는 scale 값이 변경 되었을 때 page reload 없이 처리하기 위함
 	$scope.$on('$locationChangeSuccess', function(event, newPath, prevPath) {
@@ -68,7 +68,7 @@ angular.module('tasks.gantt', [
 			$scope.currentTaskName = result.task.name;
 			$scope.currentWbs = result.task.wbs;
 
-			ganttHandler.parse(result)
+			ganttHandler.parse(result);
 		});
-	}
+	};
 }]);

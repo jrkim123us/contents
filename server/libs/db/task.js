@@ -1,24 +1,28 @@
 var mongoose = require('mongoose'),
 	debug = require('debug')('db'),
 	tree = require('mongoose-tree2'),
+	Q = require("q"),
+	async = require('async'),
 	Schema = mongoose.Schema;
 
 var schema = new Schema({
-	parent    : {type: Schema.ObjectId, ref: 'Task'},
-	wbs       : {type: String},
-	parentWbs : {type: String},
-	name      : {type: String},
-	weight    : {type: Number, min: 0, max: 100},
-	plan      : {type: Number, min: 0, max: 100},
-	act       : {type: Number, min: 0, max: 100},
-	start     : {type:String},
-	end       : {type:String},
-	startDate : {type: Date},
-	endDate   : {type: Date},
-	worker    : [{type: Schema.ObjectId, ref: 'User'}],
-	approver  : [{type: Schema.ObjectId, ref: 'User'}],
+	parent     : {type: Schema.ObjectId, ref: 'Task'},
+	taskId     : {type: Number},
+	localIndex : {type: Number},
+	wbs        : {type: String},
+	parentWbs  : {type: String},
+	name       : {type: String},
+	weight     : {type: Number, min: 0, max: 100},
+	plan       : {type: Number, min: 0, max: 100},
+	act        : {type: Number, min: 0, max: 100},
+	start      : {type:String},
+	end        : {type:String},
+	startDate  : {type: Date},
+	endDate    : {type: Date},
+	worker     : [{type: Schema.ObjectId, ref: 'User'}],
+	approver   : [{type: Schema.ObjectId, ref: 'User'}],
 	desc       : {type:String},
-	leaf : {type: Boolean}
+	leaf       : {type: Boolean}
 });
 schema.virtual('text').get(function () {
 	return this.name;
@@ -38,37 +42,30 @@ schema.virtual('duration').get(function () {
 schema.set('toJSON', {
 	virtuals: true
 });
-schema.plugin(tree);
+// schema.plugin(tree);
 
-var handleError = function(err) {
-	for(var error in err.errors) {
-		console.log(error.message);
-	}
+var execDeferer = function(queryFn) {
+	var deferred = Q.defer();
+	queryFn.exec(function(err, result) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(result);
+		}
+	});
+	return deferred.promise;
 };
 
 schema.statics.initialize = function (callback) {
-	/*var w1 = new Task({
-		wbs: '1', name: '과학화전투훈련단 중앙통제장비체계 체계개발사업', weight : 100, plan: 82.7, act: 0,
-		start : '2010.10.01', end: '20151212', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015')
-	}),
-	w1_1 = new Task({
-		parent: w1, parentWbs: '1', wbs: '1.1', name: 'Milestone', weight : 0, plan: 82.7, act: 0,
-		start: '2010.10.01', end: '2015.12.12', startDate: new Date('10.01.2010'), endDate: new Date('12.12.2015'),
-		worker: [{name: '김후정', id: '00001'}]
-	}),
-	w1_2 = new Task({
-		parent: w1, parentWbs: '1', wbs: '1.2', name: '사업관리(6종)', weight : 3.4, plan: 30.3, act: 0,
-		start: '2010.10.01', end: '2012.12.26', startDate: new Date('10.01.2010'), endDate: new Date('12.26.2012'),
-		worker: [{name: '김후정', id: '00001'}], approver: [{name: '김종록', id: '00002'}, {name:'김철수', id: '00004'}]
-	});*/
-
 	var tasks = require('./taskInit')(Task);
 
 	var result = [];
 
 	// taskInit에 정의된 데이터를 DB에 등록한다.
 	function saveAll() {
-		var task= tasks.shift();
+		var task = tasks.shift();
+		var splited = task.wbs.split('.');
+		task.localIndex = splited[splited.length - 1];
 
 		task.save(function(err, saved) {
 			if(err) throw err;
@@ -178,6 +175,128 @@ schema.statics.getTasksByParent = function (parentWbs, callback) {
 schema.statics.setTask = function (task, callback) {
 	delete task._id;
 	Task.update({wbs: task.wbs}, task, callback);
+};
+schema.statics.setTaskParent = function (params) {
+	// var query = this.find({_id: params.moved.id});
+	var query = this.update({_id: params.moved.id },{parent : params.parent.id});
+	return execDeferer(query);
+};
+// schema.statics.shiftTasks = function (shifts) {
+	/*var deferer = Q.defer();
+	async.every(shifts, function(shift, callback) {
+		Task.getStartToEndTasks(shift.parent.id, shift.start, shift.end, shift.inc)
+			.then(function(docs) {
+				return Task.shiftTasksIndex(docs, shift.parent.wbs, shift.inc);
+			})
+			.done(function() {
+				callback(null);
+			});
+	}, function(err) {
+		if(err)
+			deferer.reject();
+		else
+			deferer.resolve();
+	});
+	return deferer.promise;*/
+schema.statics.shiftTasks = function (shift) {
+	var deferer = Q.defer();
+	return Task.getStartToEndTasks(shift.parent.id, shift.start, shift.end, shift.inc)
+		.then(function(docs) {
+			return Task.shiftTasksIndex(docs, shift.parent.wbs, shift.inc);
+		});
+
+
+};
+schema.statics.getStartToEndTasks = function (parentId, gte, lte, inc) {
+	var conditon = {$gte: gte};
+	if(lte)
+		conditon.$lte = lte;
+	var query = this.find({
+			parent : parentId,
+			localIndex : conditon
+		})
+		.select('_id wbs localIndex')
+		.sort({localIndex : -1 * inc});
+	return execDeferer(query);
+};
+// schema.statics.shiftTasksIndex = function(params, tasks) {
+schema.statics.shiftTasksIndex = function(tasks, parentWbs, inc) {
+	var deferer = Q.defer();
+	// 주의 : async.every or async.each를 쓰면 데이터가 꼬임.
+	async.eachSeries(tasks, function(task, callback) {
+		var newWbs = parentWbs + '.' + (task.localIndex + inc);
+		var newIndex = task.localIndex + inc;
+		Task.setTaskIndex(task, newIndex, newWbs, null, callback);
+	}, function(err) {
+		if(err)
+			deferer.reject();
+		else
+			deferer.resolve();
+	});
+	return deferer.promise;
+};
+
+
+schema.statics.setTaskIndex = function(task, newIndex, newWbs, parentId, callback) {
+	if(parentId) task.parent = parentId;
+	task.localIndex = newIndex;
+	task.save(function(err, saved) {
+		if(err) throw err;
+		Task.getSubTasksByWbs(saved)
+			.then(function(subTasks) {
+				return Task.setSubTasksWbs(subTasks, saved.wbs, newWbs);
+			})
+			.done(function(subTasks) {
+				if(callback)
+					callback(null);
+			});
+	});
+};
+schema.statics.setSubTasksWbs = function(tasks, oldWbs, newWbs) {
+	var deferer = Q.defer();
+	async.every(tasks, function(task, callback) {
+		task.wbs = task.wbs.replace(oldWbs, newWbs);
+		task.save(function (err, saved) {
+			if(err) throw err;
+			callback();
+		});
+	}, function(err) {
+		if(err)
+			deferer.reject();
+		else
+			deferer.resolve();
+	});
+	return deferer.promise;
+};
+
+schema.statics.getSubTasksByWbs = function(task) {
+	var regWbs,	wbs = task.wbs.replace('.', '\.');
+	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
+	var query = Task.find({wbs : regWbs})
+					.select('_id wbs')
+					.sort({localIndex : 1});
+
+	return execDeferer(query);
+};
+// schema.statics.setMovedTaskIndex = function(params) {
+schema.statics.setMovedTaskIndex = function(moved) {
+	var deferer = Q.defer();
+	// var moved = params.moved;
+	var newWbs = moved.parent.wbs + '.' + moved.index;
+
+	this.findOne({_id : moved.id})
+		.select('_id wbs localIndex')
+		.exec(function(err, task) {
+			var parentId;
+			if(err)
+				deferer.reject();
+			if(moved.parent.id !== task.parent)
+				parentId = moved.parent.id;
+			Task.setTaskIndex(task, moved.index, newWbs, parentId, function() {
+				deferer.resolve();
+			});
+		});
+	return deferer.promise;
 };
 schema.statics.addTask = function (task, callback) {
 	new Task(task).save(callback);
