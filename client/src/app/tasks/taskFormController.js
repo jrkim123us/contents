@@ -63,7 +63,7 @@ angular.module('tasks.form', ['ui.select2'])
 		return isUnchanged;
 	};
 	$scope.save = function() {
-		var keys = ['wbs', 'name', 'desc', 'parent', 'leaf'],
+		var keys = ['id', 'wbs', 'name', 'desc', 'parent', 'leaf'],
 			obj = _.pick($scope.task, keys);
 		// gantt 와 db의 schema 가 다름
 		obj.startDate = $scope.task.start_date;

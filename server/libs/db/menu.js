@@ -32,7 +32,7 @@ schema.statics.initialize = function (callback) {
 		new Menu({parentName: 'Project', name : 'Risks & Issues', link : '#'}),
 
 		new Menu({parentName: 'Setup & Plan', name : 'Project profile', link : '#project/profile', icon: 'icon-home'}),
-		new Menu({parentName: 'Exceution & Control', name : 'Task Gantt', link : '/tasks/gantt/1.4.1.1.1.1', icon: 'icon-play'}),
+		new Menu({parentName: 'Exceution & Control', name : 'Task Gantt', link : '/tasks/gantt/1.1.1.1', icon: 'icon-play'}),
 		new Menu({parentName: 'Exceution & Control', name : 'Task Sync', link : '/tasks/sync/1', icon: 'icon-th-list'}),
 		new Menu({parentName: 'Exceution & Control', name : 'Weekly Task Result', link : '#project/result', icon: 'icon-flag'}),
 		new Menu({parentName: 'Exceution & Control', name : 'Weekly Task Approval', link : '#project/approval', icon: 'icon-lock'}),

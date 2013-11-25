@@ -33,7 +33,7 @@ angular.module('tasks.gantt', [
 
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
-	$scope.quickInfoEnable = true;
+	$scope.quickInfoEnable = false;
 	$scope.switchOption = {
 		size  : 'large',
 		label : {on : 'On', off : 'Off'},

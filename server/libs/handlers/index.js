@@ -95,7 +95,10 @@ module.exports = function (config, db) {
 				data: function(callback) {
 					db.Task.getGantt(wbs, function(err, result){
 						// 중간 레벨 조회 시 parent 정보가 없어야 정상 조회됨
-						result[0].parent = undefined;
+						if(result[0]) {
+							result[0].open = true;
+							result[0].parent = undefined;
+						}
 						return callback(err, result);
 					});
 				},
@@ -128,14 +131,27 @@ module.exports = function (config, db) {
 			});
 		},
 		setTask: function(req, res) {
-			db.Task.setTask(req.body, function(err, data) {
-				var statusCode = 200;
-				if(err) throw err;
-				if(parseInt(data, 10) === 0) statusCode = 204;
-				res.send(statusCode);
-			});
+			var statusCode = 200;
+			db.Task.setTask(req.body)
+				.fail(function() {
+					statusCode = 500;
+					// res.send(statusCode);
+				})
+				.done(function(docs) {
+					res.send(statusCode);
+				});
 		},
-		dndTask: function(req, res) {
+		dndTaskResize : function(req, res) {
+			var statusCode = 200, params = req.body;
+			db.Task.setTask(params.task)
+				.fail(function() {
+					statusCode = 500;
+				})
+				.done(function(docs) {
+					res.send(statusCode);
+				});
+		},
+		dndTaskRow: function(req, res) {
 			var statusCode = 200, params = req.body;
 			if(params.isChangeParent)
 				// 부모가 변경 경우
@@ -152,7 +168,6 @@ module.exports = function (config, db) {
 					})
 					.fail(function() {
 						statusCode = 500;
-						res.send(statusCode);
 					})
 					.done(function(docs) {
 						res.send(statusCode);
@@ -177,7 +192,6 @@ module.exports = function (config, db) {
 					})
 					.fail(function() {
 						statusCode = 500;
-						res.send(statusCode);
 					})
 					.done(function(docs) {
 						res.send(statusCode);

@@ -172,9 +172,10 @@ schema.statics.getTasksByParent = function (parentWbs, callback) {
 		.sort({wbs : 1})
 		.exec(callback);
 };
-schema.statics.setTask = function (task, callback) {
-	delete task._id;
-	Task.update({wbs: task.wbs}, task, callback);
+schema.statics.setTask = function (task) {
+	if(task.parent || task.parent === 0) delete task.parent; // 부모 변경은 별도의 기능으로
+	var query = Task.update({_id: task.id}, task);
+	return execDeferer(query);
 };
 schema.statics.setTaskParent = function (params) {
 	// var query = this.find({_id: params.moved.id});
@@ -187,8 +188,6 @@ schema.statics.shiftTasks = function (shift) {
 		.then(function(docs) {
 			return Task.shiftTasksIndex(docs, shift.parent.wbs, shift.inc);
 		});
-
-
 };
 schema.statics.getStartToEndTasks = function (parentId, gte, lte, inc) {
 	var conditon = {$gte: gte};
