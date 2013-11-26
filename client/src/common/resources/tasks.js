@@ -6,6 +6,10 @@ angular.module('resources.tasks', ['ngResource'])
 		'create' : {
 			method: 'PUT'
 		}
+	}, {
+		'delete' : {
+			method : 'POST'
+		}
 	});
 }])
 .factory('GanttDnD', ['$resource', function ($resource) {
