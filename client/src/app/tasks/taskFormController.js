@@ -7,7 +7,7 @@ angular.module('tasks.form', ['ui.select2'])
 	initailize();
 
 	function initailize() {
-		dayTime = 24 * 60 * 60 * 1000;
+		dayTime = (24 * 60 * 60 * 1000) - 1000;
 		task.duration = parseInt(task.duration, 10);
 		task.worker = _.unique(task.worker);
 		task.approver = _.unique(task.approver);
@@ -63,29 +63,38 @@ angular.module('tasks.form', ['ui.select2'])
 		return isUnchanged;
 	};
 	$scope.save = function() {
-		var keys = ['wbs', 'name', 'desc', 'parent', 'leaf'],
+		var keys = ['id', 'wbs', 'name', 'desc', 'leaf', 'duration'],
 			obj = _.pick($scope.task, keys);
+		// root 처리
+		obj.parent = $scope.task.realParent || $scope.task.parent;
 		// gantt 와 db의 schema 가 다름
 		obj.startDate = $scope.task.start_date;
-		obj.endDate = $scope.task.end_date;
+		// startDate와 duration으로 서버단에서 endDate를 계산한다.
 
 		obj.worker = _.unique($scope.task.worker);
 		obj.approver = _.unique($scope.task.approver);
 
-		if($scope.task.create)
+		if($scope.task.create) {
+			// index 정보 생성 위치 ganttOverWriteHandler
+			obj.index = $scope.task.index;
 			Tasks.create(obj, function(result) {
 				$scope.task.id = result.id;
 				$modalInstance.close(['create', $scope.task]);
 			});
-		else
+		}
+		else {
 			Tasks.save(obj, function(result) {
 				console.log('status : ' + result.status);
 				$modalInstance.close(['save']);
 			});
+		}
 	};
 	$scope.delete = function() {
-		console.log('delete');
-		Tasks.delete({wbs : $scope.task.wbs}, function(result) {
+		var keys = ['id', 'wbs', 'index'],
+			obj = _.pick($scope.task, keys);
+		// root 처리
+		obj.parent = $scope.task.realParent || $scope.task.parent;
+		Tasks.delete(obj, function(result) {
 			$modalInstance.close(['delete', $scope.task]);
 		});
 	};

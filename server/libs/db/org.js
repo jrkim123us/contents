@@ -1,4 +1,6 @@
 var mongoose = require('mongoose'),
+	Q = require("q"),
+	async = require('async'),
 	debug = require('debug')('db-org'),
 	Schema = mongoose.Schema;
 
@@ -11,11 +13,45 @@ schema.set('toJSON', {
 	virtuals: true
 });
 
-var handleError = function(err) {
-	// for(var error in err.errors) {
-	// 	console.log(error.message);
-	// }
-	if(err) throw err;
+var execDeferer = function(queryFn) {
+	var deferred = Q.defer();
+	queryFn.exec(function(err, result) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(result);
+		}
+	});
+	return deferred.promise;
+};
+var updateOrg = function(cond, param) {
+	var query = Org.update(cond, param);
+	return execDeferer(query);
+};
+var getAllOrgs = function() {
+	return execDeferer(Org.find({}));
+};
+var setUsers = function(orgs, users) {
+	org = orgs[0];
+	user = users[1];
+	org.leader = user._id;
+	org.member = [user._id];
+	user.org = [{ _id : org._id, leader : true}];
+
+	org = orgs[1];
+	user = users[0];
+	org.leader = user._id;
+	org.member = [user._id];
+	user.org = [{ _id : org._id, leader : true}];
+
+	org = orgs[2];
+	org.leader = user._id;
+	org.member = [users[0]._id, users[2]._id, users[3]._id, users[4]._id];
+	user.org = [{ _id : org._id, leader : true}];
+	users[0].org.push({_id : org._id});
+	users[2].org = [{_id : org._id}];
+	users[3].org = [{_id : org._id}];
+	users[4].org = [{_id : org._id}];
 };
 schema.statics.initialize = function (callback) {
 	var orgs = [
@@ -40,49 +76,33 @@ schema.statics.initialize = function (callback) {
 	}
 	saveAll();
 };
-
 schema.statics.initializeUser = function (User, callback) {
-	User.getAllId(function(err, userDoc){
-		Org.update({name : '사업관리'}, {
-			leader: userDoc[1]._id,
-			member: [userDoc[1]._id]
-		}, handleError);
+	var users, orgs, user, org;
+	User.getAllId()
+		.then(function(docs) {
+			users = docs;
+			return getAllOrgs();
+		})
+		.then(function(orgs) {
+			var deferer = Q.defer();
+			setUsers(orgs, users);
 
-		Org.update({name : '분석/설계'}, {
-			leader: userDoc[0]._id,
-			member: [userDoc[0]._id]
-		}, handleError);
+			async.every(orgs.concat(users), function(doc, callback) {
+				doc.save(callback);
+			}, function(err, docs) {
+				if(err) deferer.reject();
+				else deferer.resolve();
+			});
 
-		Org.update({name : '개발'}, {
-			leader: userDoc[0]._id,
-			member: [userDoc[0]._id, userDoc[2]._id, userDoc[3]._id]
-		}, handleError);
-
-		Org.findOne({name : '사업관리'}, function(err, doc) {
-			if(err) throw err;
-			userDoc[1].org = [{_id : doc._id, leader : true}];
-			userDoc[1].save(handleError);
+			return deferer.promise;
+		})
+		.fail(function(err) {
+			debug('fail');
+			throw(err);
+		})
+		.done(function(docs) {
+			debug('done');
 		});
-
-		Org.findOne({name : '분석/설계'}, function(err, doc) {
-			if(err) throw err;
-
-			userDoc[0].org = [{_id : doc._id, leader: true}];
-			userDoc[0].save(handleError);
-		});
-
-		Org.findOne({name : '개발'}, function(err, doc) {
-			if(err) throw err;
-			userDoc[0].org.push({_id : doc._id, leader: true});
-			userDoc[0].save(handleError);
-
-			userDoc[2].org = [{_id : doc._id}];
-			userDoc[2].save(handleError);
-
-			userDoc[3].org = [{_id : doc._id}];
-			userDoc[3].save(handleError);
-		});
-	});
 };
 schema.statics.getOrgs = function (callback) {
 	this.find({})

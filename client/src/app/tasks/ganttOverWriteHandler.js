@@ -12,6 +12,7 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			task && (task.$open = !0);
 			var newTask = {
 				wbs        : task.wbs + '.' + (this.getChildren(task.id).length + 1),
+				index      : this.getChildren(task.id).length + 1,
 				name       : this.locale.labels.new_task,
 				text       : this.locale.labels.new_task,
 				start_date : start_date,

@@ -11,8 +11,9 @@ angular.module('tasks.ganttOptions', [])
 		show_progress       : true, // loading spinner
 		drag_progress       : false,
 		round_dnd_dates     : false, // month, year scale에서 drag&drop 작업시 일정 정보가 scale 기준으로 rounding 되지 않게 함
+		time_step           : 60 * 24, // 최소 처리 기준을 Day로 정함
 		details_on_create   : false, // '+' button으로 task를 생성하고 lightbox를 호출하지 않음
-		quick_info_enable   : true,
+		quick_info_enable   : false,
 		quick_info_detached : true,
 		columns : [
 			{name:"wbs", label:"WBS", tree:true, width:200, template: wbsColumnTemplate },
@@ -27,14 +28,14 @@ angular.module('tasks.ganttOptions', [])
 	// scale 기준에 대한 설정값
 	var optionsPerType = {
 		day : {
-			scale_unit : "month", step : 1, date_scale : "%F, %Y", min_column_width : 50, scale_height : 90,
+			scale_unit : "month", step : 1, date_scale : "%F, %Y", min_column_width : 20, scale_height : 90,
 			subscales : [
 				{unit:"week", step:1, template : weekScaleTemplate },
 				{unit:"day", step:1, date:"%D" }
 			]
 		},
 		week : {
-			scale_unit : "month", step : 1, date_scale : "%F, %Y",  min_column_width : 100, scale_height : 90,
+			scale_unit : "month", step : 1, date_scale : "%F, %Y",  min_column_width : 80, scale_height : 90,
 			subscales : [
 				{unit:"week", step:1, template : weekScaleTemplate},
 			]
@@ -47,9 +48,9 @@ angular.module('tasks.ganttOptions', [])
 			]
 		},
 		year : {
-			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 80, scale_height : 90,
+			scale_unit : "year", step : 1, date_scale : "%Y", min_column_width : 20, scale_height : 90,
 			subscales : [
-				{unit:"month", step:3, template:monthScaleTemplate}
+				{unit:"month", step:3, template:quarterScaleTemplate}
 			]
 		}
 	};
@@ -59,7 +60,9 @@ angular.module('tasks.ganttOptions', [])
 		task_cell_class   : task_cell_class,  // 주말 표시
 		quick_info_header : quick_info_header,
 		quick_info_body   : quick_info_body,
-		quick_info_footer : quick_info_footer
+		quick_info_footer : quick_info_footer,
+		rightside_text    : rightside_text,
+		leftside_text     : leftside_text
 	};
 	// column template 함수
 	function wbsColumnTemplate(task) {
@@ -93,16 +96,27 @@ angular.module('tasks.ganttOptions', [])
 		}
 		return result;
 	}
-	function monthScaleTemplate (date){
+	/*function monthScaleTemplate (date){
 		var dateToStr = gantt.date.date_to_str("%M");
 		var endDate = gantt.date.add(date, 2, "month");
 		return dateToStr(date) + " - " + dateToStr(endDate);
-	}
+	}*/
 
 	function weekScaleTemplate(date) {
 		var dateToStr = gantt.date.date_to_str("%m.%d ");
 		var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
 		return dateToStr(date) + " - " + dateToStr(endDate);
+	}
+	// Task 좌/우측 보조 정보 표시
+	function rightside_text(start, end, task){
+		if(task.duration === 0) return "";
+
+		var dateToStr = gantt.date.date_to_str("%m.%d");
+		return dateToStr(end);
+	}
+	function leftside_text(start, end, task){
+		var dateToStr = gantt.date.date_to_str("%m.%d");
+		return dateToStr(start);
 	}
 	// gantt 전체 영역 template 정의
 	function task_cell_class(item, date) {

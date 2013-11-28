@@ -1,4 +1,5 @@
 var mongoose = require('mongoose'),
+	Q = require("q"),
 	Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -16,7 +17,7 @@ var schema = new Schema({
 
 schema.virtual('name.full').get(function () {
 	return [this.name.first, this.name.last].join(' ');
-})
+});
 schema.set('toJSON', {
 	virtuals: true
 });
@@ -25,6 +26,18 @@ var handleError = function(err) {
 	for(var error in err.errors) {
 		console.log(error.message);
 	}
+};
+
+var execDeferer = function(queryFn) {
+	var deferred = Q.defer();
+	queryFn.exec(function(err, result) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(result);
+		}
+	});
+	return deferred.promise;
 };
 schema.statics.initialize = function (callback) {
 	var users = [
@@ -59,11 +72,11 @@ schema.statics.getAll = function (callback) {
 		.select('_id name email')
 		.exec(callback);
 };
-schema.statics.getAllId = function(callback) {
-	this
-		.find({})
-		.select('_id')
-		.exec(callback);
+schema.statics.getAllId = function() {
+	var query = this.find({})
+					.select('_id');
+
+	return execDeferer(query);
 };
 schema.statics.getUserByEmail = function (email, callback) {
 	this.findOne({email : email}, function(err, user) {

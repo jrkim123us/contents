@@ -33,7 +33,7 @@ angular.module('tasks.gantt', [
 
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
-	$scope.quickInfoEnable = true;
+	$scope.quickInfoEnable = false;
 	$scope.switchOption = {
 		size  : 'large',
 		label : {on : 'On', off : 'Off'},
@@ -65,8 +65,10 @@ angular.module('tasks.gantt', [
 
 	$scope.getTask = function () {
 		Gantt.get({wbs: $scope.currentWbs}, function(result) {
-			$scope.currentTaskName = result.task.name;
-			$scope.currentWbs = result.task.wbs;
+			if(result.task) {
+				$scope.currentTaskName = result.task.name;
+				$scope.currentWbs = result.task.wbs;
+			}
 
 			ganttHandler.parse(result);
 		});
