@@ -142,19 +142,6 @@ angular.module('tasks.ganttEventsHandler', [])
 		info.index  = gantt.getTaskIndex(taskId) + 1;
 		info.parent = gantt.getTask(task.parent);
 	}
-	// Task Drag & Drop 또는 삭제로 인하여 순서가 변경되는 경우
-	// 그 기준에 맞춰 WBS 데이터 변경
-	/*function resetWbs(parent, childrenIds) {
-		var child = null, grandChildren = null;
-		for(var inx = 0, ilen = childrenIds.length ; inx < ilen ; inx++) {
-			child = gantt.getTask(childrenIds[inx]);
-			child.wbs = parent.wbs + '.' + (inx + 1);
-
-			grandChildren = gantt.getChildren(child.id);
-			if(gantt.getChildren.length > 0)
-				resetWbs(child, grandChildren);
-		}
-	}*/
 	return {
 		initialize : initialize
 	};
@@ -179,7 +166,6 @@ angular.module('tasks.ganttEventsHandler', [])
 					end_date   : task.end_date
 				}
 			};
-			setResizeParentInfo(resizeStart, task);
 		}
 		return true;
 	}
@@ -198,14 +184,12 @@ angular.module('tasks.ganttEventsHandler', [])
 	function beforeUpdateServer(params, id) {
 		var resizeEnd = {}, result = false;
 		var task = gantt.getTask(id);
-		setResizeParentInfo(resizeEnd, task);
 
 		if(isDiffDate(resizeStart.task.start_date, task.start_date) || isDiffDate(resizeStart.task.end_date, task.end_date)) {
 			result = true;
-			// 서버단에서는 startDate, endDate로 구성됨
 			params.task = {
 				id        : id,
-				parent    : task.parent,
+				parent    : task.realParent || task.parent, // root 처리
 				startDate : task.start_date,
 				duration  : task.duration
 			};
@@ -224,15 +208,7 @@ angular.module('tasks.ganttEventsHandler', [])
 	function isDiffDate(dateA, dateB) {
 		return dateA.getTime() !== dateB.getTime();
 	}
-	function setResizeParentInfo(info, task) {
-		var parent = gantt.getTask(task.parent);
-		info.parent = {
-			id         : parent.id,
-			wbs        : parent.wbs,
-			start_date : parent.start_date,
-			end_date   : parent.end_date
-		};
-	}
+
 	function resetResizeStart() {
 		resizeStart = null;
 	}

@@ -11,9 +11,23 @@ angular.module('tasks.ganttHandler', [])
 		element.dhx_gantt({});
 	}
 	function parse(data) {
+		predefineData(data.data);
+
 		ganttOptions.setUserData(data);
 		gantt.clearAll();
 		gantt.parse(data);
+	}
+
+	function predefineData(data) {
+		// 중간 레벨 Task 기준으로 조회할 경우 지원
+		// 두번째 레벨이 보이게 설정
+		if(data.length > 0 ) {
+			if(data[0].parent) {
+				data[0].realParent = data[0].parent;
+				delete data[0].parent;
+			}
+			data[0].open = true;
+		}
 	}
 
 	function render(type) {
@@ -34,4 +48,4 @@ angular.module('tasks.ganttHandler', [])
 		render          : render,
 		setQuickInfoEnable : setQuickInfoEnable
 	};
-}])
+}]);

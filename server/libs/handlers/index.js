@@ -88,19 +88,10 @@ module.exports = function (config, db) {
 			var wbs = req.params.wbs || '1';
 			async.parallel({
 				task: function(callback) {
-					return db.Task.getTask(wbs, function(err, result) {
-						return callback(err, result);
-					});
+					return db.Task.getTask(wbs, callback);
 				},
 				data: function(callback) {
-					db.Task.getGantt(wbs, function(err, result){
-						// 중간 레벨 조회 시 parent 정보가 없어야 정상 조회됨
-						if(result[0]) {
-							result[0].open = true;
-							result[0].parent = undefined;
-						}
-						return callback(err, result);
-					});
+					return db.Task.getGantt(wbs, callback);
 				},
 				users: function(callback) {
 					db.User.getAll(function(err, result) {
@@ -117,9 +108,7 @@ module.exports = function (config, db) {
 
 			async.parallel({
 				task: function(callback) {
-					return db.Task.getTask(wbs, function(err, result) {
-						return callback(err, result);
-					});
+					return db.Task.getTask(wbs, callback);
 				},
 				childs: function(callback) {
 					return db.Task.getTasksByParent(wbs, function(err, result) {

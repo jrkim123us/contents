@@ -63,8 +63,10 @@ angular.module('tasks.form', ['ui.select2'])
 		return isUnchanged;
 	};
 	$scope.save = function() {
-		var keys = ['id', 'wbs', 'name', 'desc', 'parent', 'leaf', 'duration'],
+		var keys = ['id', 'wbs', 'name', 'desc', 'leaf', 'duration'],
 			obj = _.pick($scope.task, keys);
+		// root 처리
+		obj.parent = $scope.task.realParent || $scope.task.parent;
 		// gantt 와 db의 schema 가 다름
 		obj.startDate = $scope.task.start_date;
 		// startDate와 duration으로 서버단에서 endDate를 계산한다.
@@ -88,8 +90,10 @@ angular.module('tasks.form', ['ui.select2'])
 		}
 	};
 	$scope.delete = function() {
-		var keys = ['id', 'wbs', 'parent', 'index'],
+		var keys = ['id', 'wbs', 'index'],
 			obj = _.pick($scope.task, keys);
+		// root 처리
+		obj.parent = $scope.task.realParent || $scope.task.parent;
 		Tasks.delete(obj, function(result) {
 			$modalInstance.close(['delete', $scope.task]);
 		});

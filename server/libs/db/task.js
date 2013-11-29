@@ -50,7 +50,7 @@ schema.set('toJSON', {
 	virtuals: true
 });
 // schema.plugin(tree);
-
+// Q exec 적용 함수
 var execDeferer = function(queryFn) {
 	var deferred = Q.defer();
 	queryFn.exec(function(err, result) {
@@ -164,81 +164,75 @@ var getSubTasksByWbs = function(task) {
 	return execDeferer(query);
 };
 
-schema.statics.initialize = function (callback) {
-	var tasks = require('./taskInit')(Task);
-
-	var result = [];
-
-	// taskInit에 정의된 데이터를 DB에 등록한다.
-	function saveAll() {
-		var task = tasks.shift();
-		var splited = task.wbs.split('.');
-		task.localIndex = splited[splited.length - 1];
-		// task.startDate.setHours(8);
-
-		task.save(function(err, saved) {
-			if(err) throw err;
-			result.push(saved[0]);
-
-			if(tasks.length > 0)
-				saveAll();
-			else {
-				// 등록된 데이터의 parent 정보를 조회한다.
-				findParent();
-			}
+schema.statics.initialize = function (initCallback) {
+	var savedTask;
+	// file에 정의된 task 정보 db에 등록
+	saveTasksFromFile()
+		.then(function() {
+			return findTaskForParent();
+		})
+		.then(function(tasks){
+			savedTask = tasks;
+			return updateParent(savedTask);
+		})
+		.then(function(){
+			return updateLeaf(savedTask);
+		})
+		.fail(function(err) {
+			throw err;
+		})
+		.done(function(docs) {
+			initCallback(docs);
 		});
-	}
-	function findLeaf() {
-		Task.find()
-			.select('_id parent wbs')
-			// .limit(10)
-			.exec(function(err, data) {
-				if(err) throw err;
-				checkLeaf(data);
-			});
-	}
-	function checkLeaf(data) {
-		var current = data.shift();
 
-		Task.find({parent: current._id})
-			.select('_id parent wbs')
-			.exec( function(err, child) {
-				if(err) throw err;
-				if(child.length === 0 ) {
-					current.leaf = true;
-					current.save();
-				}
-
-				if(data.length > 0)
-					checkLeaf(data);
-				else
-					callback();
-			});
-	}
-	function findParent() {
-		Task.find({parentWbs: {$exists: true}}, function(err, data) {
-			if(err) throw err;
-			// 데이터 별로 parent정보를 저장한다.
-			updateParent(data);
+	function saveTasksFromFile() {
+		var deferer = Q.defer();
+		var tasks = require('./taskInit')(Task);
+		async.every(tasks, function(task, callback) {
+			var splited = task.wbs.split('.');
+			task.localIndex = splited[splited.length - 1];
+			task.save(callback);
+		}, function(err) {
+			if(err) deferer.reject();
+			else deferer.resolve();
 		});
+		return deferer.promise;
 	}
-	function updateParent(data) {
-		var child = data.shift();
-
-		Task.find({wbs: child.parentWbs}, function(err, parent) {
-			child.parent = parent[0]._id;
-			child.save(function() {
-				if(data.length > 0)
-					updateParent(data);
-				else
-					findLeaf(); // 최하위 항목을 체크한다.
-					// callback();
-			});
+	function findTaskForParent() {
+		return execDeferer(Task.find({parentWbs: {$exists: true}}));
+	}
+	function updateParent(tasks) {
+		var deferer = Q.defer();
+		async.every(tasks, function(task, callback) {
+			execDeferer(Task.find({wbs: task.parentWbs}))
+				.done(function(parent){
+					task.parent = parent[0]._id;
+					task.save(callback);
+				});
+		}, function(err) {
+			if(err) deferer.reject();
+			else deferer.resolve();
 		});
+		return deferer.promise;
 	}
-
-	// 데이터 등록 시작!!
-	saveAll();
+	function updateLeaf(tasks) {
+		var deferer = Q.defer();
+		async.every(tasks, function(task, callback) {
+			execDeferer(Task.find({parent: task._id}))
+				.done(function(child) {
+					if(child.length === 0) {
+						task.leaf = true;
+						task.save(function(err) {
+							callback(err);
+						});
+					}
+				});
+		}, function(err) {
+			if(err) deferer.reject();
+			else deferer.resolve();
+		});
+		return deferer.promise;
+	}
 };
 
 schema.statics.initializeUser = function (User, callback) {
@@ -259,12 +253,16 @@ schema.statics.getGantt = function (wbs, callback) {
 		.select('_id parent wbs name act text startDate endDate progress start_date duration leaf worker approver desc')
 		// .populate('worker approver', 'name email')
 		.sort({wbs : 1})
-		.exec(callback);
+		.exec(function(err, tasks) {
+			callback(err, tasks);
+		});
 };
 schema.statics.getTask = function (wbs, callback) {
 	this.findOne({wbs : wbs})
 		.select('-_id wbs name')
-		.exec(callback);
+		.exec(function(err, task) {
+			callback(err, task);
+		});
 };
 schema.statics.setTask = function (task) {
 	if(task.parent || task.parent === 0) delete task.parent; // 부모 변경은 별도의 기능으로
@@ -301,6 +299,7 @@ schema.statics.setMovedTaskIndex = function(moved) {
 	return deferer.promise;
 };
 schema.statics.setParentDate = function(parentId, isStart, isEnd) {
+	if(parentId === 0) return;
 	// 부모의 start / end
 	// children의 min start / max end
 	var deferer = Q.defer();
