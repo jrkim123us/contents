@@ -68,13 +68,14 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 	$scope.$watch(function() {
 		return security.currentUser;
 	}, function(currentUser) {
-		if(security.isAuthenticated())
-			// $scope.menus = Menus.query();
+		if(security.isAuthenticated()) {
 			Menus.query(function(menus) {
 				$scope.menus = menus;
 			});
-		else
+		}
+		else {
 			$scope.menus = {};
+		}
 	});
 
 	$scope.home = function () {
@@ -102,8 +103,9 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 	var buildTemplate = function(items, level) {
 		var element = '';
 		angular.forEach(items, function(item, index) {
-			if(item.childs.length === 0)
+			if(item.childs.length === 0) {
 				element += '<li><a href="' + item.link +'" >' + item.name + '</a></li>';
+			}
 			else
 				switch(level) {
 					case 0:
@@ -128,8 +130,9 @@ function ($scope, $location, $route, security, Menus, breadcrumbs, notifications
 
 				var level = 0;
 				$element.html('');
-				if(angular.isArray(items) && items.length > 0)
+				if(angular.isArray(items) && items.length > 0) {
 					$element.append($compile(buildTemplate(items, level))($scope));
+				}
 			});
 		}
 	};

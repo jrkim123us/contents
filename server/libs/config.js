@@ -30,6 +30,7 @@ app.configure(function() {
 	app.set('view engine', 'jade');
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
+	// app.use(express.compress());
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
 	app.use(express.session({secret: 'this is a secret'}));
@@ -41,9 +42,8 @@ app.configure(function() {
 	app.use(passport.session());
 	// app.use(app.router); '/*'를 쓰기 위해서는 comment
 	app.use(require('less-middleware')({ src: rootDir + '/app/css' }));
-	// app.use(staticUrl, express.compress());
-  	app.use(staticUrl, express.static(distFolder));
-	// app.use(express.static(path.join(rootDir, 'app')));
+	app.use(staticUrl, express.static(distFolder));
+
 
 	// development only
 	if ('development' == app.get('env')) {

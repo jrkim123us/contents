@@ -1,0 +1,85 @@
+<form name="form" id="form" novalidate>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
+		<h4 class="modal-title">Setting up gantt columns</h4>
+	</div>
+	<div class="modal-body form-horizontal">
+		<div class="form-group">
+			<label for="wbs" class="col-sm-3 control-label">WBS</label>
+			<div class="col-sm-9">
+				<div class="btn-group">
+					<button ng-repeat="size in btnGroup.sizes" class="btn btn-default" type="button" ng-model="columns.wbs.type" btn-radio="size.type">
+						{{size.value}}
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="task" class="col-sm-3 control-label">Task</label>
+			<div class="col-sm-9">
+				<div class="btn-group">
+					<button ng-repeat="size in btnGroup.sizes" class="btn btn-default" type="button" ng-model="columns.task.type" btn-radio="size.type">
+						{{size.value}}
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="weight" class="col-sm-3 control-label">Weight (%)</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.weight.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="progress" class="col-sm-3 control-label">Progress (%)</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.progress.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="worker" class="col-sm-3 control-label">Worker</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.worker.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="approver" class="col-sm-3 control-label">Approver</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.approver.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="start_date" class="col-sm-3 control-label">Start Date</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.start_date.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="end_date" class="col-sm-3 control-label">End Date</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.end_date.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="duration" class="col-sm-3 control-label">Duration</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.duration.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="view" class="col-sm-3 control-label">View</label>
+			<div class="col-sm-9">
+				<input bs-switch ng-model="columns.view.use" switch-on-label="On" switch-off-label="Off">
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="form.$setPristine(); reset()"><span class="glyphicon glyphicon-refresh"></span> Reset</button>
+		<button type="button" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span> Close</button>
+		<button type="submit" class="btn btn-success" ng-click="save()" ng-disabled="isUnchanged() || form.$invalid"><span class="glyphicon glyphicon-saved"></span> Save</button>
+	</div>
+	<!-- <div class="well">
+		<pre>{{task.worker | json}}</pre>
+		<pre>{{task.approver | json}}</pre>
+	</div> -->
+</form>

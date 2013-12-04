@@ -26,8 +26,9 @@ angular.module('tasks.ganttEventsHandler', [])
 			child.wbs = parent.wbs + '.' + (inx + 1);
 
 			grandChildren = gantt.getChildren(child.id);
-			if(gantt.getChildren.length > 0)
+			if(gantt.getChildren.length > 0) {
 				resetWbs(child, grandChildren);
+			}
 		}
 	}
 	return {
@@ -37,12 +38,13 @@ angular.module('tasks.ganttEventsHandler', [])
 }])
 .factory('ganttRowDnDEventHandler', ['GanttDnD', 'ganttEventHandlerUtil', function(GanttDnD, handlerUtil) {
 	var dragStart = null;
-	var events = {
-		// Dragging tasks only within the parent branch
-		'onRowAfterDragStart' : onRowAfterDragStart,
-		'onRowDragEnd'        : onRowDragEnd
-	};
+	// var onRowAfterDragStart;
 	function initialize() {
+		var events = {
+			// Dragging tasks only within the parent branch
+			'onRowAfterDragStart' : onRowAfterDragStart,
+			'onRowDragEnd'        : onRowDragEnd
+		};
 		angular.forEach(events, function(evFn, evName){
 			gantt.attachEvent(evName, evFn);
 		});
@@ -55,15 +57,17 @@ angular.module('tasks.ganttEventsHandler', [])
 	function onRowDragEnd(movedId, nextId) {
 		var params = {type : 'row'}, isMoved = true;
 // back-end 영역 처리
-		if(!dragStart.parent) // 최상위 항목의 이동은 지원하지 않는다.
+		if(!dragStart.parent) { // 최상위 항목의 이동은 지원하지 않는다.
 			return;
+		}
 		isMoved = beforeUpdateServer(params, movedId);
 
-		if(isMoved)
+		if(isMoved) {
 			GanttDnD.save(params, function(result) {
 				// front-end 영역 처리
 				onAfterUpdateServer(params);
 			});
+		}
 	}
 	function beforeUpdateServer(params, movedId) {
 		var isDownward = true,
@@ -93,8 +97,9 @@ angular.module('tasks.ganttEventsHandler', [])
 		else {
 		// 부모가 변경되지 않은 경우
 			var start, end, inc;
-			if(dragStart.index === dragEnd.index)
+			if(dragStart.index === dragEnd.index) {
 				return false;
+			}
 			else if(dragStart.index < dragEnd.index) {
 				// 동일 부모 안에서 아래로 이동
 				params.isDownward = true;
@@ -148,11 +153,11 @@ angular.module('tasks.ganttEventsHandler', [])
 }])
 .factory('ganttTaskDnDEventHandler', ['GanttDnD', function(GanttDnD) {
 	var resizeStart = null;
-	var events = {
-		'onBeforeTaskChanged' : onBeforeTaskChanged,
-		'onAfterTaskDrag'     : onAfterTaskDrag
-	};
 	function initialize() {
+		var events = {
+			'onBeforeTaskChanged' : onBeforeTaskChanged,
+			'onAfterTaskDrag'     : onAfterTaskDrag
+		};
 		angular.forEach(events, function(evFn, evName){
 			gantt.attachEvent(evName, evFn);
 		});
@@ -175,10 +180,11 @@ angular.module('tasks.ganttEventsHandler', [])
 
 			isResized = beforeUpdateServer(params, id);
 
-			if(isResized)
+			if(isResized) {
 				GanttDnD.resize(params, function(result) {
 					onAfterUpdateServer();
 				});
+			}
 		}
 	}
 	function beforeUpdateServer(params, id) {
@@ -222,18 +228,18 @@ angular.module('tasks.ganttEventsHandler', [])
 		'GanttDnD',
 	function(ganttSortable, ganttOverWriteHandler, taskModalHandler, rowDnDHandler, taskDnDHandler, handlerUtil, GanttDnD) {
 	var taskModal;
-	var ganttEvents = {
-		'onGanttReady'        : onGanttReady,
-		'onLoadEnd'           : onLoadEnd,
-		'onTaskClick'         : onTaskClick,
-		'onTaskDblClick'      : onTaskDblClick,
-		'onGridHeaderClick'   : onGridHeaderClick,
-		'onBeforeTaskCreated' : onBeforeTaskCreated,
-		'onBeforeTaskChanged' : onBeforeTaskChanged,
-		'onAfterTaskUpdate'   : onAfterTaskUpdate,
-		'onAfterTaskDrag'     : onAfterTaskDrag
-	};
 	function initialize() {
+		var ganttEvents = {
+			'onGanttReady'        : onGanttReady,
+			'onLoadEnd'           : onLoadEnd,
+			'onTaskClick'         : onTaskClick,
+			'onTaskDblClick'      : onTaskDblClick,
+			'onGridHeaderClick'   : onGridHeaderClick,
+			'onBeforeTaskCreated' : onBeforeTaskCreated,
+			'onBeforeTaskChanged' : onBeforeTaskChanged,
+			'onAfterTaskUpdate'   : onAfterTaskUpdate,
+			'onAfterTaskDrag'     : onAfterTaskDrag
+		};
 		angular.forEach(ganttEvents, function(evFn, evName){
 			gantt.attachEvent(evName, evFn);
 		});
@@ -285,14 +291,17 @@ angular.module('tasks.ganttEventsHandler', [])
 			if(childrenIds.length === 0) {
 				handlerUtil.setTaskToParent(parent, false);
 			}
-			else
+			else {
 				handlerUtil.resetWbs(parent, gantt.getChildren(parent.id));
+			}
 		}
 		// form 에 사용했던 데이터 삭제
-		if(task.create)
+		if(task.create) {
 			delete task.create;
-		if(task.index)
+		}
+		if(task.index) {
 			delete task.index;
+		}
 	}
 
 	function onGanttReady() {
@@ -302,7 +311,7 @@ angular.module('tasks.ganttEventsHandler', [])
 		ganttSortable.sort();
 	}
 	function onGridHeaderClick(name, event) {
-		if(name === 'add') return false;
+		if(name === 'add') {return false;}
 	}
 	function onTaskClick(id, event) {
 		// gantt add 버튼 클릭한 경우

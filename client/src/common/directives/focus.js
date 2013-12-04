@@ -19,7 +19,7 @@ angular.module('directives.focus', [])
 				$timeout(function() {
 					scope.$apply(attrs.focus + "=true");
 				}, 0);
-			})
+			});
 		}
-	}
+	};
 });

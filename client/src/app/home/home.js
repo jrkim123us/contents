@@ -26,5 +26,5 @@ angular.module('home', [])
 			title : 'Catch phrase',
 			text : 'ead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.'
 		}
-	]
+	];
 }]);

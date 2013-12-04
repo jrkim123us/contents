@@ -27,5 +27,25 @@ angular.module('tasks', [
 
 	return {
 		openModal : openModal
+	};
+}])
+.factory('ganttColumnsModalHandler', ['$modal', function($modal) {
+	var columnsModal;
+	function openModal(columns) {
+		columnsModal = $modal.open( {
+			templateUrl : 'tasks/ganttColumnsForm.tpl.html',
+			controller  :  'GanttColumnsFormController',
+			// controller에 데이터 전달
+			resolve : {
+				columns : function() {
+					return columns;
+				}
+			}
+		});
+		return columnsModal;
 	}
-}]);
+	return {
+		openModal : openModal
+	};
+}])
+;

@@ -4,12 +4,15 @@ angular.module('tasks.ganttOverWriteHandler', [])
 		// gantt 의 '+' 이벤트 처리 함수 overwrite
 		gantt._click.gantt_add = dhtmlx.bind(function (event, id) {
 			var task = id ? this.getTask(id) : !1, start_date = "";
-			if(task) start_date = task.start_date;
+			if(task) {start_date = task.start_date;}
 			else {
 				var order  = this._order[0];
 				start_date = orders ? this.getTask(order).start_date : this.getState().min_date;
 			}
-			task && (task.$open = !0);
+			if(task) {
+				task.$open = !0;
+			}
+
 			var newTask = {
 				wbs        : task.wbs + '.' + (this.getChildren(task.id).length + 1),
 				index      : this.getChildren(task.id).length + 1,
@@ -29,10 +32,14 @@ angular.module('tasks.ganttOverWriteHandler', [])
 		}, gantt);
 		// gantt quick info box overwrite
 		gantt.showQuickInfo = function (taskId) {
-			if (gantt.config.quick_info_enable && taskId != this._quick_info_box_id) {
+			if (gantt.config.quick_info_enable && taskId !== this._quick_info_box_id) {
 				this.hideQuickInfo(!0);
 				var element = this._get_event_counter_part(taskId);
-				element && (this._quick_info_box = this._init_quick_info(element), this._fill_quick_data(taskId), this._show_quick_info(element));
+				if(element) {
+					this._quick_info_box = this._init_quick_info(element);
+					this._fill_quick_data(taskId);
+					this._show_quick_info(element);
+				}
 			}
 		};
 		gantt._init_quick_info = function () {
@@ -51,22 +58,27 @@ angular.module('tasks.ganttOverWriteHandler', [])
 				element.innerHTML = inner;
 
 				dhtmlxEvent(element, "click", function (ev) {
-					ev = ev || event, gantt._qi_button_click(ev.target || ev.srcElement)
+					ev = ev || event;
+					gantt._qi_button_click(ev.target || ev.srcElement);
 				});
-				gantt.config.quick_info_detached && dhtmlxEvent(gantt.$task_data, "scroll", function () {
-					gantt.hideQuickInfo();
-				});
+				if(gantt.config.quick_info_detached) {
+					dhtmlxEvent(gantt.$task_data, "scroll", function () {
+						gantt.hideQuickInfo();
+					});
+				}
 			}
 			return this._quick_info_box;
 		};
 		gantt._qi_button_click = function (ev) {
 			var element = gantt._quick_info_box;
-			if (ev && ev != element) {
+			if (ev && ev !== element) {
 				var className = ev.className;
-				if (-1 != className.indexOf("btn")) {
+				if (-1 !== className.indexOf("btn")) {
 					var boxId = gantt._quick_info_box_id;
 					gantt.$click.buttons[className.split(" ")[0]](boxId);
-				} else gantt._qi_button_click(ev.parentNode);
+				} else {
+					gantt._qi_button_click(ev.parentNode);
+				}
 			}
 		};
 		gantt._fill_quick_data = function (taskId) {
@@ -88,7 +100,6 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			},
 			view : function (id) {}
 		};
-
 		addEventsQuickInfoBoxHide();
 	}
 	// quick info box 를 숨겨야 할 이벤트를 추가 등록한다.
@@ -97,10 +108,11 @@ angular.module('tasks.ganttOverWriteHandler', [])
 			hideFn = function() {
 				return gantt._hideQuickInfo(), !0;
 			};
-		for (var inx =0 , ilen = eventsNm.length; inx < ilen ; inx++)
+		for (var inx =0 , ilen = eventsNm.length; inx < ilen ; inx++) {
 			gantt.attachEvent(eventsNm[inx], hideFn);
+		}
 	}
 	return {
 		initialize  : initialize
 	};
-}])
+}]);
