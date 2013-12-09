@@ -1,23 +1,18 @@
 var debug = require('debug')('server'),
-	http = require('http'),
-	https = require('https'),
+	http         = require('http'),
+	https        = require('https'),
+
 	// httpProxy = require('http-proxy'),
-	impl = require('implementjs');
+	impl         = require('implementjs');
 
 module.exports = function (config) {
 	// Create the HTTP server
 	debug('creating Express server...');
 
-	// var req = https.request(config.options, function(res) {
-	// 	debug(res.statusCode);
-	// 	res.on('data', function(d){
-	// 		process.stdout.write(d);
-	// 	});
-	// });
-	// var httpsServer = httpProxy.createServer(3000, 'localhost');
-
 	var httpServer = http.createServer(config.app);
 	var httpsServer = https.createServer(config.options, config.app);
+	var socketServer = http.createServer(config.app);
+	var io = require('socket.io').listen(socketServer);
 	// Validate server's interface
 	// impl.implements(server, {applyConfiguration: impl.F});
 
@@ -29,6 +24,8 @@ module.exports = function (config) {
 	// Export the server
 	return {
 		http  : httpServer,
-		https : httpsServer
+		https : httpsServer,
+		socket : socketServer,
+		io : io
 	};
 };

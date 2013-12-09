@@ -85,7 +85,7 @@ angular.module('tasks.form', ['ui.select2'])
 		else {
 			Tasks.save(obj, function(result) {
 				console.log('status : ' + result.status);
-				$modalInstance.close(['save']);
+				$modalInstance.close(['update', $scope.task]);
 			});
 		}
 	};

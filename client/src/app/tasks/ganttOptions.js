@@ -22,7 +22,7 @@ angular.module('tasks.ganttOptions', [])
 	}
 	function textColumnTemplate(task) {
 		var className = parseInt(task.duration, 10) === 0 ? "text-success" : task.leaf ? "text-primary" : "";
-		return '<p class="' + className + '" title="' + task.name + '">' + task.name + '</p>';
+		return '<p class="' + className + '" title="' + task.text + '">' + task.text + '</p>';
 	}
 	function weightColumnTemplate(task) {
 		return parseFloat(task.weight).toFixed(1);
@@ -42,7 +42,7 @@ angular.module('tasks.ganttOptions', [])
 	function viewColumnTemplate(task) {
 		var result = '';
 		// if(task.parent && (task.wbs === '1.1' || task.wbs === '1.4'))
-		if(task.parent) {
+		if(task.parent && !task.leaf) {
 			result = '<a href="/tasks/gantt/' + task.wbs +'#' + scaleType + '" class="btn btn-info btn-xs" role="button">View</a>';
 		}
 
@@ -99,7 +99,7 @@ angular.module('tasks.ganttOptions', [])
 		return result;
 	}
 	function quick_info_header(start, end, task) {
-		return '<h4 class="modal-title text-info" title="' + task.name +'">' + task.name + '</h4>';
+		return '<h4 class="modal-title text-info" title="' + task.text +'">' + task.text + '</h4>';
 	}
 	function quick_info_body(start, end, task){
 		var date = gantt.templates.task_time(start, end),

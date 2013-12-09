@@ -21,6 +21,7 @@ app.configure(function() {
 
 	// all environments
 	app.set('port', process.env.PORT || 80);
+	app.set('io.port', process.env.IO_PORT || 81);
 	app.set('httpsPort', options.port || 443);
 
 	/*app.set('port', process.env.PORT || 3000); // for Mac - 80 in use
