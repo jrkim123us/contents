@@ -5,7 +5,7 @@ angular.module('tasks.gantt', [
 	'tasks.ganttEventsHandler',
 	'tasks.ganttHandler',
 	'tasks.form',
-	'frapontillo.bootstrap-switch'
+	'tasks.form.gantt.columns'
 ])
 .config(['$routeProvider', function ($routeProvider) {
 	$routeProvider.when('/tasks/gantt/:wbs', {
@@ -20,9 +20,10 @@ angular.module('tasks.gantt', [
 		refresh: false,
 		link: function(scope, element, attrs, ngModel) {
 			//To-Do: refresh
-			if (ngModel) {ngModel.$render = function() { } };
-
-			ganttHandler.initialize(element, scope.currentScale);
+			if (ngModel) {
+				ngModel.$render = function() {};
+			}
+			ganttHandler.initialize(element, scope.currentScale, scope.currentColumns);
 		}
 	};
 }])
@@ -34,10 +35,23 @@ angular.module('tasks.gantt', [
 	$scope.currentWbs = $routeParams.wbs;
 	$scope.currentScale = $location.hash()  || defaultScale;
 	$scope.quickInfoEnable = false;
-	$scope.switchOption = {
-		size  : 'large',
-		label : {on : 'On', off : 'Off'},
-		class : {on : 'success', off: 'warning'}
+	$scope.currentColumns = {
+		wbs : {
+			type : 's',
+			use  : true
+		},
+		task : {
+			type : 'l',
+			use  : true
+		},
+		weight     : {type: 's', use: false},
+		progress   : {type: 's', use: false},
+		worker     : {type: 's', use: false},
+		approver   : {type: 's', use: false},
+		start_date : {type: 's', use: false},
+		end_date   : {type: 's', use: false},
+		duration   : {type: 'xs', use : false},
+		view       : {type: 's', use : false}
 	};
 
 	// wbsId 또는 scale 값이 변경 되었을 때 page reload 없이 처리하기 위함
@@ -57,7 +71,7 @@ angular.module('tasks.gantt', [
 		$scope.getTask();
 	}); // initialize the watch
 	$scope.$watch('currentScale', function() {
-		ganttHandler.render($scope.currentScale);
+		ganttHandler.render($scope.currentScale, $scope.currentColumns);
 	}); // initialize the watch
 	$scope.$watch('quickInfoEnable', function(enable) {
 		ganttHandler.setQuickInfoEnable(enable);
@@ -72,5 +86,9 @@ angular.module('tasks.gantt', [
 
 			ganttHandler.parse(result);
 		});
+	};
+
+	$scope.setColumns = function() {
+		ganttHandler.setGanttColumns($scope.currentColumns);
 	};
 }]);

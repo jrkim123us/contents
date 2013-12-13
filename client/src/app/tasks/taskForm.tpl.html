@@ -1,7 +1,7 @@
 <form name="form" id="form" novalidate>
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
-		<h4 class="modal-title"><code ng-show="task.duration === 0">milestone</code>  {{task.name || 'Task 는 필수입력 항목입니다.'}}</h4>
+		<h4 class="modal-title"><code ng-show="task.duration === 0">milestone</code>  {{task.text || 'Task 는 필수입력 항목입니다.'}}</h4>
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="alert alert-warning alert-dismissable" ng-hide="task.leaf">
@@ -17,7 +17,7 @@
 		<div class="form-group" ng-class="{'has-error' : form.name.$invalid &amp;&amp;  form.name.$dirty}">
 			<label for="wbs" class="col-sm-2 control-label">Task</label>
 			<div class="col-sm-10">
-				<input class="form-control" id="name" name="name" type="text" ng-model="task.name" placeholder="Task 는 필수입력 항목입니다." required autofocus>
+				<input class="form-control" id="name" name="name" type="text" ng-model="task.text" placeholder="Task 는 필수입력 항목입니다." required autofocus>
 			</div>
 		</div>
 		<div class="form-group">

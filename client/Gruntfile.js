@@ -11,9 +11,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-html2js');
 
 	// Default task.
-	grunt.registerTask('default', ['jshint','build','karma:unit']);
+	// grunt.registerTask('default', ['jshint','build','karma:unit']);
+	grunt.registerTask('default', ['jshint','build']);
 	grunt.registerTask('build', ['clean','html2js', 'recess:build', 'concat','copy']);
 	grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy']);
+	grunt.registerTask('gantt', ['clean','html2js','uglify','jshint','recess:min','concat', 'copy']);
 	grunt.registerTask('test-watch', ['karma:watch']);
 
 	// Print a timestamp (useful for when watching)
@@ -130,7 +132,8 @@ module.exports = function (grunt) {
 			},
 			bootstrap: {
 				src:[
-					'<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js',
+					// '<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.6.0-SNAPSHOT.js',
+					'<%= vendorDir %>/angular-bootstrap/ui-bootstrap-tpls-0.7.0.js',
 					'<%= vendorDir %>/angular-ui-sortable/src/sortable.js',
 					'<%= vendorDir %>/angular-ui-select2/src/select2.js',
 					'<%= vendorDir %>/angular-bootstrap-switch/dist/angular-bootstrap-switch.js'
@@ -146,7 +149,8 @@ module.exports = function (grunt) {
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.mouse.js',
 					'<%= vendorDir %>/jquery-ui/ui/jquery.ui.sortable.js',
 					'<%= vendorDir %>/select2/select2.js',
-					'<%= vendorDir %>/bootstrap-switch/static/js/bootstrap-switch.js'
+					'<%= vendorDir %>/bootstrap-switch/static/js/bootstrap-switch.js',
+					'<%= vendorDir %>/socket.io-client/dist/socket.io.js'
 				],
 				dest: '<%= distdir %>/jquery.js'
 			},
@@ -159,9 +163,13 @@ module.exports = function (grunt) {
 				],
 				dest: '<%= distdir %>/dhtmlx.js'
 			},
-			dhtmlxCss: {
+			/*dhtmlxCss: {
 				src: ['<%= vendorDir %>/dhtmlx/dhtmlxgantt_terrace.css'],
 				dest: '<%= distdir %>/dhtmlx.css'
+			}*/
+			css : {
+				src: ['<%= vendorDir %>/dhtmlx/dhtmlxgantt_terrace.css', '<%= distdir %>/<%= pkg.name %>.css'],
+				dest : '<%= distdir %>/<%= pkg.name %>.css'
 			}
 		},
 		uglify: {

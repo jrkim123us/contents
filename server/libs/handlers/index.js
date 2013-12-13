@@ -18,15 +18,8 @@ module.exports = function (config, db) {
 		return filteredUser;
 	}
 
-	function dbDeferred(query) {
-		var deferred = Q.defer();
-		query.exec(simpleCallback(deferred));
-		return deferred.promise;
-	}
-
-
 	return {
-		getLogin: function(req, res) {
+		getLogin: function(req, res, next) {
 			/*res.send({
 				user: {
 					firstName : 'jong rok',
@@ -35,14 +28,14 @@ module.exports = function (config, db) {
 			});*/
 			config.passport.authenticate('local', function(err, user) {
 				if (err) { return next(err); }
-				if(!user) {return res.json({user:null})}
-				res.json(filterUser(user))
+				if(!user) {return res.json({user:null});}
+				res.json(filterUser(user));
 
 				req.logIn(user, function(err) {
 					if ( err ) { return next(err); }
 					return res.json(filterUser(user));
 				});
-			})(req,res);
+			})(req, res);
 		},
 		getCurrentUser: function(req, res) {
 			res.json(200, filterUser(req.user));
@@ -84,7 +77,7 @@ module.exports = function (config, db) {
 				res.send(data);
 			});
 		},
-		getGantt: function(req, res) {
+		getGantt: function(req, res, next) {
 			var wbs = req.params.wbs || '1';
 			async.parallel({
 				task: function(callback) {

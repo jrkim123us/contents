@@ -8,9 +8,9 @@ angular.module('tasks.ganttSortable', [])
 		if (lengthA === lengthB) {
 			for(var inx = 0 ; inx < lengthA ; inx++) {
 				var valA = parseInt(arrayA[inx], 10), valB = parseInt(arrayB[inx], 10);
-				if(valA === valB)
+				if(valA === valB) {
 					continue;
-				else if(valA > valB) {
+				} else if(valA > valB) {
 					result = 1;
 					break;
 				} else {
@@ -18,8 +18,9 @@ angular.module('tasks.ganttSortable', [])
 					break;
 				}
 			}
-		} else
+		} else {
 			result = lengthA > lengthB ? 1 : -1;
+		}
 		return result;
 	}
 
@@ -34,5 +35,5 @@ angular.module('tasks.ganttSortable', [])
 
 	return {
 		sort : sort
-	}
-})
+	};
+});

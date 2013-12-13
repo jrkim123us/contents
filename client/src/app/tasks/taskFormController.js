@@ -4,7 +4,6 @@ angular.module('tasks.form', ['ui.select2'])
 	'use strict';
 
 	var dayTime;
-	initailize();
 
 	function initailize() {
 		dayTime = (24 * 60 * 60 * 1000) - 1000;
@@ -54,10 +53,11 @@ angular.module('tasks.form', ['ui.select2'])
 			changedIds= _.unique($scope.task[key]);
 			originalIds = $scope.originalTask[key];
 
-			if(changedIds.length === originalIds.length)
+			if(changedIds.length === originalIds.length) {
 				isUnchanged = _.difference(changedIds, originalIds).length > 0 ? false : true;
-			else
+			} else {
 				isUnchanged = false;
+			}
 		}
 
 		return isUnchanged;
@@ -85,7 +85,7 @@ angular.module('tasks.form', ['ui.select2'])
 		else {
 			Tasks.save(obj, function(result) {
 				console.log('status : ' + result.status);
-				$modalInstance.close(['save']);
+				$modalInstance.close(['update', $scope.task]);
 			});
 		}
 	};
@@ -110,9 +110,9 @@ angular.module('tasks.form', ['ui.select2'])
 
 // WATCH START
 	$scope.$watch('task.start_date', function(newDate, oldDate) {
-		if(!newDate)
+		if(!newDate) {
 			$scope.task.start_date = $scope.originalTask.start_date;
-		else {
+		} else {
 			var end_date = new Date();
 			end_date.setTime(newDate.getTime() + $scope.task.duration * dayTime);
 			$scope.task.end_date = end_date;
@@ -125,4 +125,5 @@ angular.module('tasks.form', ['ui.select2'])
 		$scope.task.end_date = end_date;
 	});
 // WATCH END
+	initailize();
 }]);

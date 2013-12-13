@@ -164,7 +164,7 @@ var getSubTasksByWbs = function(task) {
 	return execDeferer(query);
 };
 
-schema.statics.initialize = function (initCallback) {
+schema.statics.initialize = function (User, initCallback) {
 	var savedTask;
 	// file에 정의된 task 정보 db에 등록
 	saveTasksFromFile()
@@ -177,6 +177,12 @@ schema.statics.initialize = function (initCallback) {
 		})
 		.then(function(){
 			return updateLeaf(savedTask);
+		})
+		.then(function() {
+			return User.getAllId();
+		})
+		.then(function(userIds) {
+			return setTaskUser(userIds);
 		})
 		.fail(function(err) {
 			throw err;
@@ -204,9 +210,9 @@ schema.statics.initialize = function (initCallback) {
 	function updateParent(tasks) {
 		var deferer = Q.defer();
 		async.every(tasks, function(task, callback) {
-			execDeferer(Task.find({wbs: task.parentWbs}))
+			execDeferer(Task.findOne({wbs: task.parentWbs}))
 				.done(function(parent){
-					task.parent = parent[0]._id;
+					task.parent = parent._id;
 					task.save(callback);
 				});
 		}, function(err) {
@@ -233,15 +239,18 @@ schema.statics.initialize = function (initCallback) {
 		});
 		return deferer.promise;
 	}
-};
 
-schema.statics.initializeUser = function (User, callback) {
-	User.getAllId(function(err, userDoc){
+	function setTaskUser(userIds) {
+		var deferer = Q.defer();
 		Task.update({},{
-			worker   : [userDoc[0]._id, userDoc[1]._id],
-			approver : [userDoc[2]._id, userDoc[3]._id]
-		}, {multi:true}, callback);
-	});
+			worker   : [userIds[0]._id, userIds[1]._id],
+			approver : [userIds[2]._id, userIds[3]._id]
+		}, {multi:true}, function(err){
+			if(err) deferer.reject(err);
+			else deferer.resolve();
+		});
+		return deferer.promise;
+	}
 };
 
 schema.statics.getGantt = function (wbs, callback) {
@@ -250,7 +259,7 @@ schema.statics.getGantt = function (wbs, callback) {
 	regWbs = new RegExp('(^' + wbs + '$|^' + wbs + '[^0-9])');
 
 	this.find({wbs : regWbs})
-		.select('_id parent wbs name act text startDate endDate progress start_date duration leaf worker approver desc')
+		.select('_id parent wbs name act text startDate endDate progress start_date duration leaf worker approver desc weight')
 		// .populate('worker approver', 'name email')
 		.sort({wbs : 1})
 		.exec(function(err, tasks) {
